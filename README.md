@@ -120,7 +120,7 @@ Everything runs on **one AMD Instinct MI300X (192 GB)**: [`deploy/amd/serve_vllm
 `vllm/vllm-openai-rocm` image, API-key protected) plus [`firewall.sh`](deploy/amd/firewall.sh).
 The AMD Token Factory works too: every role is configured by environment variables ([`LINK_AMD.md`](LINK_AMD.md)).
 Interrupted runs resume from saved progress, and a partial run is published only with a PARTIAL label
-([`docs/FALLBACK.md`](docs/FALLBACK.md)).
+([`deploy/amd/README.md`](deploy/amd/README.md)).
 [`scripts/check_amd.py`](scripts/check_amd.py) verifies auth, model, chat, structured output, tool calling, vision on a
 real scan, and embeddings. [`scripts/benchmark_amd.py`](scripts/benchmark_amd.py) measures everything and records every
 investigation for replay.
@@ -158,8 +158,10 @@ All settings are environment variables. See [`.env.example`](.env.example) (name
 - `CROMO_{REASONER,VISION,EMBEDDINGS}_{BASE_URL,API_KEY,MODEL}`
 - `CROMO_GPU_PRICE_PER_HOUR`: $1.99/h list price of one MI300X on AMD Developer Cloud ([source](https://docs.digitalocean.com/products/amd/details/pricing/))
 - `EVOLUS_*`
-- `CROMO_ACCESS_TOKEN`
+- `CROMO_ACCESS_TOKEN`: required for writes and model/Evolus calls from anywhere except this machine or a private
+  network. **Set it on any internet-facing deployment.**
 - `CROMO_ALLOWED_ORIGINS`
+- `CROMO_API_DOCS`: `true` enables the interactive API docs (development only)
 
 ## The synthetic archive
 There is no public 30-year plant archive, so we built one. **Valdorso Coatings S.p.A.** is a **fictional** paint plant;

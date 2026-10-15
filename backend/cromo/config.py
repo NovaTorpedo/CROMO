@@ -78,6 +78,7 @@ class Settings:
     access_token: str = field(default="", repr=False)
     allowed_origins: tuple[str, ...] = ()
     public_demo: bool = False
+    api_docs: bool = False  # interactive /api/docs-ui; development only
     archive_dir: Path = ROOT / "archive"
     data_dir: Path = ROOT / "data"
     fixtures_dir: Path = ROOT / "fixtures"
@@ -181,6 +182,7 @@ def load_settings() -> Settings:
         access_token=_get("CROMO_ACCESS_TOKEN"),
         allowed_origins=origins,
         public_demo=_bool("CROMO_PUBLIC_DEMO", False),
+        api_docs=_bool("CROMO_API_DOCS", False),
         data_dir=Path(_get("CROMO_DATA_DIR") or (ROOT / "data")),
     )
 

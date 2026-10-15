@@ -18,6 +18,8 @@ import asyncio
 import hashlib
 import io
 import json
+import logging
+import re
 import time
 from pathlib import Path
 
@@ -30,10 +32,17 @@ CHAT = "https://api.evolus.ai/v1"
 MIN_INTERVAL_S = 1.1  # stay under 60 requests/minute
 
 
+log = logging.getLogger("cromo.evolus")
+
+
 class EvolusError(RuntimeError):
-    def __init__(self, msg: str, status: int | None = None):
+    """Evolus failure. The message is safe to show to users (no ids, no upstream text); details go to the server log."""
+
+    def __init__(self, msg: str, status: int | None = None, detail: str = ""):
         super().__init__(msg)
         self.status = status
+        if detail:
+            log.warning("%s | upstream detail: %s", msg, detail[:300])
 
 
 def cache_dir() -> Path:
@@ -118,13 +127,17 @@ def _ssl():
 def _headers() -> dict:
     s = config.settings
     if not s.evolus_configured:
-        raise EvolusError("Evolus is not configured (EVOLUS_API_KEY / EVOLUS_APPLICATION_ID)")
+        raise EvolusError("Evolus is not configured on this deployment.")
     return {"X-ApiKey": s.evolus_api_key, "X-Application-Id": s.evolus_application_id}
 
 
+_ID_RE = re.compile(r"/(?:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[0-9a-fA-F]{16,}|\d+)(?=/|$)")
+
+
 def _log(endpoint: str, status: int, credits: float | None, note: str = "") -> None:
+    # workspace ids (workflows, libraries, documents) are replaced: the usage table is shown on the System page
     db.ex("INSERT INTO evolus_calls(endpoint, status, credits, ts, note) VALUES(?,?,?,?,?)",
-          (endpoint, status, credits, time.time(), note[:200]))
+          (_ID_RE.sub("/:id", endpoint), status, credits, time.time(), note[:200]))
 
 
 async def _request(method: str, path: str, *, base: str = REST, **kw) -> httpx.Response:
@@ -167,8 +180,8 @@ async def _request(method: str, path: str, *, base: str = REST, **kw) -> httpx.R
         if r.status_code == 402:
             raise EvolusError("Evolus platform credits exhausted (402)", 402)
         if r.status_code >= 400:
-            detail = r.text[:300]
-            raise EvolusError(f"Evolus {method} {endpoint} -> HTTP {r.status_code}: {detail}", r.status_code)
+            raise EvolusError(f"Evolus request failed (HTTP {r.status_code})", r.status_code,
+                              detail=f"{method} {endpoint}: {r.text}")
         return r
     raise EvolusError("Evolus rate limit: retries exhausted", 429)
 
@@ -225,7 +238,7 @@ async def extract(acc: str, *, force: bool = False) -> dict:
         if hit is not None:
             return hit
     if not (s.evolus_extractor_agent_id and s.evolus_extractor_id):
-        raise EvolusError("Evolus extractor ids not configured")
+        raise EvolusError("The Evolus extractor is not configured on this deployment.")
     files = {"file": (f"{acc}.pdf", doc_pdf(acc), "application/pdf")}
     r = await _request("POST", f"/agents/{s.evolus_extractor_agent_id}/json/{s.evolus_extractor_id}/ask-file?useWebhook=false",
                        files=files)
@@ -248,7 +261,7 @@ async def library_upload(acc: str) -> dict:
     if hit is not None:
         return hit
     if not s.evolus_library_id:
-        raise EvolusError("Evolus library id not configured")
+        raise EvolusError("The Evolus library is not configured on this deployment.")
     r = db.q1("SELECT text, title, doc_type, date, lang FROM documents WHERE acc=?", (acc,))
     if not r:
         raise EvolusError("document not ingested")
@@ -298,7 +311,7 @@ async def list_workflows() -> list:
 async def agent_chat(question: str, conversation_id: str | None = None) -> dict:
     s = config.settings
     if not s.evolus_agent_model:
-        raise EvolusError("Evolus agent not configured (EVOLUS_AGENT_MODEL)")
+        raise EvolusError("The Evolus agent is not configured on this deployment.")
     headers = {"Authorization": f"Bearer {s.evolus_api_key}", "Content-Type": "application/json"}
     if conversation_id:
         headers["X-Conversation-Id"] = conversation_id
@@ -308,7 +321,7 @@ async def agent_chat(question: str, conversation_id: str | None = None) -> dict:
         r = await c.post(CHAT + "/chat/completions", headers=headers, json=body)
     _log("/v1/chat/completions", r.status_code, None)
     if r.status_code >= 400:
-        raise EvolusError(f"Evolus agent HTTP {r.status_code}: {r.text[:200]}", r.status_code)
+        raise EvolusError(f"Evolus agent request failed (HTTP {r.status_code})", r.status_code, detail=r.text)
     j = r.json()
     return {"answer": j["choices"][0]["message"].get("content", ""), "conversation_id": r.headers.get("X-Conversation-Id"),
             "latency_ms": round((time.perf_counter() - t0) * 1000), "model": s.evolus_agent_model}

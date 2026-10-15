@@ -5,7 +5,7 @@
 Outputs submission/CROMO-slides.pdf, submission/slides/slides.html, submission/cover.png, and fills the generated blocks
 of submission/SUBMISSION.md (AMD stack + measured results). Re-run after scripts/benchmark_amd.py so the AMD numbers
 replace the "pending" / "[AMD: ...]" placeholders. The stack text follows what actually ran (Developer Cloud or Token
-Factory, complete or partial run), so the fallback routes in docs/FALLBACK.md need no manual text edits.
+Factory, complete or partial run), so no manual text edits are needed for any of them.
 """
 
 from __future__ import annotations
@@ -265,7 +265,7 @@ def build(n: dict) -> str:
         from well-meant "optimisations".</p>
         <p><b>Model</b>: per-site subscription for process industries (coatings, chemicals, food, pharma); the change-check API for MES and optimisation vendors.</p></div>
         <div><p><b>Next</b>: pilot on a real archive · veteran-interview mode for unknowns (voice on AMD) · MES connectors · cross-recipe fossil detection.</p>
-        <p><b>Team</b>: solo developer (NovaTorpedo), built with Claude Code. MIT licensed, open models, zero budget.</p></div>
+        <p><b>Team</b>: solo developer, built with Claude Code. MIT licensed, open models, zero budget.</p></div>
       </div>"""))
     return f"""<!doctype html><html><head><meta charset="utf-8"><title>CROMO slides</title>
 <link rel="stylesheet" href="fonts.css"><style>{CSS}</style></head><body>{''.join(s)}</body></html>"""
@@ -282,7 +282,7 @@ def submission_blocks(n: dict) -> dict[str, str]:
     lines = [f"The AI pipeline runs on {st['where']}:"]
     if st["gemma"]:
         both = st["same"]
-        lines.append(f"- **Gemma 4 (Google DeepMind, 26B-A4B, open weights)** "
+        lines.append("- **Gemma 4 (Google DeepMind, 26B-A4B, open weights)** "
                      + ("as both the eyes and the brain: it reads every scanned, faxed and handwritten Italian page, reasons "
                         "over the evidence and proposes verdicts" if both else "as the " + ("reasoner" if "gemma" in mo["reasoner"].lower() else "vision model"))
                      + (", and drives the Evolus agent through native tool calling;" if (n["agent"] or not st["measured"]) and not st["tf"] else ";"))

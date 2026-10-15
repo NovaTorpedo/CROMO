@@ -65,7 +65,7 @@ We measure FENCE recall (missing a fence is the dangerous error), the false-FOSS
 it, next to a no-LLM heuristic baseline. The product never reads the answer key (enforced by a test).
 
 <!-- AMD-RESULTS:START -->
-**Measured on AMD.** On the planted ground truth CROMO reaches a FENCE recall of [AMD: FENCE recall] (rule-based baseline without an LLM: 56%), a false-FOSSIL rate of [AMD: false-FOSSIL rate] (baseline 11%), [AMD: n] fences called fossils and a citation precision of [AMD: citation precision]. It ingests [AMD: pages/min] archive pages per minute, reads scans and handwriting with a character error rate of [AMD: CER], takes [AMD: median s] s for a median multi-hop investigation, and a full plant audit costs [AMD: $ per audit] of GPU time.
+**Measured on AMD.** On the planted ground truth CROMO reaches a FENCE recall of [AMD: FENCE recall] (rule-based baseline without an LLM: 56%), a false-FOSSIL rate of [AMD: false-FOSSIL rate] (baseline 11%), [AMD: n] fences called fossils and a citation precision of [AMD: citation precision]. It ingests [AMD: pages/min] archive pages per minute, reads scans and handwriting with a character error rate of [AMD: CER] and takes [AMD: median s] s for a median multi-hop investigation. A full plant audit (178 documents, 49 steps) costs [AMD: $ per audit] of GPU time.
 <!-- AMD-RESULTS:END -->
 
 The repository is MIT licensed, keys stay server-side, secrets are scanned in CI, and the app also runs end to end

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 import threading
 import time
@@ -138,12 +139,23 @@ def export_snapshot(dest: Path | None = None) -> Path:
     with _lock:
         out = sqlite3.connect(dest)
         connect().backup(out)
-        out.execute("DELETE FROM evolus_calls")
-        out.execute("DELETE FROM change_events")
-        out.commit()
-        out.execute("VACUUM")
+        sanitize_snapshot(out)
         out.close()
     return dest
+
+
+_UUID_RE = re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
+
+
+def sanitize_snapshot(conn: sqlite3.Connection) -> None:
+    """A snapshot is published (repo, GitHub Pages): drop call logs and replace workspace-specific Evolus ids."""
+    conn.execute("DELETE FROM evolus_calls")
+    conn.execute("DELETE FROM change_events")
+    for tid, exe, hist in conn.execute("SELECT id, evolus_execution_id, history_json FROM trials").fetchall():
+        conn.execute("UPDATE trials SET evolus_execution_id=?, history_json=? WHERE id=?",
+                     ("redacted" if exe else exe, _UUID_RE.sub("redacted", hist or ""), tid))
+    conn.commit()
+    conn.execute("VACUUM")
 
 
 def import_snapshot_if_empty() -> bool:

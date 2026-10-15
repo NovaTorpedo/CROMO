@@ -40,6 +40,9 @@ ASK_EXAMPLES = [
 ]
 
 
+UUID_RE = re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
+
+
 def slug(s: str) -> str:
     s = unicodedata.normalize("NFKD", s.lower())
     return re.sub(r"[^a-z0-9]+", "-", s).strip("-")[:80]
@@ -57,9 +60,10 @@ def main():
     def save(rel: str, data):
         p = out / rel
         p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+        # the demo is public: workspace-specific ids (e.g. Evolus executions) never leave the machine
+        p.write_text(UUID_RE.sub("redacted", json.dumps(data, ensure_ascii=False)), encoding="utf-8")
 
-    with TestClient(app) as c:
+    with TestClient(app, client=("127.0.0.1", 50000)) as c:
         def get(path):
             r = c.get(path)
             r.raise_for_status()
@@ -90,7 +94,7 @@ def main():
         if runs.exists():
             for f in runs.glob("*.json"):
                 (out / "runs").mkdir(exist_ok=True)
-                shutil.copyfile(f, out / "runs" / f.name)
+                (out / "runs" / f.name).write_text(UUID_RE.sub("redacted", f.read_text(encoding="utf-8")), encoding="utf-8")
         # pre-computed example interactions
         for p in CHANGE_EXAMPLES:
             save(f"change/{slug(p)}.json", c.post("/api/v1/change-check", json={"proposal": p}).json())

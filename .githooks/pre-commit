@@ -1,8 +1,16 @@
 #!/bin/sh
-# CROMO pre-commit: syntax check, local secret scan (+ gitleaks if installed).
+# CROMO pre-commit: syntax check, local secret/privacy scan, then gitleaks on the staged changes (required).
+# Enable once per clone:  git config core.hooksPath .githooks
+# Install gitleaks once:  python scripts/install_gitleaks.py   (pinned, checksum-verified, into .tools/)
 PY=".venv/Scripts/python"; [ -x "$PY" ] || PY=".venv/bin/python"; [ -x "$PY" ] || PY="python3"
 "$PY" -m compileall -q backend/cromo scripts eval generator >/dev/null || { echo "Python syntax error - commit aborted"; exit 1; }
 "$PY" scripts/secret_scan.py --staged || exit 1
-if command -v gitleaks >/dev/null 2>&1; then
-  gitleaks protect --staged --redact --config .gitleaks.toml || exit 1
+GL=""
+for c in gitleaks .tools/gitleaks .tools/gitleaks.exe; do
+  if command -v "$c" >/dev/null 2>&1 || [ -x "$c" ]; then GL="$c"; break; fi
+done
+if [ -z "$GL" ]; then
+  echo "gitleaks not found - commit aborted. Install it with: python scripts/install_gitleaks.py"
+  exit 1
 fi
+"$GL" git --pre-commit --staged --redact --no-banner --config .gitleaks.toml . || { echo "gitleaks found a secret - commit aborted"; exit 1; }

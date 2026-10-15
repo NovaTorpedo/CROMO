@@ -38,7 +38,7 @@ Run `session.sh` inside `tmux new -s cromo`; reattach with `tmux attach -t cromo
 - `RESUME=1` keeps the running servers and continues the benchmark from its saved progress.
 - `finalize_partial.sh` publishes what an interrupted run measured, marked PARTIAL.
 
-Details and the prize impact of each case: [docs/FALLBACK.md](../../docs/FALLBACK.md).
+After any of these, copy `data/recorded/` to your PC and run `scripts/update_readme.py` and `scripts/build_submission.py`.
 
 ## Security
 - Every endpoint requires `--api-key` (`VLLM_API_KEY`); an unprotected vLLM endpoint would be open to anyone.

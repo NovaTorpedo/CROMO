@@ -31,6 +31,13 @@ jobs:
         working-directory: frontend
         env: { VITE_STATIC: "1", CROMO_BASE: "/${{ github.event.repository.name }}/", CROMO_OUT: "../site" }
         run: npm ci --no-audit --no-fund && npm run build
+      - name: public demo contains no secrets, source maps or private ids
+        run: |
+          test -z "$(find site -name '*.map')"
+          curl -sSL -o gl.tar.gz https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  gl.tar.gz" | sha256sum -c -
+          tar -xzf gl.tar.gz gitleaks && ./gitleaks dir --redact --exit-code 1 site && rm gitleaks gl.tar.gz
+          ! grep -rlE "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" site/data
       - uses: actions/upload-pages-artifact@v3
         with: { path: site }
   deploy:

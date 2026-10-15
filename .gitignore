@@ -4,8 +4,36 @@
 !.env.example
 *.pem
 *.key
+*.p12
+*.pfx
+*.ppk
+*.crt
+*.jks
+id_rsa*
+id_ed25519*
+id_ecdsa*
+*.kdbx
 secrets/
 **/secrets.json
+credentials*.json
+service-account*.json
+.netrc
+.git-credentials
+.npmrc
+.pypirc
+
+# --- private notes, plans, transcripts (keep locally, never publish) ---
+private/
+*.private.md
+CROMO_BUILD_PROMPT.md
+*transcript*.md
+*.jsonl
+
+# --- Claude Code / AI assistant local files ---
+.claude/
+CLAUDE.local.md
+.claude.json
+.mcp.json
 
 # --- python ---
 __pycache__/
@@ -23,18 +51,53 @@ htmlcov/
 node_modules/
 frontend/dist/
 *.tsbuildinfo
+*.map
 
-# --- runtime data (regenerated) ---
+# --- runtime data, logs and workspace-specific caches (regenerated) ---
 data/runtime/
 data/*.db
 data/*.db-*
+data/evolus_cache/library/
+data/evolus_cache/extractor/
+data/recorded/*.partial.json
+data/recorded/rocm-smi.txt
 *.log
+logs/
+
+# --- recordings and model files ---
+*.webm
+*.wav
+*.mp3
+*.m4a
+*.mp4
+*.mov
+*.mkv
+*.safetensors
+*.gguf
+*.onnx
+*.pt
+*.pth
+*.ckpt
+.cache/
+huggingface/
+
+# --- local tools ---
+gitleaks*
+trufflehog*
+*.exe
 
 # --- OS / editors ---
 .DS_Store
+._*
 Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
 .idea/
 .vscode/
+.vs/
+*.swp
+*~
 
 # --- static demo build output ---
 site/
+.tools/

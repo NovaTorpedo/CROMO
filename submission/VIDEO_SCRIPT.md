@@ -44,5 +44,5 @@ run), drop that clause instead of guessing.
 - a tripwire alert;
 - a "before you change" block;
 - the Evolus approval;
-- Gemma named on screen and in the voice-over (Google prize);
-- the AMD System panel with measured numbers (AMD prize).
+- Gemma named on screen and in the voice-over;
+- the AMD System panel with measured numbers.

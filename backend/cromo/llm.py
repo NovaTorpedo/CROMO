@@ -13,6 +13,7 @@ import asyncio
 import base64
 import hashlib
 import json
+import logging
 import re
 import time
 from typing import Any, TypeVar
@@ -27,8 +28,16 @@ from .prompts import TASKS
 T = TypeVar("T", bound=BaseModel)
 
 
+log = logging.getLogger("cromo.llm")
+
+
 class ProviderError(RuntimeError):
-    pass
+    """Model call failure. The message is safe to show to users; upstream details only go to the server log."""
+
+    def __init__(self, msg: str, detail: str = ""):
+        super().__init__(msg)
+        if detail:
+            log.warning("%s | upstream detail: %s", msg, detail[:300])
 
 
 def _ssl_context():
@@ -144,7 +153,7 @@ async def _chat(role: config.RoleConfig, messages: list[dict], *, max_tokens: in
                     body.pop("response_format")  # endpoint without structured output support
                     continue
                 if r.status_code >= 400:
-                    raise ProviderError(f"{role.role} endpoint HTTP {r.status_code}: {r.text[:200]}")
+                    raise ProviderError(f"{role.role} endpoint HTTP {r.status_code}", detail=r.text)
                 data = r.json()
                 break
             except httpx.HTTPError as e:
@@ -186,7 +195,7 @@ async def run_task(task: str, payload: dict, schema_model: type[T]) -> T:
             messages = messages + [{"role": "assistant", "content": text[:4000]},
                                    {"role": "user", "content": "Your answer was not valid JSON for the required schema "
                                     f"({str(e)[:300]}). Reply again with ONLY the corrected JSON object."}]
-    raise ProviderError(f"{task}: invalid model output after retry: {str(err)[:200]}")
+    raise ProviderError("the model returned an invalid answer twice", detail=f"{task}: {type(err).__name__}: {str(err)[:200]}")
 
 
 async def chat_text(task: str, system: str, user: str, *, max_tokens: int = 600) -> str:
@@ -243,7 +252,7 @@ async def transcribe_audio(data: bytes, filename: str, mime: str) -> str:
     """Whisper-style transcription on the AMD SPEECH endpoint (OpenAI-compatible /audio/transcriptions)."""
     s = config.settings
     if not (s.is_live and s.speech.configured):
-        raise ProviderError("No speech model is configured (CROMO_SPEECH_*). Type the answer instead.")
+        raise ProviderError("Speech input is not available on this deployment. Type the answer instead.")
     role = s.speech
     t0 = time.perf_counter()
     async with httpx.AsyncClient(base_url=role.base_url, verify=_ssl_context(), timeout=httpx.Timeout(300, connect=15),

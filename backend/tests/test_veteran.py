@@ -11,7 +11,7 @@ def test_testimony_flow(built):
     from cromo.api import app
 
     security._hits.clear()
-    with TestClient(app) as c:
+    with TestClient(app, client=("127.0.0.1", 50000)) as c:
         r0 = c.post("/api/steps/EPX-05/veteran-questions")
         assert r0.status_code == 200, r0.text
         q = r0.json()

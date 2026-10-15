@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 import re
 import time
 from contextlib import asynccontextmanager
@@ -21,7 +22,7 @@ from pydantic import BaseModel, Field, field_validator
 from fastapi import File, Form, UploadFile
 
 from . import (archive, ask, changecheck, config, costs, db, evolus, investigate, llm, system, trials, tripwires, veteran)
-from .security import BodyLimit, SecurityHeaders, rate_limit, require_write, token_ok
+from .security import BodyLimit, GlobalRateLimit, SecurityHeaders, rate_limit, require_write, token_ok
 
 STEP_RE = re.compile(r"^(ALK|EPX|SOL|TNK|QC)-\d{2}$")
 _live_sem = asyncio.Semaphore(3)
@@ -36,10 +37,13 @@ async def lifespan(app: FastAPI):
     await llm.aclose()
 
 
-app = FastAPI(title="CROMO", version="0.1.0", lifespan=lifespan, docs_url="/api/docs-ui", redoc_url=None,
-              openapi_url="/api/openapi.json")
+# Interactive API docs are off unless CROMO_API_DOCS=true (local development); the API itself is documented in the README.
+_docs = config.settings.api_docs
+app = FastAPI(title="CROMO", version="0.1.0", lifespan=lifespan, docs_url="/api/docs-ui" if _docs else None, redoc_url=None,
+              openapi_url="/api/openapi.json" if _docs else None, debug=False)
 app.add_middleware(SecurityHeaders)
 app.add_middleware(BodyLimit)
+app.add_middleware(GlobalRateLimit)
 if config.settings.allowed_origins:
     app.add_middleware(CORSMiddleware, allow_origins=list(config.settings.allowed_origins), allow_methods=["GET", "POST"],
                        allow_headers=["Content-Type", "X-Access-Token"])
@@ -58,7 +62,14 @@ def _step_id(sid: str) -> str:
 
 @app.exception_handler(archive.ArchiveError)
 async def _archive_err(_, exc):
-    return JSONResponse({"detail": str(exc)}, status_code=404)
+    return JSONResponse({"detail": str(exc)}, status_code=404)  # fixed, input-free messages ("invalid page", ...)
+
+
+@app.exception_handler(Exception)
+async def _internal_err(request, exc):
+    # generic answer to the client; the traceback stays in the server log
+    logging.getLogger("cromo.api").error("unhandled error on %s %s", request.method, request.url.path, exc_info=exc)
+    return JSONResponse({"detail": "Internal server error."}, status_code=500)
 
 
 # ---------------------------------------------------------------------------
@@ -390,6 +401,7 @@ async def trial_submit(tid: str):
 
 @app.post("/api/trials/{tid}/refresh")
 async def trial_refresh(tid: str, request: Request):
+    require_write(request)  # queries Evolus
     rate_limit(request, limit=40, bucket="refresh")
     try:
         return await trials.refresh(tid)

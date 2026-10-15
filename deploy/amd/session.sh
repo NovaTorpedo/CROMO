@@ -20,7 +20,7 @@
 #      scripts/check_amd.py -> compare_models.py -> benchmark_amd.py (ingest, investigate, eval, latency, cost, replays)
 #   4. leaves the results in data/recorded/ - copy them to your PC with the scp command printed at the end
 # Progress is saved after every step, so a failure never loses what was already measured (see RESUME=1 and
-# docs/FALLBACK.md). The vLLM servers keep running so you can connect them to Evolus.
+# deploy/amd/README.md). The vLLM servers keep running so you can connect them to Evolus.
 # DESTROY the droplet when done (it bills while it exists).
 set -euo pipefail
 cd "$(dirname "$0")/../.."
@@ -93,7 +93,7 @@ if [ "$PROFILE" = compare ]; then
 fi
 # shellcheck disable=SC2086
 if ! $COMPOSE run --rm eval python scripts/benchmark_amd.py --rocm-smi data/recorded/rocm-smi.txt --concurrency 8 $BENCH_ARGS; then
-  say "benchmark stopped. Its progress is saved. Options (docs/FALLBACK.md, case 3):"
+  say "benchmark stopped. Its progress is saved. Options (deploy/amd/README.md):"
   say "  continue:          RESUME=1 ./deploy/amd/session.sh"
   say "  publish as is:     RESUME=1 ./deploy/amd/finalize_partial.sh   (marked PARTIAL, no evaluation score)"
   exit 1

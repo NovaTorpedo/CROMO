@@ -7,9 +7,9 @@ steps. Commands on your PC run from the repo folder with the project virtualenv 
 > Create it → run the session (≈ 45 min) → connect Evolus and record the video → **destroy it**.
 > One MI300X is $1.99/h list price, so one full session costs about $3–5 of credits.
 
-> **Short on time, only a Token Factory key, or a run that failed partway?** See [docs/FALLBACK.md](docs/FALLBACK.md)
-> for the minimum steps in each case and which prizes each one keeps. Run `session.sh` inside `tmux new -s cromo` so a
-> dropped SSH connection doesn't stop it; `RESUME=1 ./deploy/amd/session.sh` continues an interrupted run.
+> **Short on time, or a run that failed partway?** See "Short on time or after a failure" in
+> [deploy/amd/README.md](deploy/amd/README.md). Run `session.sh` inside `tmux new -s cromo` so a dropped SSH connection
+> doesn't stop it; `RESUME=1 ./deploy/amd/session.sh` continues an interrupted run.
 
 ## Route B — own vLLM on AMD Developer Cloud (needed for the Evolus track; gives the measured MI300X numbers)
 
@@ -28,8 +28,6 @@ steps. Commands on your PC run from the repo folder with the project virtualenv 
    ./deploy/amd/session.sh
    ```
    At the end it prints an `scp` command.
-   (The clone needs the GitHub repository to be public. If it's still private, clone with a personal access token:
-   `git clone https://<token>@github.com/NovaTorpedo/CROMO.git`.)
 3. **Copy the results to your PC.** In a terminal in the CROMO folder, run the printed command:
    ```
    scp -r root@<IP>:/root/CROMO/data/recorded ./data/
@@ -102,7 +100,7 @@ steps. Commands on your PC run from the repo folder with the project virtualenv 
 4. `.venv\Scripts\python scripts\benchmark_amd.py --concurrency 4` (if a rate limit stops it, rerun with `--resume`),
    then step 6 above. On this route no GPU-hour audit cost is claimed: the Token Factory has no per-GPU billing.
 5. Evolus: the Evolus track asks for *your own vLLM endpoint on AMD Developer Cloud*, so this route alone may not
-   qualify for it. Ask the organisers before relying on it (docs/FALLBACK.md, case 1).
+   qualify for it. Ask the organisers before relying on it.
 
 ## Troubleshooting
 - **`check_amd.py` says tool calling WARN.** The reasoner must run with `--enable-auto-tool-choice --tool-call-parser gemma4` (Gemma 4) or `hermes` (Qwen). `serve_vllm.sh` already does this.

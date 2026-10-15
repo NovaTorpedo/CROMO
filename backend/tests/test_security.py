@@ -10,7 +10,7 @@ from cromo import config
 def client(built):
     from cromo.api import app
 
-    with TestClient(app) as c:
+    with TestClient(app, client=("127.0.0.1", 50000)) as c:
         yield c
 
 
@@ -114,3 +114,92 @@ def test_unmappable_change_is_never_allowed(client):
     _s._hits.clear()
     r = client.post("/api/v1/change-check", json={"proposal": "Please make the plant more efficient somehow"})
     assert r.status_code == 200 and r.json()["decision"] == "caution"
+
+
+@pytest.fixture
+def remote(built):
+    """A caller on the internet (public IP), as on a public deployment."""
+    from cromo import security as _s
+    from cromo.api import app
+
+    _s._hits.clear()
+    with TestClient(app, client=("203.0.113.9", 40000)) as c:
+        yield c
+
+
+def test_writes_fail_closed_for_remote_callers_without_token(remote, monkeypatch):
+    s = config.settings
+    monkeypatch.setattr(config, "settings", s.__class__(**{**s.__dict__, "access_token": ""}))
+    for path, body in (("/api/v1/change-check", {"proposal": "Remove step SOL-02"}), ("/api/ask", {"question": "why?"}),
+                       ("/api/tripwires/simulate", {"type": "supplier_switch", "from": "a", "to": "b"}),
+                       ("/api/steps/ALK-04/investigate", None), ("/api/trials", {"step_id": "ALK-04"})):
+        assert remote.post(path, json=body).status_code == 403, path
+    assert remote.post("/api/trials/TR-000000/refresh").status_code == 403
+    assert remote.get("/api/map").status_code == 200  # reads stay public
+
+
+def test_proxied_local_caller_is_not_trusted(client, monkeypatch):
+    from cromo import security as _s
+
+    _s._hits.clear()
+    s = config.settings
+    monkeypatch.setattr(config, "settings", s.__class__(**{**s.__dict__, "access_token": ""}))
+    r = client.post("/api/v1/change-check", json={"proposal": "Remove step SOL-02"}, headers={"X-Forwarded-For": "198.51.100.4"})
+    assert r.status_code == 403
+
+
+def test_remote_caller_with_token(remote, monkeypatch):
+    s = config.settings
+    monkeypatch.setattr(config, "settings", s.__class__(**{**s.__dict__, "access_token": "test-passcode-456"}))
+    assert remote.post("/api/v1/change-check", json={"proposal": "Remove step SOL-02"}).status_code == 401
+    ok = remote.post("/api/v1/change-check", json={"proposal": "Remove step SOL-02"}, headers={"X-Access-Token": "test-passcode-456"})
+    assert ok.status_code == 200
+
+
+def test_api_docs_hidden_by_default(client):
+    assert client.get("/api/openapi.json").status_code == 404
+    assert client.get("/api/docs-ui").status_code == 404
+
+
+def test_global_rate_limit_on_reads(remote, monkeypatch):
+    from cromo import security as _s
+
+    monkeypatch.setattr(_s, "GLOBAL_LIMIT_PER_MIN", 5)
+    codes = [remote.get("/api/health").status_code for _ in range(8)]
+    assert codes[:5] == [200] * 5 and 429 in codes
+    _s._hits.clear()
+
+
+def test_internal_errors_are_generic(monkeypatch):
+    from cromo import api as _api
+
+    def boom():
+        raise RuntimeError("secret detail C:/internal/path model=xyz")
+
+    monkeypatch.setattr(_api.tripwires, "registry", boom)
+    from cromo import security as _s
+
+    _s._hits.clear()
+    with TestClient(_api.app, client=("127.0.0.1", 50001), raise_server_exceptions=False) as c:
+        r = c.get("/api/tripwires")
+    assert r.status_code == 500 and r.json() == {"detail": "Internal server error."}
+
+
+def test_upstream_errors_are_not_shown(caplog):
+    from cromo import evolus, llm
+
+    e = llm.ProviderError("reasoner endpoint HTTP 500", detail="upstream body with internals")
+    assert "upstream" not in str(e)
+    e2 = evolus.EvolusError("Evolus request failed (HTTP 400)", 400, detail="POST /workflows/abc/execute: body")
+    assert "workflows" not in str(e2)
+
+
+def test_access_log_redacts_query_tokens():
+    import logging
+
+    from cromo.security import RedactQueryTokens
+
+    rec = logging.LogRecord("uvicorn.access", logging.INFO, "", 0, '%s - "%s %s HTTP/%s" %d',
+                            ("192.0.2.1:5", "POST", "/api/evolus/webhook?token=s3cr3t-value&x=1", "1.1", 200), None)
+    RedactQueryTokens().filter(rec)
+    assert "s3cr3t-value" not in rec.getMessage() and "token=[redacted]" in rec.getMessage()
