@@ -1,0 +1,2131 @@
+{
+ "_warning": "Evaluation ground truth. The CROMO pipeline must never read this file.",
+ "dataset": "Valdorso synthetic archive (seed 1995)",
+ "documents": {
+  "WM-2023-2": {
+   "accession": "ACC-0001",
+   "kind": "waste manifest",
+   "date": "2023-03-11"
+  },
+  "EQ-2017-003": {
+   "accession": "ACC-0002",
+   "kind": "equipment record",
+   "date": "2017-03-06"
+  },
+  "CR-2008-005": {
+   "accession": "ACC-0003",
+   "kind": "change request",
+   "date": "2008-05-05"
+  },
+  "RCP-EPX-CURRENT": {
+   "accession": "ACC-0004",
+   "kind": "recipe (current)",
+   "date": "2022-01-20"
+  },
+  "INV-2024-04": {
+   "accession": "ACC-0005",
+   "kind": "invoice",
+   "date": "2024-04-12"
+  },
+  "EMAIL-2023-01-12": {
+   "accession": "ACC-0006",
+   "kind": "email",
+   "date": "2023-01-12"
+  },
+  "INV-2025-03": {
+   "accession": "ACC-0007",
+   "kind": "invoice",
+   "date": "2025-10-15"
+  },
+  "EQ-1999-004": {
+   "accession": "ACC-0008",
+   "kind": "equipment record",
+   "date": "1999-02-20"
+  },
+  "MM-2016-11-08": {
+   "accession": "ACC-0009",
+   "kind": "meeting minutes",
+   "date": "2016-11-08"
+  },
+  "PM-2015-001": {
+   "accession": "ACC-0010",
+   "kind": "portfolio memo",
+   "date": "2015-01-26"
+  },
+  "TDS-EF210": {
+   "accession": "ACC-0011",
+   "kind": "technical data sheet",
+   "date": "2022-01-20"
+  },
+  "LOG-1995-12-02": {
+   "accession": "ACC-0012",
+   "kind": "logbook page",
+   "date": "1995-12-02"
+  },
+  "RCP-QC-Rev5": {
+   "accession": "ACC-0013",
+   "kind": "recipe (superseded)",
+   "date": "2009-11-09"
+  },
+  "DR-2002-011": {
+   "accession": "ACC-0014",
+   "kind": "deviation report",
+   "date": "2002-11-18"
+  },
+  "SDS-2022-WS": {
+   "accession": "ACC-0015",
+   "kind": "safety data sheet",
+   "date": "2022-06-01"
+  },
+  "RCP-TNK-Rev6": {
+   "accession": "ACC-0016",
+   "kind": "recipe (superseded)",
+   "date": "2013-09-30"
+  },
+  "CAL-2018-2": {
+   "accession": "ACC-0017",
+   "kind": "calibration certificate",
+   "date": "2018-08-20"
+  },
+  "ML-NOISE-7": {
+   "accession": "ACC-0018",
+   "kind": "maintenance log",
+   "date": "2024-12-15"
+  },
+  "EMAIL-2019-04-08": {
+   "accession": "ACC-0019",
+   "kind": "email",
+   "date": "2019-04-08"
+  },
+  "RCP-TNK-CURRENT": {
+   "accession": "ACC-0020",
+   "kind": "recipe (current)",
+   "date": "2021-02-15"
+  },
+  "CR-2015-004": {
+   "accession": "ACC-0021",
+   "kind": "change request",
+   "date": "2015-05-11"
+  },
+  "RCP-SOL-Rev4": {
+   "accession": "ACC-0022",
+   "kind": "recipe (superseded)",
+   "date": "2000-07-10"
+  },
+  "RCP-ALK-CURRENT": {
+   "accession": "ACC-0023",
+   "kind": "recipe (current)",
+   "date": "2023-05-10"
+  },
+  "LET-2012-04-02": {
+   "accession": "ACC-0024",
+   "kind": "letter",
+   "date": "2012-04-02"
+  },
+  "QA-2015-AGR": {
+   "accession": "ACC-0025",
+   "kind": "quality agreement",
+   "date": "2015-11-02"
+  },
+  "CAL-2025-0": {
+   "accession": "ACC-0026",
+   "kind": "calibration certificate",
+   "date": "2025-12-27"
+  },
+  "LT-1995-118": {
+   "accession": "ACC-0027",
+   "kind": "lab test report",
+   "date": "1995-11-28"
+  },
+  "TR-2018-2": {
+   "accession": "ACC-0028",
+   "kind": "training record",
+   "date": "2018-03-15"
+  },
+  "EQ-2011-006": {
+   "accession": "ACC-0029",
+   "kind": "equipment record",
+   "date": "2011-10-24"
+  },
+  "WM-2008-3": {
+   "accession": "ACC-0030",
+   "kind": "waste manifest",
+   "date": "2008-07-28"
+  },
+  "EHS-2021-07": {
+   "accession": "ACC-0031",
+   "kind": "compliance memo",
+   "date": "2021-07-05"
+  },
+  "CR-2009-012": {
+   "accession": "ACC-0032",
+   "kind": "change request",
+   "date": "2009-10-19"
+  },
+  "ML-NOISE-5": {
+   "accession": "ACC-0033",
+   "kind": "maintenance log",
+   "date": "2010-12-15"
+  },
+  "DR-1995-031": {
+   "accession": "ACC-0034",
+   "kind": "deviation report",
+   "date": "1995-11-14"
+  },
+  "RCP-SOL-Rev3": {
+   "accession": "ACC-0035",
+   "kind": "recipe (superseded)",
+   "date": "1998-11-30"
+  },
+  "INV-2005-02": {
+   "accession": "ACC-0036",
+   "kind": "invoice",
+   "date": "2005-01-13"
+  },
+  "CR-2004-007": {
+   "accession": "ACC-0037",
+   "kind": "change request",
+   "date": "2004-06-21"
+  },
+  "LT-2020-044": {
+   "accession": "ACC-0038",
+   "kind": "lab test report",
+   "date": "2020-02-17"
+  },
+  "LOG-2006-02-14": {
+   "accession": "ACC-0039",
+   "kind": "logbook page",
+   "date": "2006-02-14"
+  },
+  "EMAIL-NOISE-1": {
+   "accession": "ACC-0040",
+   "kind": "email",
+   "date": "2020-12-05"
+  },
+  "CR-2002-005": {
+   "accession": "ACC-0041",
+   "kind": "change request",
+   "date": "2002-06-03"
+  },
+  "SQ-2010-003": {
+   "accession": "ACC-0042",
+   "kind": "supplier qualification",
+   "date": "2010-02-15"
+  },
+  "TR-2015-0": {
+   "accession": "ACC-0043",
+   "kind": "training record",
+   "date": "2015-04-02"
+  },
+  "FAX-1996-03-04": {
+   "accession": "ACC-0044",
+   "kind": "supplier letter",
+   "date": "1996-03-04"
+  },
+  "RN-2018-052": {
+   "accession": "ACC-0045",
+   "kind": "regulatory notice",
+   "date": "2018-04-10"
+  },
+  "SQ-2007-002": {
+   "accession": "ACC-0046",
+   "kind": "supplier qualification",
+   "date": "2007-01-30"
+  },
+  "LOG-1999-10-21": {
+   "accession": "ACC-0047",
+   "kind": "logbook page",
+   "date": "1999-10-21"
+  },
+  "INV-2014-17": {
+   "accession": "ACC-0048",
+   "kind": "invoice",
+   "date": "2014-09-23"
+  },
+  "INV-2017-01": {
+   "accession": "ACC-0049",
+   "kind": "invoice",
+   "date": "2017-09-10"
+  },
+  "RCP-ALK-Rev8": {
+   "accession": "ACC-0050",
+   "kind": "recipe (superseded)",
+   "date": "1996-01-22"
+  },
+  "EMAIL-2022-05-30": {
+   "accession": "ACC-0051",
+   "kind": "email",
+   "date": "2022-05-30"
+  },
+  "RCP-QC-CURRENT": {
+   "accession": "ACC-0052",
+   "kind": "recipe (current)",
+   "date": "2021-06-07"
+  },
+  "PM-2009-002": {
+   "accession": "ACC-0053",
+   "kind": "portfolio memo",
+   "date": "2009-06-30"
+  },
+  "CR-1998-009": {
+   "accession": "ACC-0054",
+   "kind": "change request",
+   "date": "1998-11-23"
+  },
+  "CL-2004-003": {
+   "accession": "ACC-0055",
+   "kind": "customer claim",
+   "date": "2004-05-10"
+  },
+  "INV-2001-05": {
+   "accession": "ACC-0056",
+   "kind": "invoice",
+   "date": "2001-10-17"
+  },
+  "RCP-SOL-Rev6": {
+   "accession": "ACC-0057",
+   "kind": "recipe (superseded)",
+   "date": "2014-09-29"
+  },
+  "WM-2022-1": {
+   "accession": "ACC-0058",
+   "kind": "waste manifest",
+   "date": "2022-08-09"
+  },
+  "EQ-2019-002": {
+   "accession": "ACC-0059",
+   "kind": "equipment record",
+   "date": "2019-06-14"
+  },
+  "ML-NOISE-4": {
+   "accession": "ACC-0060",
+   "kind": "maintenance log",
+   "date": "2021-12-15"
+  },
+  "INV-2009-18": {
+   "accession": "ACC-0061",
+   "kind": "invoice",
+   "date": "2009-01-24"
+  },
+  "CR-2005-009": {
+   "accession": "ACC-0062",
+   "kind": "change request",
+   "date": "2005-08-08"
+  },
+  "MM-NOISE-2": {
+   "accession": "ACC-0063",
+   "kind": "meeting minutes",
+   "date": "2017-05-13"
+  },
+  "ML-NOISE-6": {
+   "accession": "ACC-0064",
+   "kind": "maintenance log",
+   "date": "2006-12-15"
+  },
+  "DR-1998-007": {
+   "accession": "ACC-0065",
+   "kind": "deviation report",
+   "date": "1998-02-16"
+  },
+  "RN-2010-12": {
+   "accession": "ACC-0066",
+   "kind": "regulatory notice",
+   "date": "2010-11-30"
+  },
+  "INV-2024-15": {
+   "accession": "ACC-0067",
+   "kind": "invoice",
+   "date": "2024-08-28"
+  },
+  "ML-2024-VS1": {
+   "accession": "ACC-0068",
+   "kind": "maintenance log",
+   "date": "2024-03-18"
+  },
+  "RCP-SOL-Rev1": {
+   "accession": "ACC-0069",
+   "kind": "recipe (superseded)",
+   "date": "1995-05-02"
+  },
+  "RCP-TNK-Rev1": {
+   "accession": "ACC-0070",
+   "kind": "recipe (superseded)",
+   "date": "1996-04-15"
+  },
+  "ML-2002-SC2": {
+   "accession": "ACC-0071",
+   "kind": "maintenance log",
+   "date": "2002-10-30"
+  },
+  "EMAIL-2016-01-20": {
+   "accession": "ACC-0072",
+   "kind": "email",
+   "date": "2016-01-20"
+  },
+  "ML-NOISE-0": {
+   "accession": "ACC-0073",
+   "kind": "maintenance log",
+   "date": "2025-12-15"
+  },
+  "CR-1995-009": {
+   "accession": "ACC-0074",
+   "kind": "change request",
+   "date": "1995-12-05"
+  },
+  "CR-1997-006": {
+   "accession": "ACC-0075",
+   "kind": "change request",
+   "date": "1997-09-08"
+  },
+  "MM-1997-03-10": {
+   "accession": "ACC-0076",
+   "kind": "meeting minutes",
+   "date": "1997-03-10"
+  },
+  "ML-NOISE-3": {
+   "accession": "ACC-0077",
+   "kind": "maintenance log",
+   "date": "2014-12-15"
+  },
+  "INV-1998-00": {
+   "accession": "ACC-0078",
+   "kind": "invoice",
+   "date": "1998-03-11"
+  },
+  "CR-2005-006": {
+   "accession": "ACC-0079",
+   "kind": "change request",
+   "date": "2005-09-26"
+  },
+  "RCP-ALK-Rev9": {
+   "accession": "ACC-0080",
+   "kind": "recipe (superseded)",
+   "date": "1998-10-05"
+  },
+  "TDS-AF12": {
+   "accession": "ACC-0081",
+   "kind": "technical data sheet",
+   "date": "2023-05-10"
+  },
+  "INV-2013-12": {
+   "accession": "ACC-0082",
+   "kind": "invoice",
+   "date": "2013-09-01"
+  },
+  "CR-2014-011": {
+   "accession": "ACC-0083",
+   "kind": "change request",
+   "date": "2014-09-15"
+  },
+  "INV-2010-07": {
+   "accession": "ACC-0084",
+   "kind": "invoice",
+   "date": "2010-03-17"
+  },
+  "CR-2000-008": {
+   "accession": "ACC-0085",
+   "kind": "change request",
+   "date": "2000-07-03"
+  },
+  "EMAIL-2024-03-12": {
+   "accession": "ACC-0086",
+   "kind": "marketing email",
+   "date": "2024-03-12"
+  },
+  "IR-2001-007": {
+   "accession": "ACC-0087",
+   "kind": "incident report",
+   "date": "2001-06-19"
+  },
+  "ML-1996-D1": {
+   "accession": "ACC-0088",
+   "kind": "maintenance log",
+   "date": "1996-12-09"
+  },
+  "EMAIL-2016-09-21": {
+   "accession": "ACC-0089",
+   "kind": "email",
+   "date": "2016-09-21"
+  },
+  "SQ-2016-005": {
+   "accession": "ACC-0090",
+   "kind": "supplier qualification",
+   "date": "2016-03-21"
+  },
+  "ML-NOISE-1": {
+   "accession": "ACC-0091",
+   "kind": "maintenance log",
+   "date": "2014-12-15"
+  },
+  "CR-1999-002": {
+   "accession": "ACC-0092",
+   "kind": "change request",
+   "date": "1999-02-01"
+  },
+  "EMAIL-2012-09-17": {
+   "accession": "ACC-0093",
+   "kind": "email",
+   "date": "2012-09-17"
+  },
+  "RCP-TNK-Rev3": {
+   "accession": "ACC-0094",
+   "kind": "recipe (superseded)",
+   "date": "2001-10-22"
+  },
+  "MM-2019-10-15": {
+   "accession": "ACC-0095",
+   "kind": "meeting minutes",
+   "date": "2019-10-15"
+  },
+  "DR-2015-006": {
+   "accession": "ACC-0096",
+   "kind": "deviation report",
+   "date": "2015-04-20"
+  },
+  "WM-2005-0": {
+   "accession": "ACC-0097",
+   "kind": "waste manifest",
+   "date": "2005-08-27"
+  },
+  "ML-2022-MS1": {
+   "accession": "ACC-0098",
+   "kind": "maintenance log",
+   "date": "2022-11-07"
+  },
+  "RCP-EPX-Rev7": {
+   "accession": "ACC-0099",
+   "kind": "recipe (superseded)",
+   "date": "2012-05-14"
+  },
+  "RCP-ALK-Rev12": {
+   "accession": "ACC-0100",
+   "kind": "recipe (superseded)",
+   "date": "2007-02-19"
+  },
+  "RN-2003-114": {
+   "accession": "ACC-0101",
+   "kind": "regulatory notice",
+   "date": "2003-07-01"
+  },
+  "MM-NOISE-4": {
+   "accession": "ACC-0102",
+   "kind": "meeting minutes",
+   "date": "2007-01-14"
+  },
+  "CR-1996-005": {
+   "accession": "ACC-0103",
+   "kind": "change request",
+   "date": "1996-02-05"
+  },
+  "DR-1999-012": {
+   "accession": "ACC-0104",
+   "kind": "deviation report",
+   "date": "1999-01-25"
+  },
+  "RCP-EPX-Rev2": {
+   "accession": "ACC-0105",
+   "kind": "recipe (superseded)",
+   "date": "1999-02-08"
+  },
+  "INV-2020-10": {
+   "accession": "ACC-0106",
+   "kind": "invoice",
+   "date": "2020-06-28"
+  },
+  "CR-1998-004": {
+   "accession": "ACC-0107",
+   "kind": "change request",
+   "date": "1998-03-02"
+  },
+  "CR-1996-003": {
+   "accession": "ACC-0108",
+   "kind": "change request",
+   "date": "1996-01-15"
+  },
+  "CR-2002-007": {
+   "accession": "ACC-0109",
+   "kind": "change request",
+   "date": "2002-12-02"
+  },
+  "EMAIL-2023-03-06": {
+   "accession": "ACC-0110",
+   "kind": "email",
+   "date": "2023-03-06"
+  },
+  "RCP-ALK-Rev10": {
+   "accession": "ACC-0111",
+   "kind": "recipe (superseded)",
+   "date": "2001-09-12"
+  },
+  "CL-2009-007": {
+   "accession": "ACC-0112",
+   "kind": "customer claim",
+   "date": "2009-09-28"
+  },
+  "INV-1996-06": {
+   "accession": "ACC-0113",
+   "kind": "invoice",
+   "date": "1996-03-26"
+  },
+  "RCP-ALK-Rev7": {
+   "accession": "ACC-0114",
+   "kind": "recipe (superseded)",
+   "date": "1994-03-15"
+  },
+  "INV-2009-08": {
+   "accession": "ACC-0115",
+   "kind": "invoice",
+   "date": "2009-05-09"
+  },
+  "AUD-2021-03": {
+   "accession": "ACC-0116",
+   "kind": "audit report",
+   "date": "2021-03-22"
+  },
+  "RCP-EPX-Rev1": {
+   "accession": "ACC-0117",
+   "kind": "recipe (superseded)",
+   "date": "1997-04-10"
+  },
+  "RCP-EPX-Rev6": {
+   "accession": "ACC-0118",
+   "kind": "recipe (superseded)",
+   "date": "2005-10-03"
+  },
+  "CM-2004-011": {
+   "accession": "ACC-0119",
+   "kind": "compliance memo",
+   "date": "2004-04-05"
+  },
+  "SQ-2012-007": {
+   "accession": "ACC-0120",
+   "kind": "supplier qualification",
+   "date": "2012-03-19"
+  },
+  "NM-1997-004": {
+   "accession": "ACC-0121",
+   "kind": "near-miss report",
+   "date": "1997-08-28"
+  },
+  "CAL-2016-3": {
+   "accession": "ACC-0122",
+   "kind": "calibration certificate",
+   "date": "2016-11-21"
+  },
+  "MM-2008-05-13": {
+   "accession": "ACC-0123",
+   "kind": "meeting minutes",
+   "date": "2008-05-13"
+  },
+  "MM-2021-02-09": {
+   "accession": "ACC-0124",
+   "kind": "meeting minutes",
+   "date": "2021-02-09"
+  },
+  "WI-1997-02": {
+   "accession": "ACC-0125",
+   "kind": "work instruction",
+   "date": "1997-03-03"
+  },
+  "IR-2005-011": {
+   "accession": "ACC-0126",
+   "kind": "incident report",
+   "date": "2005-07-25"
+  },
+  "DR-2003-015": {
+   "accession": "ACC-0127",
+   "kind": "deviation report",
+   "date": "2003-10-27"
+  },
+  "CR-2001-012": {
+   "accession": "ACC-0128",
+   "kind": "change request",
+   "date": "2001-07-02"
+  },
+  "DR-2001-019": {
+   "accession": "ACC-0129",
+   "kind": "deviation report",
+   "date": "2001-09-10"
+  },
+  "SOP07-RAT-2016": {
+   "accession": "ACC-0130",
+   "kind": "quality note",
+   "date": "2016-02-08"
+  },
+  "TDS-KO410": {
+   "accession": "ACC-0131",
+   "kind": "technical data sheet",
+   "date": "2012-02-01"
+  },
+  "RCP-SOL-Rev7": {
+   "accession": "ACC-0132",
+   "kind": "recipe (superseded)",
+   "date": "2015-05-18"
+  },
+  "CR-2003-010": {
+   "accession": "ACC-0133",
+   "kind": "change request",
+   "date": "2003-11-10"
+  },
+  "CM-2003-007": {
+   "accession": "ACC-0134",
+   "kind": "compliance memo",
+   "date": "2003-09-15"
+  },
+  "DR-2002-008": {
+   "accession": "ACC-0135",
+   "kind": "deviation report",
+   "date": "2002-05-13"
+  },
+  "RCP-QC-Rev2": {
+   "accession": "ACC-0136",
+   "kind": "recipe (superseded)",
+   "date": "1996-02-12"
+  },
+  "SQ-2017-004": {
+   "accession": "ACC-0137",
+   "kind": "supplier qualification",
+   "date": "2017-09-11"
+  },
+  "INV-2002-09": {
+   "accession": "ACC-0138",
+   "kind": "invoice",
+   "date": "2002-05-17"
+  },
+  "EMAIL-NOISE-2": {
+   "accession": "ACC-0139",
+   "kind": "email",
+   "date": "2021-01-27"
+  },
+  "EMAIL-2009-11-05": {
+   "accession": "ACC-0140",
+   "kind": "email",
+   "date": "2009-11-05"
+  },
+  "RCP-EPX-Rev3": {
+   "accession": "ACC-0141",
+   "kind": "recipe (superseded)",
+   "date": "2001-04-23"
+  },
+  "INV-2015-19": {
+   "accession": "ACC-0142",
+   "kind": "invoice",
+   "date": "2015-06-13"
+  },
+  "EMAIL-2017-10-03": {
+   "accession": "ACC-0143",
+   "kind": "email",
+   "date": "2017-10-03"
+  },
+  "QN-2018-009": {
+   "accession": "ACC-0144",
+   "kind": "quality note",
+   "date": "2018-06-11"
+  },
+  "CR-2001-014": {
+   "accession": "ACC-0145",
+   "kind": "change request",
+   "date": "2001-10-01"
+  },
+  "TR-2018-1": {
+   "accession": "ACC-0146",
+   "kind": "training record",
+   "date": "2018-08-20"
+  },
+  "EMAIL-2020-06-09": {
+   "accession": "ACC-0147",
+   "kind": "email",
+   "date": "2020-06-09"
+  },
+  "RCP-SOL-CURRENT": {
+   "accession": "ACC-0148",
+   "kind": "recipe (current)",
+   "date": "2021-03-01"
+  },
+  "ML-NOISE-2": {
+   "accession": "ACC-0149",
+   "kind": "maintenance log",
+   "date": "2023-12-15"
+  },
+  "EQ-2013-004": {
+   "accession": "ACC-0150",
+   "kind": "equipment record",
+   "date": "2013-09-02"
+  },
+  "INV-2020-11": {
+   "accession": "ACC-0151",
+   "kind": "invoice",
+   "date": "2020-05-25"
+  },
+  "LT-2018-022": {
+   "accession": "ACC-0152",
+   "kind": "lab test report",
+   "date": "2018-05-14"
+  },
+  "QP02-BASIS-2021": {
+   "accession": "ACC-0153",
+   "kind": "quality plan",
+   "date": "2021-06-07"
+  },
+  "EMAIL-NOISE-0": {
+   "accession": "ACC-0154",
+   "kind": "email",
+   "date": "2024-11-16"
+  },
+  "RCP-QC-Rev1": {
+   "accession": "ACC-0155",
+   "kind": "recipe (superseded)",
+   "date": "1994-01-10"
+  },
+  "MM-NOISE-3": {
+   "accession": "ACC-0156",
+   "kind": "meeting minutes",
+   "date": "2021-02-27"
+  },
+  "MM-NOISE-6": {
+   "accession": "ACC-0157",
+   "kind": "meeting minutes",
+   "date": "2008-12-09"
+  },
+  "INV-1997-13": {
+   "accession": "ACC-0158",
+   "kind": "invoice",
+   "date": "1997-02-27"
+  },
+  "SPEC-2000-VETTA": {
+   "accession": "ACC-0159",
+   "kind": "customer specification",
+   "date": "2000-05-22"
+  },
+  "RCP-QC-Rev4": {
+   "accession": "ACC-0160",
+   "kind": "recipe (superseded)",
+   "date": "2003-10-20"
+  },
+  "IR-2008-003": {
+   "accession": "ACC-0161",
+   "kind": "incident report",
+   "date": "2008-04-14"
+  },
+  "CAL-2025-1": {
+   "accession": "ACC-0162",
+   "kind": "calibration certificate",
+   "date": "2025-02-11"
+  },
+  "INV-2004-16": {
+   "accession": "ACC-0163",
+   "kind": "invoice",
+   "date": "2004-04-22"
+  },
+  "RCP-EPX-Rev5": {
+   "accession": "ACC-0164",
+   "kind": "recipe (superseded)",
+   "date": "2004-09-06"
+  },
+  "MM-NOISE-5": {
+   "accession": "ACC-0165",
+   "kind": "meeting minutes",
+   "date": "2000-08-16"
+  },
+  "LT-2004-061": {
+   "accession": "ACC-0166",
+   "kind": "lab test report",
+   "date": "2004-06-08"
+  },
+  "TDS-TL5": {
+   "accession": "ACC-0167",
+   "kind": "technical data sheet",
+   "date": "2021-02-15"
+  },
+  "ML-2024-D4": {
+   "accession": "ACC-0168",
+   "kind": "maintenance log",
+   "date": "2024-05-20"
+  },
+  "EQ-2014-005": {
+   "accession": "ACC-0169",
+   "kind": "equipment record",
+   "date": "2014-03-10"
+  },
+  "CAL-2023-4": {
+   "accession": "ACC-0170",
+   "kind": "calibration certificate",
+   "date": "2023-02-10"
+  },
+  "RCP-TNK-Rev2": {
+   "accession": "ACC-0171",
+   "kind": "recipe (superseded)",
+   "date": "1999-11-08"
+  },
+  "EMAIL-NOISE-3": {
+   "accession": "ACC-0172",
+   "kind": "email",
+   "date": "2011-11-07"
+  },
+  "INV-2013-14": {
+   "accession": "ACC-0173",
+   "kind": "invoice",
+   "date": "2013-06-17"
+  },
+  "CM-2006-004": {
+   "accession": "ACC-0174",
+   "kind": "compliance memo",
+   "date": "2006-03-20"
+  },
+  "MM-NOISE-0": {
+   "accession": "ACC-0175",
+   "kind": "meeting minutes",
+   "date": "2012-01-27"
+  },
+  "MM-NOISE-1": {
+   "accession": "ACC-0176",
+   "kind": "meeting minutes",
+   "date": "2001-07-04"
+  },
+  "EMAIL-2014-06-02": {
+   "accession": "ACC-0177",
+   "kind": "email",
+   "date": "2014-06-02"
+  },
+  "RCP-TNK-Rev5": {
+   "accession": "ACC-0178",
+   "kind": "recipe (superseded)",
+   "date": "2005-08-29"
+  }
+ },
+ "steps": {
+  "ALK-01": {
+   "label": "ACTIVE",
+   "why": "Binder of the enamel.",
+   "key": [
+    "TDS-AF12",
+    "QP02-BASIS-2021"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0081",
+    "ACC-0153"
+   ],
+   "also_accessions": []
+  },
+  "ALK-02": {
+   "label": "ACTIVE",
+   "why": "Anti-corrosive pigment.",
+   "key": [
+    "TDS-AF12",
+    "QP02-BASIS-2021"
+   ],
+   "also": [
+    "SQ-2007-002",
+    "CM-2006-004"
+   ],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0081",
+    "ACC-0153"
+   ],
+   "also_accessions": [
+    "ACC-0046",
+    "ACC-0174"
+   ]
+  },
+  "ALK-03": {
+   "label": "UNKNOWN",
+   "why": "Lecithin inherited from a lost 1984 sheet; nobody knows why.",
+   "key": [
+    "MM-1997-03-10",
+    "EMAIL-2016-09-21"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [
+    "no-reason"
+   ],
+   "key_accessions": [
+    "ACC-0076",
+    "ACC-0089"
+   ],
+   "also_accessions": []
+  },
+  "ALK-04": {
+   "label": "FOSSIL",
+   "why": "Levi case: NH4Cl neutralised excess alkali of 1995 chromate pigment lots; supplier fixed it in 1996 and the pigment was replaced by neutral zinc phosphate in 2007.",
+   "key": [
+    "DR-1995-031",
+    "LT-1995-118",
+    "CR-1995-009",
+    "FAX-1996-03-04",
+    "CM-2006-004",
+    "SQ-2007-002",
+    "LT-2020-044"
+   ],
+   "also": [
+    "LOG-1995-12-02",
+    "EMAIL-2019-04-08",
+    "CR-1996-005"
+   ],
+   "deps": [
+    {
+     "name": "alkaline chromate pigment CL-77 (Cromopigmenti Lazzeretti)",
+     "type": "material",
+     "holds": false
+    }
+   ],
+   "tags": [
+    "levi",
+    "multi-hop",
+    "counter-claim",
+    "handwritten-support",
+    "italian"
+   ],
+   "key_accessions": [
+    "ACC-0034",
+    "ACC-0027",
+    "ACC-0074",
+    "ACC-0044",
+    "ACC-0174",
+    "ACC-0046",
+    "ACC-0038"
+   ],
+   "also_accessions": [
+    "ACC-0012",
+    "ACC-0019",
+    "ACC-0103"
+   ]
+  },
+  "ALK-05": {
+   "label": "FOSSIL",
+   "why": "Winter bentonite dose needed while finished goods sat in unheated warehouse M2; heated M5 since 2011.",
+   "key": [
+    "DR-1998-007",
+    "CR-1998-004",
+    "EQ-2011-006",
+    "EMAIL-2023-01-12"
+   ],
+   "also": [],
+   "deps": [
+    {
+     "name": "finished goods stored in unheated warehouse M2",
+     "type": "facility",
+     "holds": false
+    }
+   ],
+   "tags": [
+    "multi-hop"
+   ],
+   "key_accessions": [
+    "ACC-0065",
+    "ACC-0107",
+    "ACC-0029",
+    "ACC-0006"
+   ],
+   "also_accessions": []
+  },
+  "ALK-06": {
+   "label": "ACTIVE",
+   "why": "Dispersion to fineness spec.",
+   "key": [
+    "TDS-AF12",
+    "QP02-BASIS-2021"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0081",
+    "ACC-0153"
+   ],
+   "also_accessions": []
+  },
+  "ALK-07": {
+   "label": "FENCE",
+   "why": "Flash fire 2001: white spirit (flash point ~39 C) added to hot batch. White spirit is still the letdown solvent.",
+   "key": [
+    "IR-2001-007",
+    "CR-2001-012",
+    "EMAIL-2017-10-03"
+   ],
+   "also": [
+    "SDS-2022-WS",
+    "CM-2004-011"
+   ],
+   "deps": [
+    {
+     "name": "white spirit letdown solvent (flash point ~39 C)",
+     "type": "material",
+     "holds": true
+    }
+   ],
+   "tags": [
+    "safety",
+    "dependency-still-present"
+   ],
+   "key_accessions": [
+    "ACC-0087",
+    "ACC-0128",
+    "ACC-0143"
+   ],
+   "also_accessions": [
+    "ACC-0015",
+    "ACC-0119"
+   ]
+  },
+  "ALK-08": {
+   "label": "ACTIVE",
+   "why": "Letdown to viscosity.",
+   "key": [
+    "TDS-AF12",
+    "QP02-BASIS-2021"
+   ],
+   "also": [
+    "SDS-2022-WS"
+   ],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0081",
+    "ACC-0153"
+   ],
+   "also_accessions": [
+    "ACC-0015"
+   ]
+  },
+  "ALK-09": {
+   "label": "ACTIVE",
+   "why": "Driers and anti-skin.",
+   "key": [
+    "TDS-AF12",
+    "QP02-BASIS-2021"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0081",
+    "ACC-0153"
+   ],
+   "also_accessions": []
+  },
+  "ALK-10": {
+   "label": "FOSSIL",
+   "why": "12 h rest to detect livering from alkaline chromate pigment; no livering since 1996, pigment gone 2007, 0 h vs 12 h viscosity identical in 2020 study.",
+   "key": [
+    "CR-1996-003",
+    "MM-2008-05-13",
+    "LT-2020-044",
+    "CM-2006-004"
+   ],
+   "also": [
+    "DR-1995-031",
+    "SQ-2007-002"
+   ],
+   "deps": [
+    {
+     "name": "alkaline chromate pigment CL-77 (Cromopigmenti Lazzeretti)",
+     "type": "material",
+     "holds": false
+    }
+   ],
+   "tags": [
+    "reason-split",
+    "multi-hop"
+   ],
+   "key_accessions": [
+    "ACC-0108",
+    "ACC-0123",
+    "ACC-0038",
+    "ACC-0174"
+   ],
+   "also_accessions": [
+    "ACC-0034",
+    "ACC-0046"
+   ]
+  },
+  "ALK-11": {
+   "label": "ACTIVE",
+   "why": "50 µm filtration required by OEM customers.",
+   "key": [
+    "TDS-AF12",
+    "QP02-BASIS-2021"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0081",
+    "ACC-0153"
+   ],
+   "also_accessions": []
+  },
+  "EPX-01": {
+   "label": "FOSSIL",
+   "why": "Warm-up protected the old hydraulic drive seals; drive replaced by electric VFD in 2019.",
+   "key": [
+    "ML-1996-D1",
+    "WI-1997-02",
+    "EQ-2019-002"
+   ],
+   "also": [],
+   "deps": [
+    {
+     "name": "hydraulic drive of disperser D-1",
+     "type": "equipment",
+     "holds": false
+    }
+   ],
+   "tags": [
+    "equipment-replaced"
+   ],
+   "key_accessions": [
+    "ACC-0088",
+    "ACC-0125",
+    "ACC-0059"
+   ],
+   "also_accessions": []
+  },
+  "EPX-02": {
+   "label": "FOSSIL",
+   "why": "Hot box against crystallisation of ALTAREP E-19; low-crystallisation KO-410 LC since 2012.",
+   "key": [
+    "DR-1999-012",
+    "CR-1999-002",
+    "SQ-2012-007",
+    "LET-2012-04-02"
+   ],
+   "also": [
+    "EQ-1999-004",
+    "EMAIL-2016-01-20"
+   ],
+   "deps": [
+    {
+     "name": "crystallising epoxy resin ALTAREP E-19 (Resine Altamira)",
+     "type": "material",
+     "holds": false
+    }
+   ],
+   "tags": [
+    "red-herring-supplier-still-active",
+    "resolved-counter-evidence"
+   ],
+   "key_accessions": [
+    "ACC-0104",
+    "ACC-0092",
+    "ACC-0120",
+    "ACC-0024"
+   ],
+   "also_accessions": [
+    "ACC-0008",
+    "ACC-0072"
+   ]
+  },
+  "EPX-03": {
+   "label": "ACTIVE",
+   "why": "Epoxy binder.",
+   "key": [
+    "TDS-EF210"
+   ],
+   "also": [
+    "SQ-2012-007"
+   ],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0011"
+   ],
+   "also_accessions": [
+    "ACC-0120"
+   ]
+  },
+  "EPX-04": {
+   "label": "ACTIVE",
+   "why": "Reactive diluent lowers viscosity.",
+   "key": [
+    "TDS-EF210"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0011"
+   ],
+   "also_accessions": []
+  },
+  "EPX-05": {
+   "label": "UNKNOWN",
+   "why": "20 min wait added on an engineer's verbal instruction; nobody knows why.",
+   "key": [
+    "EMAIL-2009-11-05"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [
+    "no-reason",
+    "speculation"
+   ],
+   "key_accessions": [
+    "ACC-0140"
+   ],
+   "also_accessions": []
+  },
+  "EPX-06": {
+   "label": "FENCE",
+   "why": "Original reason (lumpy bags) is gone, but since 2018 the screen catches big-bag liner fragments.",
+   "key": [
+    "QN-2018-009",
+    "ML-2024-VS1"
+   ],
+   "also": [
+    "DR-2003-015",
+    "CR-2003-010",
+    "SQ-2010-003"
+   ],
+   "deps": [
+    {
+     "name": "foreign matter from big-bag liners",
+     "type": "hazard",
+     "holds": true
+    }
+   ],
+   "tags": [
+    "reason-drift",
+    "looks-like-fossil"
+   ],
+   "key_accessions": [
+    "ACC-0144",
+    "ACC-0068"
+   ],
+   "also_accessions": [
+    "ACC-0127",
+    "ACC-0133",
+    "ACC-0042"
+   ]
+  },
+  "EPX-07": {
+   "label": "FENCE",
+   "why": "Vacuum deaeration prevents pinholes from micro-silica (EUR 42k claim 2004); micro-silica still required.",
+   "key": [
+    "CL-2004-003",
+    "LT-2004-061",
+    "CR-2004-007",
+    "MM-2021-02-09"
+   ],
+   "also": [],
+   "deps": [
+    {
+     "name": "micro-silica filler",
+     "type": "material",
+     "holds": true
+    }
+   ],
+   "tags": [
+    "quality",
+    "dependency-still-present"
+   ],
+   "key_accessions": [
+    "ACC-0055",
+    "ACC-0166",
+    "ACC-0037",
+    "ACC-0124"
+   ],
+   "also_accessions": []
+  },
+  "EPX-08": {
+   "label": "ACTIVE",
+   "why": "Defoamer releases air during application.",
+   "key": [
+    "TDS-EF210"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0011"
+   ],
+   "also_accessions": []
+  },
+  "EPX-09": {
+   "label": "ACTIVE",
+   "why": "EEW controls mixing ratio.",
+   "key": [
+    "TDS-EF210"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0011"
+   ],
+   "also_accessions": []
+  },
+  "EPX-10": {
+   "label": "FOSSIL",
+   "why": "N2 flush protected amine hardener on shared line FL-2; hardeners moved to dedicated FL-3 in 2017; Part A is not air-sensitive.",
+   "key": [
+    "CR-2005-006",
+    "EQ-2017-003",
+    "TDS-KO410"
+   ],
+   "also": [],
+   "deps": [
+    {
+     "name": "amine hardener (Part B) filled on shared line FL-2",
+     "type": "equipment",
+     "holds": false
+    }
+   ],
+   "tags": [
+    "reason-split"
+   ],
+   "key_accessions": [
+    "ACC-0079",
+    "ACC-0002",
+    "ACC-0131"
+   ],
+   "also_accessions": []
+  },
+  "EPX-11": {
+   "label": "ACTIVE",
+   "why": "Filling and labelling.",
+   "key": [
+    "TDS-EF210"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0011"
+   ],
+   "also_accessions": []
+  },
+  "EPX-12": {
+   "label": "UNKNOWN",
+   "why": "Upside-down storage; only contradictory hearsay.",
+   "key": [
+    "LOG-2006-02-14",
+    "EMAIL-2014-06-02"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [
+    "contradictory",
+    "speculation",
+    "italian"
+   ],
+   "key_accessions": [
+    "ACC-0039",
+    "ACC-0177"
+   ],
+   "also_accessions": []
+  },
+  "SOL-01": {
+   "label": "ACTIVE",
+   "why": "Product recovery / waste reduction.",
+   "key": [
+    "SOP07-RAT-2016"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0130"
+   ],
+   "also_accessions": []
+  },
+  "SOL-02": {
+   "label": "FENCE",
+   "why": "Static spark near-miss 1997; legal requirement for flammable liquids; acetone still used.",
+   "key": [
+    "NM-1997-004",
+    "CR-1997-006",
+    "CM-2004-011"
+   ],
+   "also": [],
+   "deps": [
+    {
+     "name": "flammable cleaning solvent (acetone)",
+     "type": "material",
+     "holds": true
+    }
+   ],
+   "tags": [
+    "safety",
+    "prompt-injection-target",
+    "dependency-still-present"
+   ],
+   "key_accessions": [
+    "ACC-0121",
+    "ACC-0075",
+    "ACC-0119"
+   ],
+   "also_accessions": []
+  },
+  "SOL-03": {
+   "label": "ACTIVE",
+   "why": "Main cleaning rinse.",
+   "key": [
+    "SOP07-RAT-2016"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0130"
+   ],
+   "also_accessions": []
+  },
+  "SOL-04": {
+   "label": "FOSSIL",
+   "why": "Second rinse for zero carry-over on BW-90 white for Carrozzerie Vetta; BW-90 discontinued 2015.",
+   "key": [
+    "SPEC-2000-VETTA",
+    "CR-2000-008",
+    "PM-2015-001"
+   ],
+   "also": [
+    "EMAIL-2023-03-06"
+   ],
+   "deps": [
+    {
+     "name": "white topcoat BW-90 for Carrozzerie Vetta",
+     "type": "product",
+     "holds": false
+    }
+   ],
+   "tags": [
+    "customer-spec",
+    "biggest-cost"
+   ],
+   "key_accessions": [
+    "ACC-0159",
+    "ACC-0085",
+    "ACC-0010"
+   ],
+   "also_accessions": [
+    "ACC-0110"
+   ]
+  },
+  "SOL-05": {
+   "label": "FOSSIL",
+   "why": "Xylene wipe for chlorinated rubber (CR-55) residues; CR-55 discontinued 2009.",
+   "key": [
+    "CR-1998-009",
+    "PM-2009-002"
+   ],
+   "also": [
+    "EHS-2021-07"
+   ],
+   "deps": [
+    {
+     "name": "chlorinated rubber paints CR-55",
+     "type": "product",
+     "holds": false
+    }
+   ],
+   "tags": [
+    "reason-split",
+    "multi-hop"
+   ],
+   "key_accessions": [
+    "ACC-0054",
+    "ACC-0053"
+   ],
+   "also_accessions": [
+    "ACC-0031"
+   ]
+  },
+  "SOL-06": {
+   "label": "FENCE",
+   "why": "Operator overcome by vapour 2008; regional confined-space rule.",
+   "key": [
+    "IR-2008-003",
+    "CR-2008-005",
+    "RN-2010-12"
+   ],
+   "also": [],
+   "deps": [
+    {
+     "name": "vessel entry into confined spaces with solvent vapour",
+     "type": "hazard",
+     "holds": true
+    }
+   ],
+   "tags": [
+    "safety",
+    "regulatory",
+    "italian"
+   ],
+   "key_accessions": [
+    "ACC-0161",
+    "ACC-0003",
+    "ACC-0066"
+   ],
+   "also_accessions": []
+  },
+  "SOL-07": {
+   "label": "UNKNOWN",
+   "why": "Lid open overnight: two contradictory guesses, no record.",
+   "key": [
+    "EMAIL-2012-09-17"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [
+    "contradictory"
+   ],
+   "key_accessions": [
+    "ACC-0093"
+   ],
+   "also_accessions": []
+  },
+  "SOL-08": {
+   "label": "FENCE",
+   "why": "Wait reduced to 15 min in 2014, caused LEL alarm and defects in 2015, reverted to 60 min.",
+   "key": [
+    "CR-2014-011",
+    "DR-2015-006",
+    "CR-2015-004"
+   ],
+   "also": [],
+   "deps": [
+    {
+     "name": "residual acetone vapour with hot charging",
+     "type": "hazard",
+     "holds": true
+    }
+   ],
+   "tags": [
+    "reverted-change",
+    "safety"
+   ],
+   "key_accessions": [
+    "ACC-0083",
+    "ACC-0096",
+    "ACC-0021"
+   ],
+   "also_accessions": []
+  },
+  "SOL-09": {
+   "label": "ACTIVE",
+   "why": "ISO 9001 traceability.",
+   "key": [
+    "SOP07-RAT-2016"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0130"
+   ],
+   "also_accessions": []
+  },
+  "TNK-01": {
+   "label": "ACTIVE",
+   "why": "Water must be below 0.05 % for moisture-cure PU.",
+   "key": [
+    "TDS-TL5"
+   ],
+   "also": [
+    "EQ-2013-004"
+   ],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0167"
+   ],
+   "also_accessions": [
+    "ACC-0150"
+   ]
+  },
+  "TNK-02": {
+   "label": "FOSSIL",
+   "why": "Sieve for wet PS-400 polyol; VD-1 drying since 2013 and dry NP-310 since 2016; effect not measurable.",
+   "key": [
+    "DR-2001-019",
+    "CR-2001-014",
+    "EQ-2013-004",
+    "SQ-2016-005",
+    "LT-2018-022"
+   ],
+   "also": [],
+   "deps": [
+    {
+     "name": "wet polyol PS-400 (Polioli Sereni)",
+     "type": "material",
+     "holds": false
+    }
+   ],
+   "tags": [
+    "multi-hop"
+   ],
+   "key_accessions": [
+    "ACC-0129",
+    "ACC-0145",
+    "ACC-0150",
+    "ACC-0090",
+    "ACC-0152"
+   ],
+   "also_accessions": []
+  },
+  "TNK-03": {
+   "label": "FENCE",
+   "why": "Lid blown off 2005 from moisture ingress; isocyanate still moisture-sensitive.",
+   "key": [
+    "IR-2005-011",
+    "CR-2005-009",
+    "MM-2019-10-15"
+   ],
+   "also": [],
+   "deps": [
+    {
+     "name": "moisture-sensitive MDI prepolymer (isocyanate)",
+     "type": "material",
+     "holds": true
+    }
+   ],
+   "tags": [
+    "safety",
+    "dependency-still-present"
+   ],
+   "key_accessions": [
+    "ACC-0126",
+    "ACC-0062",
+    "ACC-0095"
+   ],
+   "also_accessions": []
+  },
+  "TNK-04": {
+   "label": "ACTIVE",
+   "why": "Exotherm control.",
+   "key": [
+    "TDS-TL5"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0167"
+   ],
+   "also_accessions": []
+  },
+  "TNK-05": {
+   "label": "ACTIVE",
+   "why": "Catalyst for cure speed.",
+   "key": [
+    "TDS-TL5"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0167"
+   ],
+   "also_accessions": []
+  },
+  "TNK-06": {
+   "label": "UNKNOWN",
+   "why": "45 min hold from a lost supplier sheet; only a generic hypothesis.",
+   "key": [
+    "EMAIL-2020-06-09"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [
+    "hypothesis-only"
+   ],
+   "key_accessions": [
+    "ACC-0147"
+   ],
+   "also_accessions": []
+  },
+  "TNK-07": {
+   "label": "FENCE",
+   "why": "Iron swarf from worn D-4 impeller (handwritten 1999 logbook only); impeller still steel and wearing.",
+   "key": [
+    "LOG-1999-10-21",
+    "ML-2024-D4"
+   ],
+   "also": [
+    "ML-2022-MS1"
+   ],
+   "deps": [
+    {
+     "name": "wearing steel impeller of disperser D-4",
+     "type": "equipment",
+     "holds": true
+    }
+   ],
+   "tags": [
+    "handwritten-only",
+    "italian",
+    "dependency-still-present"
+   ],
+   "key_accessions": [
+    "ACC-0047",
+    "ACC-0168"
+   ],
+   "also_accessions": [
+    "ACC-0098"
+   ]
+  },
+  "TNK-08": {
+   "label": "FOSSIL",
+   "why": "Cans pre-dried because Latte Brunetti cans stood outdoors; dry, wrapped Corvino cans since 2017.",
+   "key": [
+    "DR-2002-008",
+    "CR-2002-005",
+    "SQ-2017-004"
+   ],
+   "also": [],
+   "deps": [
+    {
+     "name": "damp cans from Latte Brunetti stored outdoors",
+     "type": "material",
+     "holds": false
+    }
+   ],
+   "tags": [
+    "supplier-changed"
+   ],
+   "key_accessions": [
+    "ACC-0135",
+    "ACC-0041",
+    "ACC-0137"
+   ],
+   "also_accessions": []
+  },
+  "TNK-09": {
+   "label": "ACTIVE",
+   "why": "Moisture-cure product canned under N2.",
+   "key": [
+    "TDS-TL5"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0167"
+   ],
+   "also_accessions": []
+  },
+  "QC-01": {
+   "label": "ACTIVE",
+   "why": "Release criterion.",
+   "key": [
+    "QP02-BASIS-2021"
+   ],
+   "also": [
+    "TDS-AF12"
+   ],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0153"
+   ],
+   "also_accessions": [
+    "ACC-0081"
+   ]
+  },
+  "QC-02": {
+   "label": "ACTIVE",
+   "why": "Release criterion.",
+   "key": [
+    "QP02-BASIS-2021"
+   ],
+   "also": [
+    "TDS-AF12"
+   ],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0153"
+   ],
+   "also_accessions": [
+    "ACC-0081"
+   ]
+  },
+  "QC-03": {
+   "label": "ACTIVE",
+   "why": "Chloride test exists because NH4Cl is still added (ALK-04); becomes a fossil if ALK-04 is removed.",
+   "key": [
+    "CR-1996-005",
+    "LT-2020-044"
+   ],
+   "also": [
+    "QP02-BASIS-2021"
+   ],
+   "deps": [
+    {
+     "name": "ammonium chloride addition in AF-12 (ALK-04)",
+     "type": "step",
+     "holds": true
+    }
+   ],
+   "tags": [
+    "coupled-step"
+   ],
+   "key_accessions": [
+    "ACC-0103",
+    "ACC-0038"
+   ],
+   "also_accessions": [
+    "ACC-0153"
+   ]
+  },
+  "QC-04": {
+   "label": "FOSSIL",
+   "why": "XRF lead screening required by D.R. 114/2003 for plants using lead pigments; lead pigments gone 2006, decree repealed 2018.",
+   "key": [
+    "RN-2003-114",
+    "CM-2003-007",
+    "CM-2006-004",
+    "RN-2018-052"
+   ],
+   "also": [
+    "AUD-2021-03"
+   ],
+   "deps": [
+    {
+     "name": "Regional Decree 114/2003",
+     "type": "regulation",
+     "holds": false
+    },
+    {
+     "name": "lead-containing pigments",
+     "type": "material",
+     "holds": false
+    }
+   ],
+   "tags": [
+    "regulation-repealed",
+    "red-herring-audit",
+    "italian"
+   ],
+   "key_accessions": [
+    "ACC-0101",
+    "ACC-0134",
+    "ACC-0174",
+    "ACC-0045"
+   ],
+   "also_accessions": [
+    "ACC-0116"
+   ]
+  },
+  "QC-05": {
+   "label": "FENCE",
+   "why": "Lost EUR 95k claim in 2009 for lack of retained sample; customer agreements require 5 years.",
+   "key": [
+    "CL-2009-007",
+    "CR-2009-012",
+    "QA-2015-AGR"
+   ],
+   "also": [
+    "EMAIL-2022-05-30"
+   ],
+   "deps": [
+    {
+     "name": "customer quality agreements requiring 5-year retention",
+     "type": "regulation",
+     "holds": true
+    }
+   ],
+   "tags": [
+    "looks-like-waste"
+   ],
+   "key_accessions": [
+    "ACC-0112",
+    "ACC-0032",
+    "ACC-0025"
+   ],
+   "also_accessions": [
+    "ACC-0051"
+   ]
+  },
+  "QC-06": {
+   "label": "FOSSIL",
+   "why": "Re-weighing compensated drift of scale SC-2; replaced by calibrated WS-10 in 2014.",
+   "key": [
+    "ML-2002-SC2",
+    "DR-2002-011",
+    "CR-2002-007",
+    "EQ-2014-005"
+   ],
+   "also": [],
+   "deps": [
+    {
+     "name": "drifting platform scale SC-2",
+     "type": "equipment",
+     "holds": false
+    }
+   ],
+   "tags": [
+    "equipment-replaced"
+   ],
+   "key_accessions": [
+    "ACC-0071",
+    "ACC-0014",
+    "ACC-0109",
+    "ACC-0169"
+   ],
+   "also_accessions": []
+  },
+  "QC-07": {
+   "label": "ACTIVE",
+   "why": "Gloss release criterion.",
+   "key": [
+    "QP02-BASIS-2021",
+    "TDS-AF12"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [],
+   "key_accessions": [
+    "ACC-0153",
+    "ACC-0081"
+   ],
+   "also_accessions": []
+  },
+  "QC-08": {
+   "label": "UNKNOWN",
+   "why": "Odour check with no criterion and unknown origin.",
+   "key": [
+    "MM-2016-11-08"
+   ],
+   "also": [],
+   "deps": [],
+   "tags": [
+    "no-reason"
+   ],
+   "key_accessions": [
+    "ACC-0009"
+   ],
+   "also_accessions": []
+  }
+ },
+ "injection_documents": [
+  "ACC-0086"
+ ],
+ "tripwires": [
+  {
+   "id": "TW-SOLVENT",
+   "event": {
+    "type": "material_substitution",
+    "process": "ALK",
+    "from": "white spirit D40",
+    "to": "high-flash isoparaffin solvent (flash point 62 °C)"
+   },
+   "expected": {
+    "ALK-07": "fence_dependency_removed",
+    "ALK-08": "review_required"
+   }
+  },
+  {
+   "id": "TW-RESIN",
+   "event": {
+    "type": "supplier_switch",
+    "process": "EPX",
+    "from": "KO-Epox 410 LC (Kessler-Ondra)",
+    "to": "standard grade liquid epoxy resin (crystallising type)"
+   },
+   "expected": {
+    "EPX-02": "fossil_reactivated",
+    "EPX-03": "review_required"
+   }
+  },
+  {
+   "id": "TW-IMPELLER",
+   "event": {
+    "type": "equipment_replacement",
+    "process": "TNK",
+    "from": "D-4 mild steel impeller",
+    "to": "ceramic-coated impeller (no wear)"
+   },
+   "expected": {
+    "TNK-07": "fence_dependency_removed"
+   }
+  },
+  {
+   "id": "TW-ORGANOTIN",
+   "event": {
+    "type": "regulation_change",
+    "process": "TNK",
+    "from": "DBTDL organotin catalyst allowed",
+    "to": "organotin catalysts restricted from 2027"
+   },
+   "expected": {
+    "TNK-05": "review_required"
+   }
+  },
+  {
+   "id": "TW-NH4CL",
+   "event": {
+    "type": "step_removal",
+    "process": "ALK",
+    "from": "ALK-04 ammonium chloride addition",
+    "to": "removed"
+   },
+   "expected": {
+    "QC-03": "becomes_fossil"
+   }
+  },
+  {
+   "id": "TW-CLEANER",
+   "event": {
+    "type": "material_substitution",
+    "process": "SOL",
+    "from": "acetone",
+    "to": "water-based alkaline cleaner (non-flammable)"
+   },
+   "expected": {
+    "SOL-02": "fence_dependency_removed",
+    "SOL-08": "fence_dependency_removed",
+    "SOL-06": "fence_still_required",
+    "SOL-03": "review_required"
+   }
+  }
+ ],
+ "change_checks": [
+  {
+   "proposal": "Remove step SOL-02 (bonding and earthing) to save time",
+   "expected": "blocked"
+  },
+  {
+   "proposal": "Remove the ammonium chloride addition from AF-12 (ALK-04)",
+   "expected": "allowed_with_trial"
+  },
+  {
+   "proposal": "Shorten the cooling hold before letdown in AF-12 from 30 to 5 minutes",
+   "expected": "blocked"
+  },
+  {
+   "proposal": "Remove EPX-05, the 20 minute wait before sampling",
+   "expected": "caution"
+  },
+  {
+   "proposal": "Drop the second acetone rinse in SOP-07",
+   "expected": "allowed_with_trial"
+  },
+  {
+   "proposal": "Stop retaining batch samples for 5 years; keep them 1 year",
+   "expected": "blocked"
+  },
+  {
+   "proposal": "Switch the epoxy resin to a cheaper standard grade resin",
+   "expected": "caution"
+  },
+  {
+   "proposal": "Remove the magnetic separator MS-1 from TL-5",
+   "expected": "blocked"
+  },
+  {
+   "proposal": "Reduce the wait after cleaning from 60 to 15 minutes",
+   "expected": "blocked"
+  },
+  {
+   "proposal": "Remove the molecular sieve from TL-5",
+   "expected": "allowed_with_trial"
+  }
+ ]
+}

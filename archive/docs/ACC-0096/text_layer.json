@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. DR-2015-006 20 April 2015",
+"bbox": [
+78,
+150,
+327,
+171
+]
+},
+{
+"text": "Deviation report DR-2015-006",
+"bbox": [
+78,
+179,
+394,
+207
+]
+},
+{
+"text": "AF-12 lot 15-0412 was charged hot (55 °C) into D-2 fifteen minutes after an acetone",
+"bbox": [
+78,
+219,
+880,
+245
+]
+},
+{
+"text": "cleaning.",
+"bbox": [
+78,
+245,
+164,
+271
+]
+},
+{
+"text": "LEL alarm at 35 % during charging; the batch showed popping and craters attributed to",
+"bbox": [
+78,
+281,
+894,
+307
+]
+},
+{
+"text": "residual acetone. Batch downgraded.",
+"bbox": [
+78,
+307,
+431,
+333
+]
+},
+{
+"text": "Prepared by: R. Ferrandi",
+"bbox": [
+78,
+361,
+254,
+381
+]
+}
+]
+}
+]
+}

@@ -1,0 +1,209 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. SOP-07 Rev 6 29 September 2014",
+"bbox": [
+78,
+150,
+374,
+171
+]
+},
+{
+"text": "STANDARD OPERATING PROCEDURE - SOP-07 Solvent cleaning of dispersers and",
+"bbox": [
+78,
+179,
+916,
+207
+]
+},
+{
+"text": "mixing vessels",
+"bbox": [
+78,
+207,
+228,
+235
+]
+},
+{
+"text": "Document: SOP-07 Solvent cleaning of dispersers and mixing vessels",
+"bbox": [
+78,
+247,
+732,
+273
+]
+},
+{
+"text": "Revision: Rev 6, effective 29/09/2014.",
+"bbox": [
+78,
+283,
+446,
+309
+]
+},
+{
+"text": "Steps",
+"bbox": [
+78,
+323,
+135,
+350
+]
+},
+{
+"text": "1. Drain residual product into recovery drum.",
+"bbox": [
+78,
+354,
+502,
+380
+]
+},
+{
+"text": "2. Bond and earth vessel and solvent drum before transfer (clamps at solvent station).",
+"bbox": [
+78,
+390,
+888,
+416
+]
+},
+{
+"text": "3. Rinse with 40 L acetone, circulate 10 min, drain to waste solvent.",
+"bbox": [
+78,
+426,
+717,
+452
+]
+},
+{
+"text": "4. Second rinse with 20 L fresh acetone, drain.",
+"bbox": [
+78,
+462,
+518,
+488
+]
+},
+{
+"text": "5. Wipe agitator shaft and blades with xylene-soaked rag.",
+"bbox": [
+78,
+498,
+617,
+524
+]
+},
+{
+"text": "6. Before vessel entry: forced ventilation 15 min, O2/LEL test, entry permit.",
+"bbox": [
+78,
+534,
+789,
+560
+]
+},
+{
+"text": "7. Leave lid open overnight.",
+"bbox": [
+78,
+570,
+339,
+596
+]
+},
+{
+"text": "8. Wait at least 15 min before charging next batch.",
+"bbox": [
+78,
+606,
+554,
+632
+]
+},
+{
+"text": "9. Record cleaning in vessel logbook and sign.",
+"bbox": [
+78,
+642,
+512,
+668
+]
+},
+{
+"text": "Change note",
+"bbox": [
+78,
+682,
+204,
+709
+]
+},
+{
+"text": "Wait before next charge reduced to 15 min (CR-2014-011).",
+"bbox": [
+78,
+713,
+642,
+739
+]
+},
+{
+"text": "Prepared by: D. Morra",
+"bbox": [
+78,
+749,
+285,
+775
+]
+},
+{
+"text": "Prepared by: D. Morra",
+"bbox": [
+78,
+803,
+237,
+823
+]
+},
+{
+"text": "[stamp] SUPERSEDED ARCHIVE COPY",
+"bbox": [
+462,
+1127,
+794,
+1221
+]
+}
+]
+}
+]
+}

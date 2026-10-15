@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. EQ-2013-004 2 September 2013",
+"bbox": [
+78,
+150,
+365,
+171
+]
+},
+{
+"text": "Commissioning record EQ-2013-004 - vacuum dryer VD-1",
+"bbox": [
+78,
+179,
+673,
+207
+]
+},
+{
+"text": "Vacuum dryer VD-1 for polyol: drying at 90 °C / 20 mbar to water below 0.05 %; Karl",
+"bbox": [
+78,
+219,
+876,
+245
+]
+},
+{
+"text": "Fischer check before isocyanate addition.",
+"bbox": [
+78,
+245,
+471,
+271
+]
+},
+{
+"text": "In service for TL-5 from Rev 6 of the recipe.",
+"bbox": [
+78,
+281,
+491,
+307
+]
+},
+{
+"text": "Prepared by: D. Morra",
+"bbox": [
+78,
+335,
+237,
+355
+]
+}
+]
+}
+]
+}

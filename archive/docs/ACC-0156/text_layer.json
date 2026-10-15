@@ -1,0 +1,65 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "27 February 2021",
+"bbox": [
+78,
+150,
+214,
+171
+]
+},
+{
+"text": "Minutes - plant meeting (2021)",
+"bbox": [
+78,
+179,
+399,
+207
+]
+},
+{
+"text": "1. Customer visit from an agricultural OEM next week; route through warehouse M5.",
+"bbox": [
+78,
+219,
+871,
+245
+]
+},
+{
+"text": "2. Forklift traffic plan updated.",
+"bbox": [
+78,
+255,
+366,
+281
+]
+}
+]
+}
+]
+}

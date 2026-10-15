@@ -1,0 +1,119 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. SQ-2012-007 19 March 2012",
+"bbox": [
+78,
+150,
+339,
+171
+]
+},
+{
+"text": "Supplier qualification SQ-2012-007 - Kessler-Ondra Harze GmbH, KO-Epox 410",
+"bbox": [
+78,
+179,
+896,
+207
+]
+},
+{
+"text": "LC",
+"bbox": [
+78,
+207,
+104,
+235
+]
+},
+{
+"text": "Material: modified low-crystallisation liquid epoxy resin KO-Epox 410 LC, for EF-210 Part",
+"bbox": [
+78,
+247,
+917,
+273
+]
+},
+{
+"text": "A.",
+"bbox": [
+78,
+273,
+97,
+299
+]
+},
+{
+"text": "Tests: 6 freeze-thaw cycles (-10 °C / +25 °C): no crystallisation. Reference ALTAREP",
+"bbox": [
+78,
+309,
+877,
+335
+]
+},
+{
+"text": "E-19 crystallised after cycle 2.",
+"bbox": [
+78,
+335,
+366,
+361
+]
+},
+{
+"text": "EEW 188 g/eq; viscosity at 25 °C 9,800 mPa·s; EF-210 trial batches within specification.",
+"bbox": [
+78,
+371,
+910,
+397
+]
+},
+{
+"text": "Conclusion: approved; replaces ALTAREP E-19 from May 2012.",
+"bbox": [
+78,
+407,
+675,
+433
+]
+},
+{
+"text": "Prepared by: E. Marchisio",
+"bbox": [
+78,
+461,
+262,
+481
+]
+}
+]
+}
+]
+}

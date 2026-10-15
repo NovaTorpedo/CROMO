@@ -1,0 +1,227 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. EF-210 Rev 6 3 October 2005",
+"bbox": [
+78,
+150,
+340,
+171
+]
+},
+{
+"text": "RECIPE CARD - EF-210 epoxy floor coating - Part A",
+"bbox": [
+78,
+179,
+597,
+207
+]
+},
+{
+"text": "Document: EF-210 epoxy floor coating - Part A",
+"bbox": [
+78,
+219,
+519,
+245
+]
+},
+{
+"text": "Revision: Rev 6, effective 03/10/2005.",
+"bbox": [
+78,
+255,
+446,
+281
+]
+},
+{
+"text": "Steps",
+"bbox": [
+78,
+295,
+135,
+322
+]
+},
+{
+"text": "1. Run D-1 empty 5 min before charging (see WI-1997-02).",
+"bbox": [
+78,
+326,
+640,
+352
+]
+},
+{
+"text": "2. Pre-heat all epoxy resin drums in hot box HB-1, 40 °C, 12 h.",
+"bbox": [
+78,
+362,
+670,
+388
+]
+},
+{
+"text": "3. Charge 430 kg liquid epoxy resin ALTAREP E-19 (Resine Altamira).",
+"bbox": [
+78,
+398,
+727,
+424
+]
+},
+{
+"text": "4. Add 40 kg reactive diluent; mix 10 min.",
+"bbox": [
+78,
+434,
+471,
+460
+]
+},
+{
+"text": "5. Wait 20 min after diluent before viscosity sample.",
+"bbox": [
+78,
+470,
+569,
+496
+]
+},
+{
+"text": "6. Sieve quartz flour on 1 mm screen before charging.",
+"bbox": [
+78,
+506,
+586,
+532
+]
+},
+{
+"text": "7. Add 250 kg quartz flour and 20 kg micro-silica under vacuum (-0.8 bar).",
+"bbox": [
+78,
+542,
+779,
+568
+]
+},
+{
+"text": "8. Add 2.4 kg silicone defoamer.",
+"bbox": [
+78,
+578,
+384,
+604
+]
+},
+{
+"text": "9. Sample; EEW 190-210 g/eq.",
+"bbox": [
+78,
+614,
+372,
+640
+]
+},
+{
+"text": "10. Flush every pail with nitrogen before filling (FL-2).",
+"bbox": [
+78,
+650,
+586,
+676
+]
+},
+{
+"text": "11. Fill 20 kg pails on FL-2, close and label.",
+"bbox": [
+78,
+686,
+489,
+712
+]
+},
+{
+"text": "12. Store filled pails upside down 24 h (FT).",
+"bbox": [
+78,
+722,
+490,
+748
+]
+},
+{
+"text": "Change note",
+"bbox": [
+78,
+762,
+204,
+789
+]
+},
+{
+"text": "Nitrogen flush of pails on FL-2 (CR-2005-006). Pails upside down 24 h.",
+"bbox": [
+78,
+793,
+750,
+819
+]
+},
+{
+"text": "Prepared by: P. Gastaldi",
+"bbox": [
+78,
+829,
+305,
+855
+]
+},
+{
+"text": "Prepared by: P. Gastaldi",
+"bbox": [
+78,
+883,
+253,
+903
+]
+},
+{
+"text": "[stamp] SUPERSEDED ARCHIVE COPY",
+"bbox": [
+425,
+1078,
+757,
+1176
+]
+}
+]
+}
+]
+}

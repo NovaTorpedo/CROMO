@@ -1,0 +1,74 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "LABORATORIO METROLOGICO CANAVESE",
+"bbox": [
+78,
+78,
+740,
+111
+]
+},
+{
+"text": "Calibration certificate",
+"bbox": [
+78,
+117,
+215,
+134
+]
+},
+{
+"text": "27 December 2025",
+"bbox": [
+78,
+150,
+224,
+171
+]
+},
+{
+"text": "Calibration certificate - Brookfield viscometer DV-2",
+"bbox": [
+78,
+179,
+601,
+207
+]
+},
+{
+"text": "Instrument: Brookfield viscometer DV-2. Result: deviation 0.8 % - within tolerance.",
+"bbox": [
+78,
+219,
+863,
+245
+]
+},
+{
+"text": "Next calibration due in 12 months.",
+"bbox": [
+78,
+255,
+404,
+281
+]
+},
+{
+"text": "Laboratorio Metrologico Canavese (accredited).",
+"bbox": [
+78,
+291,
+527,
+317
+]
+}
+]
+}
+]
+}

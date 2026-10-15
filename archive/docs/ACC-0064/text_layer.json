@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "15 December 2006",
+"bbox": [
+78,
+150,
+224,
+171
+]
+},
+{
+"text": "MAINTENANCE LOG - DISPERSER D-3 (extract)",
+"bbox": [
+78,
+179,
+562,
+207
+]
+},
+{
+"text": "21/03/2006 Shaft seal replaced. (2 h)",
+"bbox": [
+78,
+219,
+440,
+245
+]
+},
+{
+"text": "01/06/2006 Gearbox overhaul. (2 h)",
+"bbox": [
+78,
+255,
+427,
+281
+]
+},
+{
+"text": "05/09/2007 Shaft seal replaced. (2 h)",
+"bbox": [
+78,
+291,
+440,
+317
+]
+},
+{
+"text": "21/02/2008 Shaft seal replaced. (1 h)",
+"bbox": [
+78,
+327,
+440,
+353
+]
+},
+{
+"text": "22/05/2008 Gearbox overhaul. (1 h)",
+"bbox": [
+78,
+363,
+427,
+389
+]
+}
+]
+}
+]
+}

@@ -1,0 +1,200 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. TL-5 Rev 5 29 August 2005",
+"bbox": [
+78,
+150,
+321,
+171
+]
+},
+{
+"text": "RECIPE CARD - TL-5 tank sealing compound (1K PU)",
+"bbox": [
+78,
+179,
+615,
+207
+]
+},
+{
+"text": "Document: TL-5 tank sealing compound (1K PU)",
+"bbox": [
+78,
+219,
+532,
+245
+]
+},
+{
+"text": "Revision: Rev 5, effective 29/08/2005.",
+"bbox": [
+78,
+255,
+446,
+281
+]
+},
+{
+"text": "Steps",
+"bbox": [
+78,
+295,
+135,
+322
+]
+},
+{
+"text": "1. Add 2 kg molecular sieve 3A per batch.",
+"bbox": [
+78,
+326,
+471,
+352
+]
+},
+{
+"text": "2. Nitrogen blanket on D-4 during and after isocyanate addition.",
+"bbox": [
+78,
+362,
+677,
+388
+]
+},
+{
+"text": "3. Charge 900 kg polyol PS-400 (Polioli Sereni); add 280 kg MDI prepolymer at max 2",
+"bbox": [
+78,
+398,
+886,
+424
+]
+},
+{
+"text": "kg/min.",
+"bbox": [
+78,
+424,
+149,
+450
+]
+},
+{
+"text": "4. Add 0.6 kg DBTDL.",
+"bbox": [
+78,
+460,
+279,
+486
+]
+},
+{
+"text": "5. Hold 60 °C, 45 min (Varesotti formulation sheet).",
+"bbox": [
+78,
+496,
+566,
+522
+]
+},
+{
+"text": "6. Pass through magnetic separator MS-1 before canning (see shift log 21/10/99).",
+"bbox": [
+78,
+532,
+853,
+558
+]
+},
+{
+"text": "7. Pre-dry empty cans in oven OV-1, 60 °C, 2 h.",
+"bbox": [
+78,
+568,
+525,
+594
+]
+},
+{
+"text": "8. Fill 5 L cans (Latte Brunetti) under dry nitrogen; seal.",
+"bbox": [
+78,
+604,
+599,
+630
+]
+},
+{
+"text": "Change note",
+"bbox": [
+78,
+644,
+204,
+671
+]
+},
+{
+"text": "Nitrogen blanket during isocyanate addition (CR-2005-009). Can pre-drying per Rev 4.",
+"bbox": [
+78,
+675,
+891,
+701
+]
+},
+{
+"text": "Prepared by: P. Gastaldi",
+"bbox": [
+78,
+711,
+305,
+737
+]
+},
+{
+"text": "Prepared by: P. Gastaldi",
+"bbox": [
+78,
+765,
+253,
+785
+]
+},
+{
+"text": "[stamp] SUPERSEDED ARCHIVE COPY",
+"bbox": [
+406,
+1140,
+746,
+1272
+]
+}
+]
+}
+]
+}

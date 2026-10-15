@@ -1,0 +1,191 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. QP-02 Rev 5 9 November 2009",
+"bbox": [
+78,
+150,
+349,
+171
+]
+},
+{
+"text": "QC RELEASE PLAN - QP-02 Batch QC release",
+"bbox": [
+78,
+179,
+536,
+207
+]
+},
+{
+"text": "Document: QP-02 Batch QC release",
+"bbox": [
+78,
+219,
+418,
+245
+]
+},
+{
+"text": "Revision: Rev 5, effective 09/11/2009.",
+"bbox": [
+78,
+255,
+446,
+281
+]
+},
+{
+"text": "Steps",
+"bbox": [
+78,
+295,
+135,
+322
+]
+},
+{
+"text": "1. Viscosity, Ford cup 4 / Brookfield.",
+"bbox": [
+78,
+326,
+421,
+352
+]
+},
+{
+"text": "2. Fineness of grind, Hegman.",
+"bbox": [
+78,
+362,
+360,
+388
+]
+},
+{
+"text": "3. Chloride on every AF-12 batch, max 400 ppm (see CR-1996-005).",
+"bbox": [
+78,
+398,
+729,
+424
+]
+},
+{
+"text": "4. XRF lead screening of every incoming pigment lot (D.R. 114/2003).",
+"bbox": [
+78,
+434,
+736,
+460
+]
+},
+{
+"text": "5. Retain 0.5 L sample of each batch for 5 years.",
+"bbox": [
+78,
+470,
+534,
+496
+]
+},
+{
+"text": "6. Re-weigh each pigment addition on bench scale SC-2B, countersign.",
+"bbox": [
+78,
+506,
+747,
+532
+]
+},
+{
+"text": "7. Gloss 60° on drawdown.",
+"bbox": [
+78,
+542,
+335,
+568
+]
+},
+{
+"text": "8. Odour check.",
+"bbox": [
+78,
+578,
+229,
+604
+]
+},
+{
+"text": "Change note",
+"bbox": [
+78,
+618,
+204,
+645
+]
+},
+{
+"text": "Retained samples kept 5 years (CR-2009-012).",
+"bbox": [
+78,
+649,
+525,
+675
+]
+},
+{
+"text": "Prepared by: E. Marchisio",
+"bbox": [
+78,
+685,
+318,
+711
+]
+},
+{
+"text": "Prepared by: E. Marchisio",
+"bbox": [
+78,
+739,
+262,
+759
+]
+},
+{
+"text": "[stamp] SUPERSEDED ARCHIVE COPY",
+"bbox": [
+370,
+1112,
+702,
+1208
+]
+}
+]
+}
+]
+}

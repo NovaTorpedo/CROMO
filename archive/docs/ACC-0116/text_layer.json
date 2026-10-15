@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. AUD-2021-03 22 March 2021",
+"bbox": [
+78,
+150,
+341,
+171
+]
+},
+{
+"text": "Internal audit report AUD-2021-03 - incoming inspection",
+"bbox": [
+78,
+179,
+665,
+207
+]
+},
+{
+"text": "Scope: receiving and incoming inspection of raw materials.",
+"bbox": [
+78,
+219,
+631,
+245
+]
+},
+{
+"text": "XRF lead screening of pigment lots continues as per QP-02; records complete; no",
+"bbox": [
+78,
+255,
+848,
+281
+]
+},
+{
+"text": "non-conformities.",
+"bbox": [
+78,
+281,
+247,
+307
+]
+},
+{
+"text": "Observation: retained-sample room close to capacity.",
+"bbox": [
+78,
+317,
+583,
+343
+]
+},
+{
+"text": "Prepared by: internal auditor",
+"bbox": [
+78,
+371,
+287,
+391
+]
+}
+]
+}
+]
+}

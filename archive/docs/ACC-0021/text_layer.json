@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. CR-2015-004 11 May 2015",
+"bbox": [
+78,
+150,
+322,
+171
+]
+},
+{
+"text": "Change request CR-2015-004",
+"bbox": [
+78,
+179,
+389,
+207
+]
+},
+{
+"text": "Procedure: SOP-07. Change: restore the wait after cleaning to 60 minutes. Cancels",
+"bbox": [
+78,
+219,
+862,
+245
+]
+},
+{
+"text": "CR-2014-011.",
+"bbox": [
+78,
+245,
+217,
+271
+]
+},
+{
+"text": "Reason: DR-2015-006 - residual acetone vapour combined with hot charging gives a",
+"bbox": [
+78,
+281,
+874,
+307
+]
+},
+{
+"text": "flammable atmosphere and film defects.",
+"bbox": [
+78,
+307,
+461,
+333
+]
+},
+{
+"text": "Prepared by: D. Morra",
+"bbox": [
+78,
+361,
+237,
+381
+]
+}
+]
+}
+]
+}

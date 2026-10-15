@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "CHIMICA ONDINA S.n.c.",
+"bbox": [
+78,
+78,
+436,
+111
+]
+},
+{
+"text": "Additivi e prodotti chimici",
+"bbox": [
+78,
+117,
+241,
+134
+]
+},
+{
+"text": "12 April 2024",
+"bbox": [
+78,
+150,
+182,
+171
+]
+},
+{
+"text": "FATTURA / INVOICE n. 2456/24",
+"bbox": [
+78,
+179,
+410,
+207
+]
+},
+{
+"text": "Bill to: Valdorso Coatings S.p.A., Via delle Fornaci 7, Borgo Valdorso (TO).",
+"bbox": [
+78,
+219,
+770,
+245
+]
+},
+{
+"text": "Item: Soy lecithin, pails 20 kg. Quantity: 800 kg. Unit price: 4.23 EUR.",
+"bbox": [
+78,
+255,
+731,
+281
+]
+},
+{
+"text": "Total excl. VAT: 3,383 EUR. Payment: 60 days end of month.",
+"bbox": [
+78,
+291,
+649,
+317
+]
+},
+{
+"text": "Delivery note: DDT 4864 of 12/04/2024.",
+"bbox": [
+78,
+327,
+466,
+353
+]
+}
+]
+}
+]
+}

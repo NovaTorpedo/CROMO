@@ -1,0 +1,74 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "20 May 2024",
+"bbox": [
+78,
+150,
+177,
+171
+]
+},
+{
+"text": "Maintenance log - disperser D-4 (extract)",
+"bbox": [
+78,
+179,
+500,
+207
+]
+},
+{
+"text": "20/05/2024 Impeller edge wear measured 2.1 mm. Replacement planned 2027 (mild",
+"bbox": [
+78,
+219,
+896,
+245
+]
+},
+{
+"text": "steel, same type).",
+"bbox": [
+78,
+245,
+246,
+271
+]
+},
+{
+"text": "20/05/2024 Shaft seal OK. Gearbox oil changed.",
+"bbox": [
+78,
+281,
+541,
+307
+]
+}
+]
+}
+]
+}

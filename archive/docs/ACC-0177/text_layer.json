@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: Warehouse (M5)",
+"bbox": [
+78,
+78,
+298,
+101
+]
+},
+{
+"text": "To: Davide Morra",
+"bbox": [
+78,
+101,
+254,
+124
+]
+},
+{
+"text": "Date: 2 Jun 2014",
+"bbox": [
+78,
+124,
+254,
+147
+]
+},
+{
+"text": "Subject: Upside-down pails",
+"bbox": [
+78,
+147,
+364,
+170
+]
+},
+{
+"text": "We were told it is to check that the lids don't leak.",
+"bbox": [
+78,
+186,
+661,
+209
+]
+},
+{
+"text": "Reply from R. Ferrandi: I always heard it keeps the lid gasket wet so it",
+"bbox": [
+106,
+219,
+898,
+242
+]
+},
+{
+"text": "doesn't dry out. Not sure either.",
+"bbox": [
+106,
+242,
+469,
+265
+]
+},
+{
+"text": "Reply from D. Morra: Thanks - neither reason is written anywhere. 'FT' in",
+"bbox": [
+106,
+273,
+909,
+296
+]
+},
+{
+"text": "Rev 6 could be a person's initials.",
+"bbox": [
+106,
+296,
+491,
+319
+]
+}
+]
+}
+]
+}

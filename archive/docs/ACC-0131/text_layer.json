@@ -1,0 +1,74 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "KESSLER-ONDRA HARZE GmbH",
+"bbox": [
+78,
+78,
+558,
+111
+]
+},
+{
+"text": "Technisches Datenblatt / Technical data sheet",
+"bbox": [
+78,
+117,
+368,
+134
+]
+},
+{
+"text": "1 February 2012",
+"bbox": [
+78,
+150,
+204,
+171
+]
+},
+{
+"text": "Technical data sheet - KO-Epox 410 LC",
+"bbox": [
+78,
+179,
+479,
+207
+]
+},
+{
+"text": "Modified liquid epoxy resin, low crystallisation tendency. EEW 185-192 g/eq.",
+"bbox": [
+78,
+219,
+804,
+245
+]
+},
+{
+"text": "Storage: in original closed containers, 5-30 °C. Not sensitive to air or humidity; no inert",
+"bbox": [
+78,
+255,
+894,
+281
+]
+},
+{
+"text": "gas required.",
+"bbox": [
+78,
+281,
+202,
+307
+]
+}
+]
+}
+]
+}

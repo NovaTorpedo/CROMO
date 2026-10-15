@@ -1,0 +1,218 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. AF-12 Rev 14 10 May 2023",
+"bbox": [
+78,
+150,
+320,
+171
+]
+},
+{
+"text": "RECIPE CARD - AF-12 anti-rust alkyd enamel",
+"bbox": [
+78,
+179,
+538,
+207
+]
+},
+{
+"text": "Document: AF-12 anti-rust alkyd enamel",
+"bbox": [
+78,
+219,
+462,
+245
+]
+},
+{
+"text": "Revision: Rev 14 (current), effective 10/05/2023.",
+"bbox": [
+78,
+255,
+548,
+281
+]
+},
+{
+"text": "Batch size: 2,000 kg. Equipment: D-2, holding tanks HT-1..4, FL-2.",
+"bbox": [
+78,
+291,
+706,
+317
+]
+},
+{
+"text": "Steps",
+"bbox": [
+78,
+331,
+135,
+358
+]
+},
+{
+"text": "1. Charge 1,040 kg long-oil alkyd resin AL-60 (RM-101) into disperser D-2; start agitator",
+"bbox": [
+78,
+362,
+908,
+388
+]
+},
+{
+"text": "at 300 rpm.",
+"bbox": [
+78,
+388,
+189,
+414
+]
+},
+{
+"text": "2. Add 360 kg zinc phosphate anti-corrosive pigment ZP-40 (RM-110) over 10 min.",
+"bbox": [
+78,
+424,
+860,
+450
+]
+},
+{
+"text": "3. Add 0.4 kg soy lecithin (RM-150) together with the pigment.",
+"bbox": [
+78,
+460,
+666,
+486
+]
+},
+{
+"text": "4. Add 1.6 kg ammonium chloride (RM-118) pre-dissolved in 4 L water; stir 10 min.",
+"bbox": [
+78,
+496,
+860,
+522
+]
+},
+{
+"text": "5. Winter dose: from 1 November to 31 March add 3 kg bentonite anti-settling agent",
+"bbox": [
+78,
+532,
+870,
+558
+]
+},
+{
+"text": "(RM-120).",
+"bbox": [
+78,
+558,
+175,
+584
+]
+},
+{
+"text": "6. Disperse at 1,400 rpm until fineness of grind is at least 6 Hegman (approx. 40 min).",
+"bbox": [
+78,
+594,
+887,
+620
+]
+},
+{
+"text": "7. Cool the batch below 40 °C before solvent letdown and record the temperature (hold",
+"bbox": [
+78,
+630,
+907,
+656
+]
+},
+{
+"text": "up to 30 min).",
+"bbox": [
+78,
+656,
+210,
+682
+]
+},
+{
+"text": "8. Let down with 320 kg white spirit D40 (RM-131) at 600 rpm.",
+"bbox": [
+78,
+692,
+671,
+718
+]
+},
+{
+"text": "9. Add 9 kg Co/Zr drier pack (RM-140) and 4 kg MEKO anti-skinning agent (RM-141).",
+"bbox": [
+78,
+728,
+871,
+754
+]
+},
+{
+"text": "10. Transfer to holding tank and rest the batch 12 h before QC sampling.",
+"bbox": [
+78,
+764,
+761,
+790
+]
+},
+{
+"text": "11. Filter through 50 µm bag filter and fill 20 L tins on line FL-2.",
+"bbox": [
+78,
+800,
+678,
+826
+]
+},
+{
+"text": "Controlled copy - the MES recipe is the master.",
+"bbox": [
+78,
+836,
+521,
+862
+]
+}
+]
+}
+]
+}

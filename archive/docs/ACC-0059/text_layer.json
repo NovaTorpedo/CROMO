@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. EQ-2019-002 14 June 2019",
+"bbox": [
+78,
+150,
+329,
+171
+]
+},
+{
+"text": "Equipment modification EQ-2019-002 - disperser D-1 drive",
+"bbox": [
+78,
+179,
+688,
+207
+]
+},
+{
+"text": "The hydraulic drive unit of D-1 has been removed and replaced by a direct-coupled 45",
+"bbox": [
+78,
+219,
+891,
+245
+]
+},
+{
+"text": "kW electric motor with variable frequency drive (VFD).",
+"bbox": [
+78,
+245,
+589,
+271
+]
+},
+{
+"text": "No hydraulic circuit remains on D-1. Soft-start ramp 20 s. Commissioning 14/06/2019.",
+"bbox": [
+78,
+281,
+896,
+307
+]
+},
+{
+"text": "Recipe impact: none identified.",
+"bbox": [
+78,
+317,
+371,
+343
+]
+},
+{
+"text": "Prepared by: D. Morra",
+"bbox": [
+78,
+371,
+237,
+391
+]
+}
+]
+}
+]
+}

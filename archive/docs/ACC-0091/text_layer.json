@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "15 December 2014",
+"bbox": [
+78,
+150,
+224,
+171
+]
+},
+{
+"text": "MAINTENANCE LOG - BOILER B-1 (extract)",
+"bbox": [
+78,
+179,
+522,
+207
+]
+},
+{
+"text": "08/02/2014 Burner nozzle cleaned. (1.5 h)",
+"bbox": [
+78,
+219,
+491,
+245
+]
+},
+{
+"text": "02/05/2015 Safety valve tested. (4 h)",
+"bbox": [
+78,
+255,
+436,
+281
+]
+},
+{
+"text": "05/06/2015 Burner nozzle cleaned. (1.5 h)",
+"bbox": [
+78,
+291,
+491,
+317
+]
+},
+{
+"text": "15/06/2015 Safety valve tested. (2 h)",
+"bbox": [
+78,
+327,
+436,
+353
+]
+},
+{
+"text": "04/09/2015 Flue gas analysis within limits. (3 h)",
+"bbox": [
+78,
+363,
+535,
+389
+]
+}
+]
+}
+]
+}

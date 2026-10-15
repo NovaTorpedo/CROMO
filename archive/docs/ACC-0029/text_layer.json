@@ -1,0 +1,101 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. EQ-2011-006 24 October 2011",
+"bbox": [
+78,
+150,
+353,
+171
+]
+},
+{
+"text": "Commissioning record EQ-2011-006 - finished goods warehouse M5",
+"bbox": [
+78,
+179,
+783,
+207
+]
+},
+{
+"text": "New heated warehouse M5: 2,400 pallet positions; gas heating with BMS alarm;",
+"bbox": [
+78,
+219,
+831,
+245
+]
+},
+{
+"text": "minimum internal temperature 12 °C guaranteed all year.",
+"bbox": [
+78,
+245,
+620,
+271
+]
+},
+{
+"text": "From 1 November 2011 all finished goods are stored in M5.",
+"bbox": [
+78,
+281,
+642,
+307
+]
+},
+{
+"text": "Warehouse M2 will be used for empty packaging and pallets only.",
+"bbox": [
+78,
+317,
+695,
+343
+]
+},
+{
+"text": "Acceptance: heating test 72 h at -8 °C external, internal 14.5 °C minimum - passed.",
+"bbox": [
+78,
+353,
+867,
+379
+]
+},
+{
+"text": "Prepared by: M. Viale",
+"bbox": [
+78,
+407,
+232,
+427
+]
+}
+]
+}
+]
+}

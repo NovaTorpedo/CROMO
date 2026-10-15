@@ -1,0 +1,110 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. QN-2018-009 11 June 2018",
+"bbox": [
+78,
+150,
+331,
+171
+]
+},
+{
+"text": "Quality note QN-2018-009 - foreign matter retained by screen VS-1",
+"bbox": [
+78,
+179,
+770,
+207
+]
+},
+{
+"text": "Three times in May-June 2018 the 1 mm screen retained fragments of PE big-bag liner",
+"bbox": [
+78,
+219,
+895,
+245
+]
+},
+{
+"text": "(up to 4 cm) torn when the bag outlet was cut.",
+"bbox": [
+78,
+245,
+512,
+271
+]
+},
+{
+"text": "Without the screen these fragments would have reached the disperser and the filling line",
+"bbox": [
+78,
+281,
+916,
+307
+]
+},
+{
+"text": "(blocked nozzles, film defects).",
+"bbox": [
+78,
+307,
+374,
+333
+]
+},
+{
+"text": "Action: keep the 1 mm screen as a foreign-matter barrier for big-bag deliveries.",
+"bbox": [
+78,
+343,
+825,
+369
+]
+},
+{
+"text": "Operators re-instructed on opening the bag outlet.",
+"bbox": [
+78,
+369,
+554,
+395
+]
+},
+{
+"text": "Prepared by: R. Ferrandi",
+"bbox": [
+78,
+423,
+254,
+443
+]
+}
+]
+}
+]
+}

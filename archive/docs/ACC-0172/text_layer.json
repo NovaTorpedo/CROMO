@@ -1,0 +1,65 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: Giulia Testa (Purchasing)",
+"bbox": [
+78,
+78,
+419,
+101
+]
+},
+{
+"text": "To: Davide Morra",
+"bbox": [
+78,
+101,
+254,
+124
+]
+},
+{
+"text": "Date: 7 Nov 2011",
+"bbox": [
+78,
+124,
+254,
+147
+]
+},
+{
+"text": "Subject: Acetone price increase",
+"bbox": [
+78,
+147,
+419,
+170
+]
+},
+{
+"text": "Solventi Garbagna announces +6 % on acetone from next quarter. Please check",
+"bbox": [
+78,
+186,
+903,
+209
+]
+},
+{
+"text": "consumption forecasts.",
+"bbox": [
+78,
+209,
+320,
+232
+]
+}
+]
+}
+]
+}

@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "SOLVENTI GARBAGNA S.r.l.",
+"bbox": [
+78,
+78,
+492,
+111
+]
+},
+{
+"text": "Safety data sheet extract",
+"bbox": [
+78,
+117,
+234,
+134
+]
+},
+{
+"text": "1 June 2022",
+"bbox": [
+78,
+150,
+174,
+171
+]
+},
+{
+"text": "Safety data sheet (extract) - White spirit D40",
+"bbox": [
+78,
+179,
+534,
+207
+]
+},
+{
+"text": "Supplier: Solventi Garbagna S.r.l.",
+"bbox": [
+78,
+219,
+389,
+245
+]
+},
+{
+"text": "Section 9: flash point 39 °C (closed cup); boiling range 150-195 °C; vapour heavier than",
+"bbox": [
+78,
+255,
+908,
+281
+]
+},
+{
+"text": "air.",
+"bbox": [
+78,
+281,
+108,
+307
+]
+},
+{
+"text": "Section 7: keep away from heat and ignition sources; take precautionary measures",
+"bbox": [
+78,
+317,
+855,
+343
+]
+},
+{
+"text": "against static discharge.",
+"bbox": [
+78,
+343,
+304,
+369
+]
+}
+]
+}
+]
+}

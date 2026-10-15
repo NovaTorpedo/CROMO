@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "KESSLER-ONDRA HARZE GmbH",
+"bbox": [
+78,
+78,
+558,
+111
+]
+},
+{
+"text": "Epoxidharze",
+"bbox": [
+78,
+117,
+156,
+134
+]
+},
+{
+"text": "1 September 2013",
+"bbox": [
+78,
+150,
+220,
+171
+]
+},
+{
+"text": "FATTURA / INVOICE n. 2653/13",
+"bbox": [
+78,
+179,
+410,
+207
+]
+},
+{
+"text": "Bill to: Valdorso Coatings S.p.A., Via delle Fornaci 7, Borgo Valdorso (TO).",
+"bbox": [
+78,
+219,
+770,
+245
+]
+},
+{
+"text": "Item: KO-Epox 410 LC, drums 220 kg. Quantity: 2,000 kg. Unit price: 3.59 EUR.",
+"bbox": [
+78,
+255,
+826,
+281
+]
+},
+{
+"text": "Total excl. VAT: 7,189 EUR. Payment: 60 days end of month.",
+"bbox": [
+78,
+291,
+649,
+317
+]
+},
+{
+"text": "Delivery note: DDT 5444 of 01/09/2013.",
+"bbox": [
+78,
+327,
+466,
+353
+]
+}
+]
+}
+]
+}

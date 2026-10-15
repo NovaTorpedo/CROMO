@@ -1,0 +1,74 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. CR-2009-012 19 October 2009",
+"bbox": [
+78,
+150,
+353,
+171
+]
+},
+{
+"text": "Change request CR-2009-012",
+"bbox": [
+78,
+179,
+389,
+207
+]
+},
+{
+"text": "Plan: QP-02. Change: retain 0.5 L of every batch for 5 years (was 1 year).",
+"bbox": [
+78,
+219,
+765,
+245
+]
+},
+{
+"text": "Reason: CL-2009-007 - without the retained sample we could not defend the claim.",
+"bbox": [
+78,
+255,
+870,
+281
+]
+},
+{
+"text": "Prepared by: E. Marchisio",
+"bbox": [
+78,
+309,
+262,
+329
+]
+}
+]
+}
+]
+}

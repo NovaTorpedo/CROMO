@@ -1,0 +1,173 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. QP-02 Rev 6 7 June 2021",
+"bbox": [
+78,
+150,
+308,
+171
+]
+},
+{
+"text": "QC RELEASE PLAN - QP-02 Batch QC release",
+"bbox": [
+78,
+179,
+536,
+207
+]
+},
+{
+"text": "Document: QP-02 Batch QC release",
+"bbox": [
+78,
+219,
+418,
+245
+]
+},
+{
+"text": "Revision: Rev 6 (current), effective 07/06/2021.",
+"bbox": [
+78,
+255,
+535,
+281
+]
+},
+{
+"text": "Batch size: per release. Equipment: QC laboratory, XRF-01, SC-2B.",
+"bbox": [
+78,
+291,
+708,
+317
+]
+},
+{
+"text": "Steps",
+"bbox": [
+78,
+331,
+135,
+358
+]
+},
+{
+"text": "1. Viscosity: Ford cup No. 4 (AF-12) or Brookfield (EF-210, TL-5) against product",
+"bbox": [
+78,
+362,
+839,
+388
+]
+},
+{
+"text": "specification.",
+"bbox": [
+78,
+388,
+204,
+414
+]
+},
+{
+"text": "2. Fineness of grind (Hegman gauge) on AF-12 and EF-210.",
+"bbox": [
+78,
+424,
+639,
+450
+]
+},
+{
+"text": "3. Chloride content of every AF-12 batch (limit 400 ppm).",
+"bbox": [
+78,
+460,
+620,
+486
+]
+},
+{
+"text": "4. XRF lead screening of every incoming pigment lot.",
+"bbox": [
+78,
+496,
+574,
+522
+]
+},
+{
+"text": "5. Retain a 0.5 L sample of every batch for 5 years.",
+"bbox": [
+78,
+532,
+556,
+558
+]
+},
+{
+"text": "6. Re-weigh every pigment addition on bench scale SC-2B and countersign.",
+"bbox": [
+78,
+568,
+787,
+594
+]
+},
+{
+"text": "7. Gloss at 60° on drawdown (AF-12).",
+"bbox": [
+78,
+604,
+436,
+630
+]
+},
+{
+"text": "8. Odour check of every batch by the QC technician.",
+"bbox": [
+78,
+640,
+567,
+666
+]
+},
+{
+"text": "Controlled copy - the MES recipe is the master.",
+"bbox": [
+78,
+676,
+521,
+702
+]
+}
+]
+}
+]
+}

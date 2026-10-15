@@ -1,0 +1,23 @@
+code,name,unit,price_eur,current_supplier,aliases
+RM-101,Long-oil alkyd resin AL-60,kg,2.1,Resine Altamira S.p.A.,alkyd resin|AL-60
+RM-110,Zinc phosphate anti-corrosive pigment ZP-40,kg,3.2,Fosfazinco Nord S.p.A.,zinc phosphate|ZP-40
+RM-118,"Ammonium chloride, technical",kg,1.35,Chimica Ondina S.n.c.,ammonium chloride|NH4Cl|cloruro d'ammonio
+RM-120,Bentonite anti-settling agent Bentagel,kg,2.4,Silicati Brenta S.r.l.,bentonite|anti-settling agent
+RM-131,White spirit D40 (flash point 39 C),l,1.1,Solventi Garbagna S.r.l.,white spirit|mineral spirits
+RM-140,Drier pack Co/Zr,kg,9.8,Chimica Ondina S.n.c.,drier|cobalt drier
+RM-141,MEKO anti-skinning agent,kg,7.5,Chimica Ondina S.n.c.,MEKO|anti-skin
+RM-150,Soy lecithin,kg,4.2,Chimica Ondina S.n.c.,lecithin|lecitina
+RM-201,Liquid epoxy resin KO-Epox 410 LC,kg,3.9,Kessler-Ondra Harze GmbH,epoxy resin|KO-410|KO-Epox 410 LC
+RM-205,Reactive diluent C12-C14 glycidyl ether,kg,4.6,Kessler-Ondra Harze GmbH,reactive diluent|glycidyl ether
+RM-210,Quartz flour 0.1 mm,kg,0.32,Quarzi Monterosso S.p.A.,quartz flour|silica flour
+RM-212,Micro-silica,kg,1.8,Quarzi Monterosso S.p.A.,micro-silica|microsilica
+RM-220,Silicone defoamer,kg,12.0,Chimica Ondina S.n.c.,defoamer
+RM-301,Acetone,l,1.05,Solventi Garbagna S.r.l.,acetone
+RM-305,Xylene,l,1.6,Solventi Garbagna S.r.l.,xylene|xilene
+RM-401,Polyether polyol NP-310 Dry,kg,2.7,Nordpol Chemicals AB,polyol|NP-310
+RM-405,Molecular sieve 3A,kg,6.8,Essiccanti Marelli S.r.l.,molecular sieve|setacci molecolari
+RM-410,MDI prepolymer,kg,3.5,Isocianati Varesotti S.p.A.,isocyanate|MDI prepolymer|MDI
+RM-415,DBTDL catalyst (dibutyltin dilaurate),kg,18.0,Chimica Ondina S.n.c.,DBTDL|organotin catalyst|tin catalyst
+UT-01,Nitrogen (bulk),m3,0.42,Gas Tecnici Valdorso,nitrogen|N2|azoto
+PK-20,20 kg steel pail,pc,2.6,Imballaggi Corvino S.r.l.,pail|secchio
+PK-05,5 L tinplate can,pc,1.1,Imballaggi Corvino S.r.l.,can|latta

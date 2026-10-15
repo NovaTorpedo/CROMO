@@ -1,0 +1,218 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. TL-5 Rev 6 30 September 2013",
+"bbox": [
+78,
+150,
+351,
+171
+]
+},
+{
+"text": "RECIPE CARD - TL-5 tank sealing compound (1K PU)",
+"bbox": [
+78,
+179,
+615,
+207
+]
+},
+{
+"text": "Document: TL-5 tank sealing compound (1K PU)",
+"bbox": [
+78,
+219,
+532,
+245
+]
+},
+{
+"text": "Revision: Rev 6, effective 30/09/2013.",
+"bbox": [
+78,
+255,
+446,
+281
+]
+},
+{
+"text": "Steps",
+"bbox": [
+78,
+295,
+135,
+322
+]
+},
+{
+"text": "1. Charge polyol and dry under vacuum in VD-1 (90 °C) until water < 0.05 % (Karl",
+"bbox": [
+78,
+326,
+843,
+352
+]
+},
+{
+"text": "Fischer).",
+"bbox": [
+78,
+352,
+161,
+378
+]
+},
+{
+"text": "2. Add 2 kg molecular sieve 3A per batch.",
+"bbox": [
+78,
+388,
+471,
+414
+]
+},
+{
+"text": "3. Nitrogen blanket on D-4 during and after isocyanate addition.",
+"bbox": [
+78,
+424,
+677,
+450
+]
+},
+{
+"text": "4. Charge 900 kg polyol PS-400 (Polioli Sereni); add 280 kg MDI prepolymer at max 2",
+"bbox": [
+78,
+460,
+886,
+486
+]
+},
+{
+"text": "kg/min.",
+"bbox": [
+78,
+486,
+149,
+512
+]
+},
+{
+"text": "5. Add 0.6 kg DBTDL.",
+"bbox": [
+78,
+522,
+279,
+548
+]
+},
+{
+"text": "6. Hold 60 °C, 45 min (Varesotti formulation sheet).",
+"bbox": [
+78,
+558,
+566,
+584
+]
+},
+{
+"text": "7. Pass through magnetic separator MS-1 before canning (see shift log 21/10/99).",
+"bbox": [
+78,
+594,
+853,
+620
+]
+},
+{
+"text": "8. Pre-dry empty cans in oven OV-1, 60 °C, 2 h.",
+"bbox": [
+78,
+630,
+525,
+656
+]
+},
+{
+"text": "9. Fill 5 L cans (Latte Brunetti) under dry nitrogen; seal.",
+"bbox": [
+78,
+666,
+599,
+692
+]
+},
+{
+"text": "Change note",
+"bbox": [
+78,
+706,
+204,
+733
+]
+},
+{
+"text": "Vacuum drying in VD-1 added (EQ-2013-004). Molecular sieve retained.",
+"bbox": [
+78,
+737,
+760,
+763
+]
+},
+{
+"text": "Prepared by: D. Morra",
+"bbox": [
+78,
+773,
+285,
+799
+]
+},
+{
+"text": "Prepared by: D. Morra",
+"bbox": [
+78,
+827,
+237,
+847
+]
+},
+{
+"text": "[stamp] SUPERSEDED ARCHIVE COPY",
+"bbox": [
+465,
+1053,
+799,
+1161
+]
+}
+]
+}
+]
+}

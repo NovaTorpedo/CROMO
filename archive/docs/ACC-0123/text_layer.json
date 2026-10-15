@@ -1,0 +1,110 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. MM-2008-05-13 13 May 2008",
+"bbox": [
+78,
+150,
+345,
+171
+]
+},
+{
+"text": "Minutes - production meeting, 13 May 2008",
+"bbox": [
+78,
+179,
+529,
+207
+]
+},
+{
+"text": "Present: Morra, Marchisio, Bellone, Testa, plant manager.",
+"bbox": [
+78,
+219,
+622,
+245
+]
+},
+{
+"text": "1. Holiday shutdown: plant closed 4-22 August; maintenance plan agreed.",
+"bbox": [
+78,
+255,
+777,
+281
+]
+},
+{
+"text": "2. D-3 gearbox: overhaul approved.",
+"bbox": [
+78,
+291,
+413,
+317
+]
+},
+{
+"text": "3. AF-12 12 h rest before QC: Morra asks whether it is still needed because the holding",
+"bbox": [
+78,
+327,
+899,
+353
+]
+},
+{
+"text": "tanks are a bottleneck. Marchisio: no livering case since 1996. Decision: keep for now,",
+"bbox": [
+78,
+353,
+893,
+379
+]
+},
+{
+"text": "review later (low priority).",
+"bbox": [
+78,
+379,
+321,
+405
+]
+},
+{
+"text": "4. Canteen: new supplier from June.",
+"bbox": [
+78,
+415,
+422,
+441
+]
+}
+]
+}
+]
+}

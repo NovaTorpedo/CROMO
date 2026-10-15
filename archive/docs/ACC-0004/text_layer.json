@@ -1,0 +1,209 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. EF-210 Rev 9 20 January 2022",
+"bbox": [
+78,
+150,
+349,
+171
+]
+},
+{
+"text": "RECIPE CARD - EF-210 epoxy floor coating - Part A",
+"bbox": [
+78,
+179,
+597,
+207
+]
+},
+{
+"text": "Document: EF-210 epoxy floor coating - Part A",
+"bbox": [
+78,
+219,
+519,
+245
+]
+},
+{
+"text": "Revision: Rev 9 (current), effective 20/01/2022.",
+"bbox": [
+78,
+255,
+535,
+281
+]
+},
+{
+"text": "Batch size: 1,600 kg. Equipment: D-1, HB-1, VS-1, FL-2.",
+"bbox": [
+78,
+291,
+609,
+317
+]
+},
+{
+"text": "Steps",
+"bbox": [
+78,
+331,
+135,
+358
+]
+},
+{
+"text": "1. Run disperser D-1 empty for 5 min before charging (warm-up).",
+"bbox": [
+78,
+362,
+691,
+388
+]
+},
+{
+"text": "2. Pre-heat epoxy resin drums in hot box HB-1 at 40 °C for 12 h before use.",
+"bbox": [
+78,
+398,
+792,
+424
+]
+},
+{
+"text": "3. Charge 860 kg liquid epoxy resin KO-Epox 410 LC (RM-201).",
+"bbox": [
+78,
+434,
+674,
+460
+]
+},
+{
+"text": "4. Add 80 kg reactive diluent (RM-205); mix 10 min.",
+"bbox": [
+78,
+470,
+567,
+496
+]
+},
+{
+"text": "5. Wait 20 min after the diluent addition before taking the viscosity sample.",
+"bbox": [
+78,
+506,
+784,
+532
+]
+},
+{
+"text": "6. Sieve quartz flour through the 1 mm vibrating screen VS-1 before charging.",
+"bbox": [
+78,
+542,
+809,
+568
+]
+},
+{
+"text": "7. Add 500 kg quartz flour (RM-210) and 40 kg micro-silica (RM-212) under vacuum (-0.8",
+"bbox": [
+78,
+578,
+922,
+604
+]
+},
+{
+"text": "bar).",
+"bbox": [
+78,
+604,
+122,
+630
+]
+},
+{
+"text": "8. Add 4.8 kg silicone defoamer (RM-220).",
+"bbox": [
+78,
+640,
+480,
+666
+]
+},
+{
+"text": "9. Sample and test epoxy equivalent weight (EEW) against specification 190-210 g/eq.",
+"bbox": [
+78,
+676,
+892,
+702
+]
+},
+{
+"text": "10. Flush each 20 kg pail with nitrogen (approx. 0.06 m³ per pail) before filling.",
+"bbox": [
+78,
+712,
+822,
+738
+]
+},
+{
+"text": "11. Fill 20 kg pails on line FL-2, close and label.",
+"bbox": [
+78,
+748,
+529,
+774
+]
+},
+{
+"text": "12. Store filled pails upside down for 24 h before palletising.",
+"bbox": [
+78,
+784,
+649,
+810
+]
+},
+{
+"text": "Controlled copy - the MES recipe is the master.",
+"bbox": [
+78,
+820,
+521,
+846
+]
+}
+]
+}
+]
+}

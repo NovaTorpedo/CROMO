@@ -1,0 +1,37 @@
+# --- secrets: never commit ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+**/secrets.json
+
+# --- python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+.coverage
+htmlcov/
+
+# --- node / frontend ---
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# --- runtime data (regenerated) ---
+data/runtime/
+data/*.db
+data/*.db-*
+*.log
+
+# --- OS / editors ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

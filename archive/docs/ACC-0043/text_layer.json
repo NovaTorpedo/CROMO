@@ -1,0 +1,65 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "2 April 2015",
+"bbox": [
+78,
+150,
+172,
+171
+]
+},
+{
+"text": "Training record - Forklift operation refresher",
+"bbox": [
+78,
+179,
+528,
+207
+]
+},
+{
+"text": "Course: Forklift operation refresher. Duration: 8 h. Participants: 9.",
+"bbox": [
+78,
+219,
+700,
+245
+]
+},
+{
+"text": "Trainer: external. Attendance sheet and test results filed with HR.",
+"bbox": [
+78,
+255,
+696,
+281
+]
+}
+]
+}
+]
+}

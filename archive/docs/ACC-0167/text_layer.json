@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "15 February 2021",
+"bbox": [
+78,
+150,
+214,
+171
+]
+},
+{
+"text": "Technical data sheet - TL-5 tank sealing compound",
+"bbox": [
+78,
+179,
+601,
+207
+]
+},
+{
+"text": "One-component moisture-curing polyurethane. The polyol must be dried below 0.05 %",
+"bbox": [
+78,
+219,
+902,
+245
+]
+},
+{
+"text": "water: water reacts with isocyanate and forms CO2.",
+"bbox": [
+78,
+245,
+564,
+271
+]
+},
+{
+"text": "MDI prepolymer addition rate is limited to control the exotherm. DBTDL catalyst adjusts",
+"bbox": [
+78,
+281,
+902,
+307
+]
+},
+{
+"text": "the curing speed.",
+"bbox": [
+78,
+307,
+242,
+333
+]
+},
+{
+"text": "Packed in 5 L cans under dry nitrogen; shelf life 12 months.",
+"bbox": [
+78,
+343,
+639,
+369
+]
+}
+]
+}
+]
+}

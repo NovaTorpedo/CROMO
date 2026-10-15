@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: Davide Morra",
+"bbox": [
+78,
+78,
+276,
+101
+]
+},
+{
+"text": "To: Technical service, Isocianati Varesotti S.p.A.",
+"bbox": [
+78,
+101,
+628,
+124
+]
+},
+{
+"text": "Date: 9 Jun 2020",
+"bbox": [
+78,
+124,
+254,
+147
+]
+},
+{
+"text": "Subject: TL-5 original formulation sheet",
+"bbox": [
+78,
+147,
+518,
+170
+]
+},
+{
+"text": "Could you send the original 1995 formulation sheet for TL-5, or the reason",
+"bbox": [
+78,
+186,
+892,
+209
+]
+},
+{
+"text": "for the 45 min hold at 60 °C?",
+"bbox": [
+78,
+209,
+397,
+232
+]
+},
+{
+"text": "Reply: Our archive from that period was lost in the 2008 flood. A hold",
+"bbox": [
+106,
+242,
+876,
+265
+]
+},
+{
+"text": "like this is often used to complete the prepolymer reaction, but we cannot",
+"bbox": [
+106,
+265,
+920,
+288
+]
+},
+{
+"text": "confirm it for your formulation.",
+"bbox": [
+106,
+288,
+458,
+311
+]
+}
+]
+}
+]
+}

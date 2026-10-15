@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. EQ-2014-005 10 March 2014",
+"bbox": [
+78,
+150,
+339,
+171
+]
+},
+{
+"text": "Equipment record EQ-2014-005 - weighing system WS-10",
+"bbox": [
+78,
+179,
+679,
+207
+]
+},
+{
+"text": "Platform scale SC-2 replaced by load-cell weighing system WS-10 integrated with the",
+"bbox": [
+78,
+219,
+885,
+245
+]
+},
+{
+"text": "MES: automatic recording of every addition, monthly calibration with certificate, accuracy",
+"bbox": [
+78,
+245,
+917,
+271
+]
+},
+{
+"text": "0.1 %.",
+"bbox": [
+78,
+271,
+140,
+297
+]
+},
+{
+"text": "Prepared by: D. Morra",
+"bbox": [
+78,
+325,
+237,
+345
+]
+}
+]
+}
+]
+}

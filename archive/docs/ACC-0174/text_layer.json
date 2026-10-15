@@ -1,0 +1,128 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. CM-2006-004 20 March 2006",
+"bbox": [
+78,
+150,
+342,
+171
+]
+},
+{
+"text": "Compliance memo CM-2006-004: phase-out of lead chromate pigments",
+"bbox": [
+78,
+179,
+821,
+207
+]
+},
+{
+"text": "To: Production, Purchasing, QC, Process Engineering. From: R. Gallina, EHS.",
+"bbox": [
+78,
+219,
+794,
+245
+]
+},
+{
+"text": "Following requirements from our OEM customers (agricultural and earth-moving",
+"bbox": [
+78,
+255,
+835,
+281
+]
+},
+{
+"text": "machinery) and the ARAPO regional programme on heavy metals, all lead and chromate",
+"bbox": [
+78,
+281,
+903,
+307
+]
+},
+{
+"text": "pigments will be removed from our formulations by 31 December 2006.",
+"bbox": [
+78,
+307,
+758,
+333
+]
+},
+{
+"text": "AF-12: basic lead chromate CL-77 will be replaced by zinc phosphate ZP-40 from",
+"bbox": [
+78,
+343,
+847,
+369
+]
+},
+{
+"text": "Fosfazinco Nord (qualification in progress, see SQ-2007-002). Last CL-77 delivery:",
+"bbox": [
+78,
+369,
+860,
+395
+]
+},
+{
+"text": "October 2006. The supply agreement with Cromopigmenti Lazzeretti ends on",
+"bbox": [
+78,
+395,
+807,
+421
+]
+},
+{
+"text": "31/12/2006.",
+"bbox": [
+78,
+421,
+204,
+447
+]
+},
+{
+"text": "Other products: no lead pigments in use.",
+"bbox": [
+78,
+457,
+461,
+483
+]
+}
+]
+}
+]
+}

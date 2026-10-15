@@ -1,0 +1,74 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. CR-2005-009 8 August 2005",
+"bbox": [
+78,
+150,
+335,
+171
+]
+},
+{
+"text": "Change request CR-2005-009",
+"bbox": [
+78,
+179,
+389,
+207
+]
+},
+{
+"text": "Product: TL-5. Change: nitrogen blanket on D-4 during and after the isocyanate addition.",
+"bbox": [
+78,
+219,
+909,
+245
+]
+},
+{
+"text": "Reason: IR-2005-011 (pressure build-up in cans from moisture ingress).",
+"bbox": [
+78,
+255,
+763,
+281
+]
+},
+{
+"text": "Prepared by: P. Gastaldi",
+"bbox": [
+78,
+309,
+253,
+329
+]
+}
+]
+}
+]
+}

@@ -1,0 +1,12 @@
+# gitleaks configuration: default rules + allowlist for synthetic, non-secret data.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Synthetic archive images/fixtures and lockfiles are not secrets"
+paths = [
+  '''archive/docs/.*\.webp$''',
+  '''fixtures/vision/.*\.json$''',
+  '''frontend/package-lock\.json$''',
+  '''generator/fonts/.*''',
+]

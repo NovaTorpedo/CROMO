@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: Luca Ferro (Sales)",
+"bbox": [
+78,
+78,
+342,
+101
+]
+},
+{
+"text": "To: Davide Morra (Process Engineering)",
+"bbox": [
+78,
+101,
+496,
+124
+]
+},
+{
+"text": "Date: 8 Apr 2019",
+"bbox": [
+78,
+124,
+254,
+147
+]
+},
+{
+"text": "Subject: AF-12 - please don't touch the recipe",
+"bbox": [
+78,
+147,
+584,
+170
+]
+},
+{
+"text": "Davide,",
+"bbox": [
+78,
+186,
+155,
+209
+]
+},
+{
+"text": "I hear process engineering wants to 'clean up' the AF-12 recipe. Our",
+"bbox": [
+78,
+219,
+826,
+242
+]
+},
+{
+"text": "customers are happy with it, so please leave the ammonium chloride where it",
+"bbox": [
+78,
+242,
+903,
+265
+]
+},
+{
+"text": "is - I was always told it helps the enamel dry faster.",
+"bbox": [
+78,
+265,
+672,
+288
+]
+},
+{
+"text": "Luca",
+"bbox": [
+78,
+298,
+122,
+321
+]
+}
+]
+}
+]
+}

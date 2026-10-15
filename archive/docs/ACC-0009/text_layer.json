@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. MM-2016-11-08 8 November 2016",
+"bbox": [
+78,
+150,
+383,
+171
+]
+},
+{
+"text": "Minutes - QC meeting, 8 November 2016",
+"bbox": [
+78,
+179,
+498,
+207
+]
+},
+{
+"text": "1. New Brookfield viscometer delivered.",
+"bbox": [
+78,
+219,
+459,
+245
+]
+},
+{
+"text": "2. Odour check in QP-02: there is no written acceptance criterion. Ferrandi: no batch has",
+"bbox": [
+78,
+255,
+917,
+281
+]
+},
+{
+"text": "been rejected for odour since at least 2005. Nobody knows where the check comes",
+"bbox": [
+78,
+281,
+870,
+307
+]
+},
+{
+"text": "from. Keep pending review.",
+"bbox": [
+78,
+307,
+338,
+333
+]
+},
+{
+"text": "3. Training plan 2017 approved.",
+"bbox": [
+78,
+343,
+381,
+369
+]
+}
+]
+}
+]
+}

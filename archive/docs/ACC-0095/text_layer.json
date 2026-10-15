@@ -1,0 +1,74 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. MM-2019-10-15 15 October 2019",
+"bbox": [
+78,
+150,
+376,
+171
+]
+},
+{
+"text": "Minutes - cost review, 15 October 2019",
+"bbox": [
+78,
+179,
+486,
+207
+]
+},
+{
+"text": "Nitrogen on TL-5: about EUR 1,600 per year for the blanket. Keep: the MDI prepolymer",
+"bbox": [
+78,
+219,
+898,
+245
+]
+},
+{
+"text": "still reacts with moisture in air and blown lids are a safety issue.",
+"bbox": [
+78,
+245,
+676,
+271
+]
+},
+{
+"text": "Compressed air leaks: survey ordered.",
+"bbox": [
+78,
+281,
+441,
+307
+]
+}
+]
+}
+]
+}

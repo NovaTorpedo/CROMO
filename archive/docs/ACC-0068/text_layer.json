@@ -1,0 +1,74 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "18 March 2024",
+"bbox": [
+78,
+150,
+194,
+171
+]
+},
+{
+"text": "Maintenance log - vibrating screen VS-1 (extract)",
+"bbox": [
+78,
+179,
+580,
+207
+]
+},
+{
+"text": "18/03/2024 Screen mesh replaced (wear). Debris found on mesh: PE liner fragments,",
+"bbox": [
+78,
+219,
+891,
+245
+]
+},
+{
+"text": "cardboard pieces.",
+"bbox": [
+78,
+245,
+248,
+271
+]
+},
+{
+"text": "02/09/2024 Motor bearings greased.",
+"bbox": [
+78,
+281,
+432,
+307
+]
+}
+]
+}
+]
+}

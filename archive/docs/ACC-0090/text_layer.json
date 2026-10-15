@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. SQ-2016-005 21 March 2016",
+"bbox": [
+78,
+150,
+339,
+171
+]
+},
+{
+"text": "Supplier qualification SQ-2016-005 - Nordpol Chemicals AB, NP-310 Dry",
+"bbox": [
+78,
+179,
+824,
+207
+]
+},
+{
+"text": "Polyether polyol NP-310 Dry: water 0.03 % maximum guaranteed, delivered in",
+"bbox": [
+78,
+219,
+822,
+245
+]
+},
+{
+"text": "nitrogen-padded tank trucks.",
+"bbox": [
+78,
+245,
+352,
+271
+]
+},
+{
+"text": "Replaces Polioli Sereni PS-400 for TL-5.",
+"bbox": [
+78,
+281,
+459,
+307
+]
+},
+{
+"text": "Prepared by: R. Ferrandi",
+"bbox": [
+78,
+335,
+254,
+355
+]
+}
+]
+}
+]
+}

@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "SOLVENTI GARBAGNA S.r.l.",
+"bbox": [
+78,
+78,
+492,
+111
+]
+},
+{
+"text": "Solventi industriali",
+"bbox": [
+78,
+117,
+197,
+134
+]
+},
+{
+"text": "13 January 2005",
+"bbox": [
+78,
+150,
+207,
+171
+]
+},
+{
+"text": "FATTURA / INVOICE n. 4407/05",
+"bbox": [
+78,
+179,
+410,
+207
+]
+},
+{
+"text": "Bill to: Valdorso Coatings S.p.A., Via delle Fornaci 7, Borgo Valdorso (TO).",
+"bbox": [
+78,
+219,
+770,
+245
+]
+},
+{
+"text": "Item: Xylene, drums 200 L. Quantity: 24,000 l. Unit price: 1.67 EUR.",
+"bbox": [
+78,
+255,
+721,
+281
+]
+},
+{
+"text": "Total excl. VAT: 40,108 EUR. Payment: 60 days end of month.",
+"bbox": [
+78,
+291,
+662,
+317
+]
+},
+{
+"text": "Delivery note: DDT 2928 of 13/01/2005.",
+"bbox": [
+78,
+327,
+466,
+353
+]
+}
+]
+}
+]
+}

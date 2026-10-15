@@ -1,0 +1,74 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "ARAPO",
+"bbox": [
+78,
+78,
+185,
+111
+]
+},
+{
+"text": "Regional Environment Agency (unofficial translation)",
+"bbox": [
+78,
+117,
+410,
+134
+]
+},
+{
+"text": "10 April 2018",
+"bbox": [
+78,
+150,
+182,
+171
+]
+},
+{
+"text": "ARAPO - Decreto Regionale n. 52/2018 (extract, unofficial English translation)",
+"bbox": [
+78,
+179,
+878,
+207
+]
+},
+{
+"text": "Art. 1 - Regional Decree 114/2003 is repealed.",
+"bbox": [
+78,
+219,
+524,
+245
+]
+},
+{
+"text": "Art. 3 - Plants that do not use lead-containing pigments may rely on the supplier's",
+"bbox": [
+78,
+255,
+844,
+281
+]
+},
+{
+"text": "certificate of analysis for incoming pigment lots.",
+"bbox": [
+78,
+281,
+529,
+307
+]
+}
+]
+}
+]
+}

@@ -1,0 +1,56 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: IT department",
+"bbox": [
+78,
+78,
+287,
+101
+]
+},
+{
+"text": "To: All staff",
+"bbox": [
+78,
+101,
+221,
+124
+]
+},
+{
+"text": "Date: 16 Nov 2024",
+"bbox": [
+78,
+124,
+265,
+147
+]
+},
+{
+"text": "Subject: Password change reminder",
+"bbox": [
+78,
+147,
+441,
+170
+]
+},
+{
+"text": "Please change your MES password before Friday.",
+"bbox": [
+78,
+186,
+584,
+209
+]
+}
+]
+}
+]
+}

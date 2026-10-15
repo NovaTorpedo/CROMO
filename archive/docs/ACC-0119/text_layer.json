@@ -1,0 +1,101 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. CM-2004-011 5 April 2004",
+"bbox": [
+78,
+150,
+320,
+171
+]
+},
+{
+"text": "Compliance memo CM-2004-011 - hazardous areas, solvent handling",
+"bbox": [
+78,
+179,
+790,
+207
+]
+},
+{
+"text": "Hazardous area classification of the solvent room and the dispersing hall completed:",
+"bbox": [
+78,
+219,
+874,
+245
+]
+},
+{
+"text": "zone 1 at open vessels and drum transfer points, zone 2 elsewhere.",
+"bbox": [
+78,
+245,
+717,
+271
+]
+},
+{
+"text": "Equipotential bonding is required for all conductive containers during the transfer of",
+"bbox": [
+78,
+281,
+869,
+307
+]
+},
+{
+"text": "flammable liquids (acetone, white spirit, xylene).",
+"bbox": [
+78,
+307,
+537,
+333
+]
+},
+{
+"text": "SOP-07 bonding step confirmed as a legal requirement.",
+"bbox": [
+78,
+343,
+603,
+369
+]
+},
+{
+"text": "Prepared by: R. Gallina",
+"bbox": [
+78,
+397,
+243,
+417
+]
+}
+]
+}
+]
+}

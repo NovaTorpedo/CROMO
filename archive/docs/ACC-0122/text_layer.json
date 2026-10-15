@@ -1,0 +1,74 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "LABORATORIO METROLOGICO CANAVESE",
+"bbox": [
+78,
+78,
+740,
+111
+]
+},
+{
+"text": "Calibration certificate",
+"bbox": [
+78,
+117,
+215,
+134
+]
+},
+{
+"text": "21 November 2016",
+"bbox": [
+78,
+150,
+225,
+171
+]
+},
+{
+"text": "Calibration certificate - Gloss meter GM-60",
+"bbox": [
+78,
+179,
+519,
+207
+]
+},
+{
+"text": "Instrument: Gloss meter GM-60. Result: standard tile 93.2 GU vs 93.0 nominal.",
+"bbox": [
+78,
+219,
+827,
+245
+]
+},
+{
+"text": "Next calibration due in 12 months.",
+"bbox": [
+78,
+255,
+404,
+281
+]
+},
+{
+"text": "Laboratorio Metrologico Canavese (accredited).",
+"bbox": [
+78,
+291,
+527,
+317
+]
+}
+]
+}
+]
+}

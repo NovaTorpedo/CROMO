@@ -1,0 +1,74 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "LABORATORIO METROLOGICO CANAVESE",
+"bbox": [
+78,
+78,
+740,
+111
+]
+},
+{
+"text": "Calibration certificate",
+"bbox": [
+78,
+117,
+215,
+134
+]
+},
+{
+"text": "10 February 2023",
+"bbox": [
+78,
+150,
+214,
+171
+]
+},
+{
+"text": "Calibration certificate - Karl Fischer titrator KF-1",
+"bbox": [
+78,
+179,
+572,
+207
+]
+},
+{
+"text": "Instrument: Karl Fischer titrator KF-1. Result: water standard 1.00 mg: 1.01 mg.",
+"bbox": [
+78,
+219,
+833,
+245
+]
+},
+{
+"text": "Next calibration due in 12 months.",
+"bbox": [
+78,
+255,
+404,
+281
+]
+},
+{
+"text": "Laboratorio Metrologico Canavese (accredited).",
+"bbox": [
+78,
+291,
+527,
+317
+]
+}
+]
+}
+]
+}

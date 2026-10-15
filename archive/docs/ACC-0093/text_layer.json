@@ -1,0 +1,101 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: Davide Morra",
+"bbox": [
+78,
+78,
+276,
+101
+]
+},
+{
+"text": "To: F. Bellone; E. Marchisio",
+"bbox": [
+78,
+101,
+386,
+124
+]
+},
+{
+"text": "Date: 17 Sep 2012",
+"bbox": [
+78,
+124,
+265,
+147
+]
+},
+{
+"text": "Subject: SOP-07: lid open overnight",
+"bbox": [
+78,
+147,
+463,
+170
+]
+},
+{
+"text": "Why do we leave the lid open overnight after cleaning? Nothing in the change",
+"bbox": [
+78,
+186,
+914,
+209
+]
+},
+{
+"text": "requests.",
+"bbox": [
+78,
+209,
+177,
+232
+]
+},
+{
+"text": "Reply from F. Bellone: So the tank dries.",
+"bbox": [
+106,
+242,
+557,
+265
+]
+},
+{
+"text": "Reply from E. Marchisio: I always understood it was to let the acetone",
+"bbox": [
+106,
+273,
+876,
+296
+]
+},
+{
+"text": "vapour out - but we wait 60 min and ventilate before entry now anyway. I",
+"bbox": [
+106,
+296,
+898,
+319
+]
+},
+{
+"text": "don't think anybody really knows.",
+"bbox": [
+106,
+319,
+469,
+342
+]
+}
+]
+}
+]
+}

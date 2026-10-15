@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "SOLVENTI GARBAGNA S.r.l.",
+"bbox": [
+78,
+78,
+492,
+111
+]
+},
+{
+"text": "Solventi industriali",
+"bbox": [
+78,
+117,
+197,
+134
+]
+},
+{
+"text": "17 June 2013",
+"bbox": [
+78,
+150,
+184,
+171
+]
+},
+{
+"text": "FATTURA / INVOICE n. 7141/13",
+"bbox": [
+78,
+179,
+410,
+207
+]
+},
+{
+"text": "Bill to: Valdorso Coatings S.p.A., Via delle Fornaci 7, Borgo Valdorso (TO).",
+"bbox": [
+78,
+219,
+770,
+245
+]
+},
+{
+"text": "Item: White spirit D40, bulk. Quantity: 800 l. Unit price: 1.05 EUR.",
+"bbox": [
+78,
+255,
+697,
+281
+]
+},
+{
+"text": "Total excl. VAT: 839 EUR. Payment: 60 days end of month.",
+"bbox": [
+78,
+291,
+630,
+317
+]
+},
+{
+"text": "Delivery note: DDT 9443 of 17/06/2013.",
+"bbox": [
+78,
+327,
+466,
+353
+]
+}
+]
+}
+]
+}

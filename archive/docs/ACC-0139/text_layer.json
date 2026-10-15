@@ -1,0 +1,56 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: HR",
+"bbox": [
+78,
+78,
+166,
+101
+]
+},
+{
+"text": "To: All staff",
+"bbox": [
+78,
+101,
+221,
+124
+]
+},
+{
+"text": "Date: 27 Jan 2021",
+"bbox": [
+78,
+124,
+265,
+147
+]
+},
+{
+"text": "Subject: Summer timetable",
+"bbox": [
+78,
+147,
+353,
+170
+]
+},
+{
+"text": "From 1 July the canteen opens at 11:45.",
+"bbox": [
+78,
+186,
+507,
+209
+]
+}
+]
+}
+]
+}

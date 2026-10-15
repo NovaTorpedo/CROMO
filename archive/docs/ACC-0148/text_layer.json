@@ -1,0 +1,191 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. SOP-07 Rev 8 1 March 2021",
+"bbox": [
+78,
+150,
+328,
+171
+]
+},
+{
+"text": "STANDARD OPERATING PROCEDURE - SOP-07 Solvent cleaning of dispersers and",
+"bbox": [
+78,
+179,
+916,
+207
+]
+},
+{
+"text": "mixing vessels",
+"bbox": [
+78,
+207,
+228,
+235
+]
+},
+{
+"text": "Document: SOP-07 Solvent cleaning of dispersers and mixing vessels",
+"bbox": [
+78,
+247,
+732,
+273
+]
+},
+{
+"text": "Revision: Rev 8 (current), effective 01/03/2021.",
+"bbox": [
+78,
+283,
+535,
+309
+]
+},
+{
+"text": "Batch size: per cleaning. Equipment: D-1..D-4, T-1..T-6, solvent station.",
+"bbox": [
+78,
+319,
+753,
+345
+]
+},
+{
+"text": "Steps",
+"bbox": [
+78,
+359,
+135,
+386
+]
+},
+{
+"text": "1. Drain residual product into the recovery drum.",
+"bbox": [
+78,
+390,
+538,
+416
+]
+},
+{
+"text": "2. Bond and earth the vessel and the solvent drum before any solvent transfer.",
+"bbox": [
+78,
+426,
+819,
+452
+]
+},
+{
+"text": "3. First rinse: circulate 40 L acetone (RM-301) for 10 min; drain to waste solvent.",
+"bbox": [
+78,
+462,
+842,
+488
+]
+},
+{
+"text": "4. Second rinse with 20 L fresh acetone (RM-301); drain to waste solvent.",
+"bbox": [
+78,
+498,
+773,
+524
+]
+},
+{
+"text": "5. Wipe agitator shaft and blades with a xylene-soaked rag (approx. 1 L xylene, RM-305).",
+"bbox": [
+78,
+534,
+914,
+560
+]
+},
+{
+"text": "6. Before any vessel entry: force-ventilate 15 min and check O₂ and LEL with the gas",
+"bbox": [
+78,
+570,
+872,
+596
+]
+},
+{
+"text": "detector.",
+"bbox": [
+78,
+596,
+165,
+622
+]
+},
+{
+"text": "7. Leave the vessel lid open overnight after cleaning.",
+"bbox": [
+78,
+632,
+575,
+658
+]
+},
+{
+"text": "8. Wait at least 60 min after cleaning before charging the next batch.",
+"bbox": [
+78,
+668,
+725,
+694
+]
+},
+{
+"text": "9. Record the cleaning in the vessel logbook and sign.",
+"bbox": [
+78,
+704,
+584,
+730
+]
+},
+{
+"text": "Controlled copy - the MES recipe is the master.",
+"bbox": [
+78,
+740,
+521,
+766
+]
+}
+]
+}
+]
+}

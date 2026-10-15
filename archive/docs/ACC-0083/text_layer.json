@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. CR-2014-011 15 September 2014",
+"bbox": [
+78,
+150,
+375,
+171
+]
+},
+{
+"text": "Change request CR-2014-011",
+"bbox": [
+78,
+179,
+389,
+207
+]
+},
+{
+"text": "Procedure: SOP-07.",
+"bbox": [
+78,
+219,
+269,
+245
+]
+},
+{
+"text": "Change: reduce the wait after cleaning from 60 to 15 minutes to gain capacity (about",
+"bbox": [
+78,
+255,
+876,
+281
+]
+},
+{
+"text": "1,000 vessel-hours per year).",
+"bbox": [
+78,
+281,
+359,
+307
+]
+},
+{
+"text": "Trial on D-1 and D-2 for 4 weeks: no issues reported. Approved.",
+"bbox": [
+78,
+317,
+680,
+343
+]
+},
+{
+"text": "Prepared by: D. Morra",
+"bbox": [
+78,
+371,
+237,
+391
+]
+}
+]
+}
+]
+}

@@ -1,0 +1,173 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. LT-2020-044 17 February 2020",
+"bbox": [
+78,
+150,
+356,
+171
+]
+},
+{
+"text": "Laboratory report LT-2020-044 - chloride and drying study, AF-12",
+"bbox": [
+78,
+179,
+753,
+207
+]
+},
+{
+"text": "Purpose: investigate two complaints of under-film corrosion on AF-12 coated steel",
+"bbox": [
+78,
+219,
+858,
+245
+]
+},
+{
+"text": "(2019).",
+"bbox": [
+78,
+245,
+150,
+271
+]
+},
+{
+"text": "Chloride content of 20 production batches: 380-420 ppm; nearly all of it comes from the",
+"bbox": [
+78,
+281,
+916,
+307
+]
+},
+{
+"text": "ammonium chloride addition in the recipe.",
+"bbox": [
+78,
+307,
+477,
+333
+]
+},
+{
+"text": "Laboratory batches with and without ammonium chloride: dry-to-touch 3 h 10 min vs 3 h",
+"bbox": [
+78,
+343,
+911,
+369
+]
+},
+{
+"text": "05 min; through-dry 8 h for both. Storage 8 weeks at 40 °C: no viscosity increase in",
+"bbox": [
+78,
+369,
+860,
+395
+]
+},
+{
+"text": "either.",
+"bbox": [
+78,
+395,
+140,
+421
+]
+},
+{
+"text": "Viscosity measured 0 h and 12 h after letdown on the same 20 production batches: no",
+"bbox": [
+78,
+431,
+891,
+457
+]
+},
+{
+"text": "change beyond measurement error.",
+"bbox": [
+78,
+457,
+418,
+483
+]
+},
+{
+"text": "Comments: ammonium chloride has no measurable effect on drying. Chloride above 300",
+"bbox": [
+78,
+493,
+914,
+519
+]
+},
+{
+"text": "ppm can contribute to under-film corrosion on steel.",
+"bbox": [
+78,
+519,
+573,
+545
+]
+},
+{
+"text": "Recommendation: Process Engineering to review whether the ammonium chloride",
+"bbox": [
+78,
+555,
+855,
+581
+]
+},
+{
+"text": "addition is still needed.",
+"bbox": [
+78,
+581,
+296,
+607
+]
+},
+{
+"text": "Prepared by: R. Ferrandi",
+"bbox": [
+78,
+635,
+254,
+655
+]
+}
+]
+}
+]
+}

@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "20 January 2022",
+"bbox": [
+78,
+150,
+207,
+171
+]
+},
+{
+"text": "Technical data sheet - EF-210 epoxy floor coating",
+"bbox": [
+78,
+179,
+587,
+207
+]
+},
+{
+"text": "Part A: liquid epoxy resin, reactive diluent to reduce viscosity, quartz flour and",
+"bbox": [
+78,
+219,
+812,
+245
+]
+},
+{
+"text": "micro-silica fillers, silicone defoamer to release air during application.",
+"bbox": [
+78,
+245,
+737,
+271
+]
+},
+{
+"text": "Epoxy equivalent weight of Part A: 190-210 g/eq - controls the mixing ratio with Part B.",
+"bbox": [
+78,
+281,
+899,
+307
+]
+},
+{
+"text": "Supplied in 20 kg pails.",
+"bbox": [
+78,
+317,
+296,
+343
+]
+}
+]
+}
+]
+}

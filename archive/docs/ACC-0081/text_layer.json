@@ -1,0 +1,110 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "10 May 2023",
+"bbox": [
+78,
+150,
+177,
+171
+]
+},
+{
+"text": "Technical data sheet - AF-12 anti-rust alkyd enamel",
+"bbox": [
+78,
+179,
+609,
+207
+]
+},
+{
+"text": "Binder: long-oil alkyd resin. Anti-corrosive pigment: zinc phosphate.",
+"bbox": [
+78,
+219,
+717,
+245
+]
+},
+{
+"text": "Fineness of grind: 6 Hegman minimum (dispersion quality, gloss and anti-corrosion",
+"bbox": [
+78,
+255,
+857,
+281
+]
+},
+{
+"text": "performance).",
+"bbox": [
+78,
+281,
+214,
+307
+]
+},
+{
+"text": "Viscosity: Ford cup No. 4, 80-110 s; adjusted with white spirit at letdown.",
+"bbox": [
+78,
+317,
+768,
+343
+]
+},
+{
+"text": "Drying: oxidative, Co/Zr drier system; MEKO prevents skinning in the tin. Gloss 60°: 80 GU",
+"bbox": [
+78,
+353,
+922,
+379
+]
+},
+{
+"text": "minimum.",
+"bbox": [
+78,
+379,
+172,
+405
+]
+},
+{
+"text": "Filtration: 50 µm (required by OEM spray-application customers).",
+"bbox": [
+78,
+415,
+690,
+441
+]
+}
+]
+}
+]
+}

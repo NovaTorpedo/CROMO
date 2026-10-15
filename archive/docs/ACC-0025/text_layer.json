@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. QA-2015-AGR 2 November 2015",
+"bbox": [
+78,
+150,
+365,
+171
+]
+},
+{
+"text": "Customer quality agreements - summary",
+"bbox": [
+78,
+179,
+494,
+207
+]
+},
+{
+"text": "Three key customers (two OEMs and one distributor) require retained samples of each",
+"bbox": [
+78,
+219,
+891,
+245
+]
+},
+{
+"text": "delivered lot for 5 years.",
+"bbox": [
+78,
+245,
+309,
+271
+]
+},
+{
+"text": "Agreements valid until revoked; reviewed yearly.",
+"bbox": [
+78,
+281,
+537,
+307
+]
+},
+{
+"text": "Prepared by: R. Ferrandi",
+"bbox": [
+78,
+335,
+254,
+355
+]
+}
+]
+}
+]
+}

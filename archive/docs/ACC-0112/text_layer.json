@@ -1,0 +1,101 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. CL-2009-007 28 September 2009",
+"bbox": [
+78,
+150,
+373,
+171
+]
+},
+{
+"text": "Customer claim CL-2009-007",
+"bbox": [
+78,
+179,
+386,
+207
+]
+},
+{
+"text": "Customer: Macchine Agricole Sesia S.p.A. Claim for coating failure (blistering) on tractors",
+"bbox": [
+78,
+219,
+915,
+245
+]
+},
+{
+"text": "painted with AF-12 in 2007: EUR 180,000.",
+"bbox": [
+78,
+245,
+482,
+271
+]
+},
+{
+"text": "The retained sample of the lot had been discarded after 1 year, so conformity of the",
+"bbox": [
+78,
+281,
+867,
+307
+]
+},
+{
+"text": "batch could not be demonstrated.",
+"bbox": [
+78,
+307,
+398,
+333
+]
+},
+{
+"text": "Settled at EUR 95,000.",
+"bbox": [
+78,
+343,
+295,
+369
+]
+},
+{
+"text": "Prepared by: L. Ferro",
+"bbox": [
+78,
+397,
+230,
+417
+]
+}
+]
+}
+]
+}

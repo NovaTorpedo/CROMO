@@ -1,0 +1,40 @@
+{
+ "currency": "EUR",
+ "labor_rate_eur_per_h": 38.0,
+ "energy_price_eur_per_kwh": 0.21,
+ "solvent_disposal_eur_per_l": 0.55,
+ "disperser_occupancy_eur_per_h": 14.0,
+ "holding_tank_eur_per_h": 1.8,
+ "nitrogen_eur_per_m3": 0.42,
+ "volumes": {
+  "ALK": {
+   "basis": "batch",
+   "per_year": 1850,
+   "label": "AF-12 batches/yr"
+  },
+  "EPX": {
+   "basis": "batch",
+   "per_year": 1150,
+   "label": "EF-210 A batches/yr"
+  },
+  "SOL": {
+   "basis": "cleaning",
+   "per_year": 3900,
+   "label": "vessel cleanings/yr"
+  },
+  "TNK": {
+   "basis": "batch",
+   "per_year": 620,
+   "label": "TL-5 batches/yr"
+  },
+  "QC": {
+   "basis": "release",
+   "per_year": 3620,
+   "label": "batch releases/yr"
+  },
+  "winter_fraction": 0.42,
+  "pigment_lots_per_year": 950,
+  "pigment_additions_per_year": 3000
+ },
+ "source": "ERP controlling export 2026-09 (synthetic)"
+}

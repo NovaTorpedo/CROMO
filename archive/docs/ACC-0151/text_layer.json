@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "CHIMICA ONDINA S.n.c.",
+"bbox": [
+78,
+78,
+436,
+111
+]
+},
+{
+"text": "Additivi e prodotti chimici",
+"bbox": [
+78,
+117,
+241,
+134
+]
+},
+{
+"text": "25 May 2020",
+"bbox": [
+78,
+150,
+177,
+171
+]
+},
+{
+"text": "FATTURA / INVOICE n. 3826/20",
+"bbox": [
+78,
+179,
+410,
+207
+]
+},
+{
+"text": "Bill to: Valdorso Coatings S.p.A., Via delle Fornaci 7, Borgo Valdorso (TO).",
+"bbox": [
+78,
+219,
+770,
+245
+]
+},
+{
+"text": "Item: DBTDL catalyst, cans 25 kg. Quantity: 1,000 kg. Unit price: 17.42 EUR.",
+"bbox": [
+78,
+255,
+797,
+281
+]
+},
+{
+"text": "Total excl. VAT: 17,419 EUR. Payment: 60 days end of month.",
+"bbox": [
+78,
+291,
+662,
+317
+]
+},
+{
+"text": "Delivery note: DDT 4807 of 25/05/2020.",
+"bbox": [
+78,
+327,
+466,
+353
+]
+}
+]
+}
+]
+}

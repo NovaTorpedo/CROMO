@@ -1,0 +1,65 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "9 December 2008",
+"bbox": [
+78,
+150,
+214,
+171
+]
+},
+{
+"text": "Minutes - plant meeting (2008)",
+"bbox": [
+78,
+179,
+399,
+207
+]
+},
+{
+"text": "1. Ergonomics: lifting aids for 25 kg bags at D-2.",
+"bbox": [
+78,
+219,
+528,
+245
+]
+},
+{
+"text": "2. Ventilation of the solvent room: annual check done.",
+"bbox": [
+78,
+255,
+589,
+281
+]
+}
+]
+}
+]
+}

@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. CR-2008-005 5 May 2008",
+"bbox": [
+78,
+150,
+312,
+171
+]
+},
+{
+"text": "Change request CR-2008-005",
+"bbox": [
+78,
+179,
+389,
+207
+]
+},
+{
+"text": "Procedure: SOP-07.",
+"bbox": [
+78,
+219,
+269,
+245
+]
+},
+{
+"text": "Change: before any vessel entry, forced ventilation for 15 min and O2/LEL test with a",
+"bbox": [
+78,
+255,
+877,
+281
+]
+},
+{
+"text": "calibrated detector; entry permit signed by the shift leader.",
+"bbox": [
+78,
+281,
+634,
+307
+]
+},
+{
+"text": "Reason: IR-2008-003 (operator overcome by solvent vapour in tank T-3).",
+"bbox": [
+78,
+317,
+771,
+343
+]
+},
+{
+"text": "Prepared by: D. Morra",
+"bbox": [
+78,
+371,
+237,
+391
+]
+}
+]
+}
+]
+}

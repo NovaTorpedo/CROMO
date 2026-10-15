@@ -1,0 +1,101 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. PM-2015-001 26 January 2015",
+"bbox": [
+78,
+150,
+354,
+171
+]
+},
+{
+"text": "Product portfolio memo PM-2015-001",
+"bbox": [
+78,
+179,
+476,
+207
+]
+},
+{
+"text": "Discontinued from 1 January 2015: BW-90 white topcoat - the Carrozzerie Vetta supply",
+"bbox": [
+78,
+219,
+904,
+245
+]
+},
+{
+"text": "contract ended on 31/12/2014 and was not renewed.",
+"bbox": [
+78,
+245,
+589,
+271
+]
+},
+{
+"text": "With BW-90 gone, the range consists of primers, AF-12 enamel in dark industrial colours,",
+"bbox": [
+78,
+281,
+920,
+307
+]
+},
+{
+"text": "EF-210 epoxy and TL-5 polyurethane. No white or light-coloured topcoats remain in",
+"bbox": [
+78,
+307,
+870,
+333
+]
+},
+{
+"text": "production.",
+"bbox": [
+78,
+333,
+187,
+359
+]
+},
+{
+"text": "Prepared by: M. Viale",
+"bbox": [
+78,
+387,
+232,
+407
+]
+}
+]
+}
+]
+}

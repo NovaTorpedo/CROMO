@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: Turno A (D-1)",
+"bbox": [
+78,
+78,
+287,
+101
+]
+},
+{
+"text": "To: Rosa Ferrandi (QC)",
+"bbox": [
+78,
+101,
+320,
+124
+]
+},
+{
+"text": "Date: 20 Jan 2016",
+"bbox": [
+78,
+124,
+265,
+147
+]
+},
+{
+"text": "Subject: KO-410 drums thick this morning",
+"bbox": [
+78,
+147,
+518,
+170
+]
+},
+{
+"text": "The KO-410 drums are very thick this morning, it is -4 °C outside. Do we",
+"bbox": [
+78,
+186,
+870,
+209
+]
+},
+{
+"text": "need longer in the hot box?",
+"bbox": [
+78,
+209,
+375,
+232
+]
+},
+{
+"text": "Reply from R. Ferrandi: Thick, not crystallised. KO-410 viscosity at 15 °C",
+"bbox": [
+106,
+242,
+920,
+265
+]
+},
+{
+"text": "is about 21,000 mPa·s - still pumpable with the gear pump. I checked two",
+"bbox": [
+106,
+265,
+898,
+288
+]
+},
+{
+"text": "drums: no crystals.",
+"bbox": [
+106,
+288,
+315,
+311
+]
+}
+]
+}
+]
+}

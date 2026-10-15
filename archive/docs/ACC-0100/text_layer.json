@@ -1,0 +1,236 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. AF-12 Rev 12 19 February 2007",
+"bbox": [
+78,
+150,
+357,
+171
+]
+},
+{
+"text": "RECIPE CARD - AF-12 anti-rust alkyd enamel",
+"bbox": [
+78,
+179,
+538,
+207
+]
+},
+{
+"text": "Document: AF-12 anti-rust alkyd enamel",
+"bbox": [
+78,
+219,
+462,
+245
+]
+},
+{
+"text": "Revision: Rev 12, effective 19/02/2007.",
+"bbox": [
+78,
+255,
+459,
+281
+]
+},
+{
+"text": "Steps",
+"bbox": [
+78,
+295,
+135,
+322
+]
+},
+{
+"text": "1. Charge 520 kg long-oil alkyd resin AL-60 (Resine Altamira) into disperser D-2; agitator",
+"bbox": [
+78,
+326,
+912,
+352
+]
+},
+{
+"text": "300 rpm.",
+"bbox": [
+78,
+352,
+166,
+378
+]
+},
+{
+"text": "2. Add 180 kg zinc phosphate pigment ZP-40 (Fosfazinco Nord).",
+"bbox": [
+78,
+388,
+683,
+414
+]
+},
+{
+"text": "3. Add 0.2 kg soy lecithin with the pigment.",
+"bbox": [
+78,
+424,
+484,
+450
+]
+},
+{
+"text": "4. Add 0.8 kg ammonium chloride per 1000 kg batch, dissolved in 2 L water; stir 10 min.",
+"bbox": [
+78,
+460,
+909,
+486
+]
+},
+{
+"text": "5. 1 Nov - 31 Mar: add 1.5 kg bentonite anti-settling agent (winter dose).",
+"bbox": [
+78,
+496,
+760,
+522
+]
+},
+{
+"text": "6. Disperse at 1,400 rpm to fineness 6 Hegman minimum.",
+"bbox": [
+78,
+532,
+624,
+558
+]
+},
+{
+"text": "7. Cool batch below 40 °C before letdown. Record temperature on batch sheet.",
+"bbox": [
+78,
+568,
+829,
+594
+]
+},
+{
+"text": "8. Let down with 160 kg white spirit.",
+"bbox": [
+78,
+604,
+420,
+630
+]
+},
+{
+"text": "9. Add 4.5 kg cobalt drier flakes dissolved in xylene and 2 kg MEKO.",
+"bbox": [
+78,
+640,
+716,
+666
+]
+},
+{
+"text": "10. Rest batch 12 h in holding tank before QC sample.",
+"bbox": [
+78,
+676,
+587,
+702
+]
+},
+{
+"text": "11. Filter through 50 µm bag filter and fill 20 L tins on FL-2.",
+"bbox": [
+78,
+712,
+638,
+738
+]
+},
+{
+"text": "Change note",
+"bbox": [
+78,
+752,
+204,
+779
+]
+},
+{
+"text": "Pigment changed from CL-77 to ZP-40 (CM-2006-004, SQ-2007-002). All other steps",
+"bbox": [
+78,
+783,
+892,
+809
+]
+},
+{
+"text": "unchanged.",
+"bbox": [
+78,
+809,
+189,
+835
+]
+},
+{
+"text": "Prepared by: D. Morra",
+"bbox": [
+78,
+845,
+285,
+871
+]
+},
+{
+"text": "Prepared by: D. Morra",
+"bbox": [
+78,
+899,
+237,
+919
+]
+},
+{
+"text": "[stamp] SUPERSEDED ARCHIVE COPY",
+"bbox": [
+439,
+1066,
+775,
+1184
+]
+}
+]
+}
+]
+}

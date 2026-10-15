@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "RESINE ALTAMIRA S.p.A.",
+"bbox": [
+78,
+78,
+448,
+111
+]
+},
+{
+"text": "Resine alchidiche ed epossidiche",
+"bbox": [
+78,
+117,
+289,
+134
+]
+},
+{
+"text": "22 April 2004",
+"bbox": [
+78,
+150,
+182,
+171
+]
+},
+{
+"text": "FATTURA / INVOICE n. 5931/04",
+"bbox": [
+78,
+179,
+410,
+207
+]
+},
+{
+"text": "Bill to: Valdorso Coatings S.p.A., Via delle Fornaci 7, Borgo Valdorso (TO).",
+"bbox": [
+78,
+219,
+770,
+245
+]
+},
+{
+"text": "Item: Epoxy resin ALTAREP E-19, drums. Quantity: 24,000 kg. Unit price: 3.64 EUR.",
+"bbox": [
+78,
+255,
+864,
+281
+]
+},
+{
+"text": "Total excl. VAT: 87,468 EUR. Payment: 60 days end of month.",
+"bbox": [
+78,
+291,
+662,
+317
+]
+},
+{
+"text": "Delivery note: DDT 6734 of 22/04/2004.",
+"bbox": [
+78,
+327,
+466,
+353
+]
+}
+]
+}
+]
+}

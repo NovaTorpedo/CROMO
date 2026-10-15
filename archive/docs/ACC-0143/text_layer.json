@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: Davide Morra",
+"bbox": [
+78,
+78,
+276,
+101
+]
+},
+{
+"text": "To: Samuel Adeyemi (EHS)",
+"bbox": [
+78,
+101,
+342,
+124
+]
+},
+{
+"text": "Date: 3 Oct 2017",
+"bbox": [
+78,
+124,
+254,
+147
+]
+},
+{
+"text": "Subject: AF-12 cooling hold",
+"bbox": [
+78,
+147,
+375,
+170
+]
+},
+{
+"text": "Samuel, the cooling hold before letdown on AF-12 costs us about 30 min per",
+"bbox": [
+78,
+186,
+892,
+209
+]
+},
+{
+"text": "batch. Is it still required now that all hoses are antistatic?",
+"bbox": [
+78,
+209,
+760,
+232
+]
+},
+{
+"text": "Reply from S. Adeyemi: Yes. As long as we let down with white spirit",
+"bbox": [
+106,
+242,
+854,
+265
+]
+},
+{
+"text": "(flash point about 39 °C) the batch must be below 40 °C. Antistatic hoses",
+"bbox": [
+106,
+265,
+909,
+288
+]
+},
+{
+"text": "reduce ignition sources; they do not remove the vapour. See IR-2001-007.",
+"bbox": [
+106,
+288,
+898,
+311
+]
+}
+]
+}
+]
+}

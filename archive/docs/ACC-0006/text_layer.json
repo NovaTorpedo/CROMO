@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: Chiara Bosio (Logistics)",
+"bbox": [
+78,
+78,
+408,
+101
+]
+},
+{
+"text": "To: Davide Morra (Process Engineering)",
+"bbox": [
+78,
+101,
+496,
+124
+]
+},
+{
+"text": "Date: 12 Jan 2023",
+"bbox": [
+78,
+124,
+265,
+147
+]
+},
+{
+"text": "Subject: Re: M2 usage",
+"bbox": [
+78,
+147,
+309,
+170
+]
+},
+{
+"text": "Davide,",
+"bbox": [
+78,
+186,
+155,
+209
+]
+},
+{
+"text": "confirming: M2 has held only empty drums, pallets and packaging since M5",
+"bbox": [
+78,
+219,
+870,
+242
+]
+},
+{
+"text": "opened in 2011. No finished goods are stored there, not even in peak season",
+"bbox": [
+78,
+242,
+903,
+265
+]
+},
+{
+"text": "- overflow goes to the external depot, which is also heated.",
+"bbox": [
+78,
+265,
+738,
+288
+]
+},
+{
+"text": "Chiara",
+"bbox": [
+78,
+298,
+144,
+321
+]
+}
+]
+}
+]
+}

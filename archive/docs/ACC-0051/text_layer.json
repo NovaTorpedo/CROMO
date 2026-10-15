@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: QC laboratory",
+"bbox": [
+78,
+78,
+287,
+101
+]
+},
+{
+"text": "To: Rosa Ferrandi",
+"bbox": [
+78,
+101,
+265,
+124
+]
+},
+{
+"text": "Date: 30 May 2022",
+"bbox": [
+78,
+124,
+265,
+147
+]
+},
+{
+"text": "Subject: Retained sample room full",
+"bbox": [
+78,
+147,
+452,
+170
+]
+},
+{
+"text": "The retained sample room is full. Can we go down to 1 year?",
+"bbox": [
+78,
+186,
+727,
+209
+]
+},
+{
+"text": "Reply from R. Ferrandi: No. Our quality agreements require 5 years, and we",
+"bbox": [
+106,
+219,
+920,
+242
+]
+},
+{
+"text": "lost EUR 95,000 in 2009 (CL-2009-007) without a sample. I will ask for",
+"bbox": [
+106,
+242,
+876,
+265
+]
+},
+{
+"text": "more shelving.",
+"bbox": [
+106,
+265,
+260,
+288
+]
+}
+]
+}
+]
+}

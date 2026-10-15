@@ -1,0 +1,101 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. IR-2005-011 25 July 2005",
+"bbox": [
+78,
+150,
+319,
+171
+]
+},
+{
+"text": "Incident report IR-2005-011",
+"bbox": [
+78,
+179,
+378,
+207
+]
+},
+{
+"text": "A customer reported a TL-5 can lid blown off in a storage container (inside temperature",
+"bbox": [
+78,
+219,
+901,
+245
+]
+},
+{
+"text": "35 °C). Nobody was hurt.",
+"bbox": [
+78,
+245,
+315,
+271
+]
+},
+{
+"text": "Investigation: humid summer air was drawn into the D-4 headspace during the isocyanate",
+"bbox": [
+78,
+281,
+920,
+307
+]
+},
+{
+"text": "addition; the water reacted with isocyanate and produced CO2 after canning.",
+"bbox": [
+78,
+307,
+801,
+333
+]
+},
+{
+"text": "Corrective action: CR-2005-009.",
+"bbox": [
+78,
+343,
+389,
+369
+]
+},
+{
+"text": "Prepared by: R. Gallina",
+"bbox": [
+78,
+397,
+243,
+417
+]
+}
+]
+}
+]
+}

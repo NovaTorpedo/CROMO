@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. CM-2003-007 15 September 2003",
+"bbox": [
+78,
+150,
+378,
+171
+]
+},
+{
+"text": "Compliance memo CM-2003-007 - implementation of D.R. 114/2003",
+"bbox": [
+78,
+179,
+792,
+207
+]
+},
+{
+"text": "XRF analyser XRF-01 purchased (EQ-2003-009). From 1/11/2003 every incoming",
+"bbox": [
+78,
+219,
+857,
+245
+]
+},
+{
+"text": "pigment lot is screened for lead.",
+"bbox": [
+78,
+245,
+383,
+271
+]
+},
+{
+"text": "Applies because AF-12 uses basic lead chromate CL-77.",
+"bbox": [
+78,
+281,
+611,
+307
+]
+},
+{
+"text": "Prepared by: R. Gallina",
+"bbox": [
+78,
+335,
+243,
+355
+]
+}
+]
+}
+]
+}

@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. MM-2021-02-09 9 February 2021",
+"bbox": [
+78,
+150,
+372,
+171
+]
+},
+{
+"text": "Minutes - EF-210 cycle time review, 9 February 2021",
+"bbox": [
+78,
+179,
+624,
+207
+]
+},
+{
+"text": "Present: Morra, Ferrandi, Viale.",
+"bbox": [
+78,
+219,
+374,
+245
+]
+},
+{
+"text": "The vacuum step adds about 25 min per EF-210 batch. Proposal: drop the micro-silica,",
+"bbox": [
+78,
+255,
+897,
+281
+]
+},
+{
+"text": "and with it the vacuum.",
+"bbox": [
+78,
+281,
+296,
+307
+]
+},
+{
+"text": "Rejected: micro-silica is needed for sag resistance on ramps and vertical surfaces",
+"bbox": [
+78,
+317,
+846,
+343
+]
+},
+{
+"text": "(customer specification). Vacuum stays.",
+"bbox": [
+78,
+343,
+454,
+369
+]
+}
+]
+}
+]
+}

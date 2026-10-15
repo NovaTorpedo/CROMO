@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. SQ-2010-003 15 February 2010",
+"bbox": [
+78,
+150,
+359,
+171
+]
+},
+{
+"text": "Supplier qualification SQ-2010-003 - Quarzi Monterosso S.p.A.",
+"bbox": [
+78,
+179,
+721,
+207
+]
+},
+{
+"text": "Material: quartz flour 0.1 mm for EF-210, delivered in 1-tonne big-bags with PE liner.",
+"bbox": [
+78,
+219,
+879,
+245
+]
+},
+{
+"text": "Free-flowing, moisture < 0.1 %, no lumps in 6 trial lots.",
+"bbox": [
+78,
+245,
+599,
+271
+]
+},
+{
+"text": "Replaces Silicati Brenta paper bags from April 2010.",
+"bbox": [
+78,
+281,
+572,
+307
+]
+},
+{
+"text": "Prepared by: E. Marchisio",
+"bbox": [
+78,
+335,
+262,
+355
+]
+}
+]
+}
+]
+}

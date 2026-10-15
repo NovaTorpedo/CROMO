@@ -1,0 +1,110 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. CR-2005-006 26 September 2005",
+"bbox": [
+78,
+150,
+375,
+171
+]
+},
+{
+"text": "Change request CR-2005-006 - nitrogen flush on filling line FL-2",
+"bbox": [
+78,
+179,
+737,
+207
+]
+},
+{
+"text": "Filling line FL-2 is shared by EF-210 Part A (epoxy base) and Part B (amine hardener",
+"bbox": [
+78,
+219,
+870,
+245
+]
+},
+{
+"text": "H-21).",
+"bbox": [
+78,
+245,
+140,
+271
+]
+},
+{
+"text": "Amine hardeners react with carbon dioxide and moisture in air (carbamation, white crust",
+"bbox": [
+78,
+281,
+910,
+307
+]
+},
+{
+"text": "on the surface).",
+"bbox": [
+78,
+307,
+227,
+333
+]
+},
+{
+"text": "Change: flush every pail with nitrogen before filling on FL-2. Applied to all products filled",
+"bbox": [
+78,
+343,
+912,
+369
+]
+},
+{
+"text": "on the line, to avoid changeover mistakes.",
+"bbox": [
+78,
+369,
+474,
+395
+]
+},
+{
+"text": "Prepared by: P. Gastaldi",
+"bbox": [
+78,
+423,
+253,
+443
+]
+}
+]
+}
+]
+}

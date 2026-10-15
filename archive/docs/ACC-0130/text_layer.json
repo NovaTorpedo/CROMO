@@ -1,0 +1,110 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. SOP07-RAT-2016 8 February 2016",
+"bbox": [
+78,
+150,
+381,
+171
+]
+},
+{
+"text": "SOP-07 - purpose of the main steps (QA note)",
+"bbox": [
+78,
+179,
+546,
+207
+]
+},
+{
+"text": "Prepared for the ISO 9001 surveillance audit.",
+"bbox": [
+78,
+219,
+509,
+245
+]
+},
+{
+"text": "Draining residual product into the recovery drum reduces waste and recovers product:",
+"bbox": [
+78,
+255,
+892,
+281
+]
+},
+{
+"text": "the recovery drums are reprocessed into primers.",
+"bbox": [
+78,
+281,
+547,
+307
+]
+},
+{
+"text": "The first acetone rinse removes the product film before the next batch.",
+"bbox": [
+78,
+317,
+748,
+343
+]
+},
+{
+"text": "The cleaning record in the vessel logbook is required for traceability (ISO 9001 and",
+"bbox": [
+78,
+353,
+863,
+379
+]
+},
+{
+"text": "customer audits).",
+"bbox": [
+78,
+379,
+243,
+405
+]
+},
+{
+"text": "Prepared by: R. Ferrandi",
+"bbox": [
+78,
+433,
+254,
+453
+]
+}
+]
+}
+]
+}

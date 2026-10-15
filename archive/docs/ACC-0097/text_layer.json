@@ -1,0 +1,74 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "27 August 2005",
+"bbox": [
+78,
+150,
+200,
+171
+]
+},
+{
+"text": "Waste transport form n. 95869",
+"bbox": [
+78,
+179,
+394,
+207
+]
+},
+{
+"text": "Producer: Valdorso Coatings S.p.A. - Borgo Valdorso.",
+"bbox": [
+78,
+219,
+577,
+245
+]
+},
+{
+"text": "Waste: spent non-halogenated solvents (EWC 07 01 04*). Quantity: 12,000 kg.",
+"bbox": [
+78,
+255,
+822,
+281
+]
+},
+{
+"text": "Carrier: Ecotrasporti Dora. Destination: solvent recovery plant.",
+"bbox": [
+78,
+291,
+664,
+317
+]
+}
+]
+}
+]
+}

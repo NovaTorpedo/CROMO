@@ -1,0 +1,74 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "7 November 2022",
+"bbox": [
+78,
+150,
+215,
+171
+]
+},
+{
+"text": "Maintenance log - magnetic separator MS-1 (extract)",
+"bbox": [
+78,
+179,
+620,
+207
+]
+},
+{
+"text": "07/02/2022 MS-1 cleaned: 9 g iron fines collected.",
+"bbox": [
+78,
+219,
+567,
+245
+]
+},
+{
+"text": "09/05/2022 MS-1 cleaned: 12 g iron fines collected.",
+"bbox": [
+78,
+255,
+580,
+281
+]
+},
+{
+"text": "07/11/2022 MS-1 cleaned: 11 g iron fines collected.",
+"bbox": [
+78,
+291,
+580,
+317
+]
+}
+]
+}
+]
+}

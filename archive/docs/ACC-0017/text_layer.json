@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "LABORATORIO METROLOGICO CANAVESE",
+"bbox": [
+78,
+78,
+740,
+111
+]
+},
+{
+"text": "Calibration certificate",
+"bbox": [
+78,
+117,
+215,
+134
+]
+},
+{
+"text": "20 August 2018",
+"bbox": [
+78,
+150,
+200,
+171
+]
+},
+{
+"text": "Calibration certificate - Portable gas detector GD-3 (O2/LEL)",
+"bbox": [
+78,
+179,
+694,
+207
+]
+},
+{
+"text": "Instrument: Portable gas detector GD-3 (O2/LEL). Result: bump test passed; span 50 %",
+"bbox": [
+78,
+219,
+903,
+245
+]
+},
+{
+"text": "LEL OK.",
+"bbox": [
+78,
+245,
+151,
+271
+]
+},
+{
+"text": "Next calibration due in 12 months.",
+"bbox": [
+78,
+281,
+404,
+307
+]
+},
+{
+"text": "Laboratorio Metrologico Canavese (accredited).",
+"bbox": [
+78,
+317,
+527,
+343
+]
+}
+]
+}
+]
+}

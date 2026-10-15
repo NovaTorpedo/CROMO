@@ -1,0 +1,101 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: Davide Morra",
+"bbox": [
+78,
+78,
+276,
+101
+]
+},
+{
+"text": "To: Production team; QC",
+"bbox": [
+78,
+101,
+331,
+124
+]
+},
+{
+"text": "Date: 5 Nov 2009",
+"bbox": [
+78,
+124,
+254,
+147
+]
+},
+{
+"text": "Subject: EF-210: why 20 minutes?",
+"bbox": [
+78,
+147,
+430,
+170
+]
+},
+{
+"text": "Does anyone know why EF-210 waits 20 minutes after the diluent addition",
+"bbox": [
+78,
+186,
+859,
+209
+]
+},
+{
+"text": "before the viscosity sample? I cannot find a change request.",
+"bbox": [
+78,
+209,
+738,
+232
+]
+},
+{
+"text": "Reply from F. Bellone: Gastaldi wanted it in 2001. I don't know why. Maybe",
+"bbox": [
+106,
+242,
+920,
+265
+]
+},
+{
+"text": "to let the bubbles out?",
+"bbox": [
+106,
+265,
+359,
+288
+]
+},
+{
+"text": "Reply from E. Marchisio: Not a lab requirement - we measure viscosity and",
+"bbox": [
+106,
+296,
+909,
+319
+]
+},
+{
+"text": "EEW, not bubbles. No idea.",
+"bbox": [
+106,
+319,
+392,
+342
+]
+}
+]
+}
+]
+}

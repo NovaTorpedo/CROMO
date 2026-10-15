@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "NORDPOL CHEMICALS AB",
+"bbox": [
+78,
+78,
+480,
+111
+]
+},
+{
+"text": "Polyols",
+"bbox": [
+78,
+117,
+124,
+134
+]
+},
+{
+"text": "15 October 2025",
+"bbox": [
+78,
+150,
+208,
+171
+]
+},
+{
+"text": "FATTURA / INVOICE n. 7620/25",
+"bbox": [
+78,
+179,
+410,
+207
+]
+},
+{
+"text": "Bill to: Valdorso Coatings S.p.A., Via delle Fornaci 7, Borgo Valdorso (TO).",
+"bbox": [
+78,
+219,
+770,
+245
+]
+},
+{
+"text": "Item: Polyol NP-310 Dry, tank truck. Quantity: 400 kg. Unit price: 2.90 EUR.",
+"bbox": [
+78,
+255,
+791,
+281
+]
+},
+{
+"text": "Total excl. VAT: 1,160 EUR. Payment: 60 days end of month.",
+"bbox": [
+78,
+291,
+649,
+317
+]
+},
+{
+"text": "Delivery note: DDT 5248 of 15/10/2025.",
+"bbox": [
+78,
+327,
+466,
+353
+]
+}
+]
+}
+]
+}

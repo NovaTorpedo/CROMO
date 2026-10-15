@@ -1,0 +1,74 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: Samuel Adeyemi (EHS)",
+"bbox": [
+78,
+78,
+364,
+101
+]
+},
+{
+"text": "To: Marco Viale (Plant manager)",
+"bbox": [
+78,
+101,
+419,
+124
+]
+},
+{
+"text": "Date: 6 Mar 2023",
+"bbox": [
+78,
+124,
+254,
+147
+]
+},
+{
+"text": "Subject: Acetone consumption 2022",
+"bbox": [
+78,
+147,
+441,
+170
+]
+},
+{
+"text": "Marco, acetone consumption in 2022 was 238,000 L, nearly all of it in",
+"bbox": [
+78,
+186,
+837,
+209
+]
+},
+{
+"text": "SOP-07. Waste solvent disposal cost went up 18 %.",
+"bbox": [
+78,
+209,
+617,
+232
+]
+},
+{
+"text": "I would like a review of the cleaning procedure.",
+"bbox": [
+78,
+242,
+606,
+265
+]
+}
+]
+}
+]
+}

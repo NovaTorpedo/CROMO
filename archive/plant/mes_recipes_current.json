@@ -1,0 +1,780 @@
+{
+ "export": "MES recipe export (synthetic)",
+ "exported_at": "2026-09-30",
+ "plant": {
+  "name": "Valdorso Coatings S.p.A.",
+  "site": "Borgo Valdorso (TO), Italy",
+  "synthetic": true,
+  "description": "Mid-sized industrial coatings plant (fictional). Primers, enamels, epoxy floor coatings, PU sealants."
+ },
+ "processes": [
+  {
+   "id": "ALK",
+   "code": "AF-12",
+   "name": "AF-12 anti-rust alkyd enamel",
+   "kind": "batch recipe",
+   "revision": "Rev 14",
+   "revision_date": "2023-05-10",
+   "batch_size": "2,000 kg",
+   "equipment": [
+    "D-2",
+    "holding tanks HT-1..4",
+    "FL-2"
+   ],
+   "steps": [
+    {
+     "id": "ALK-01",
+     "instruction": "Charge 1,040 kg long-oil alkyd resin AL-60 (RM-101) into disperser D-2; start agitator at 300 rpm.",
+     "materials": [
+      {
+       "code": "RM-101",
+       "qty": 1040
+      }
+     ],
+     "labor_min": 15,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "ALK-02",
+     "instruction": "Add 360 kg zinc phosphate anti-corrosive pigment ZP-40 (RM-110) over 10 min.",
+     "materials": [
+      {
+       "code": "RM-110",
+       "qty": 360
+      }
+     ],
+     "labor_min": 12,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "ALK-03",
+     "instruction": "Add 0.4 kg soy lecithin (RM-150) together with the pigment.",
+     "materials": [
+      {
+       "code": "RM-150",
+       "qty": 0.4
+      }
+     ],
+     "labor_min": 3,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "ALK-04",
+     "instruction": "Add 1.6 kg ammonium chloride (RM-118) pre-dissolved in 4 L water; stir 10 min.",
+     "materials": [
+      {
+       "code": "RM-118",
+       "qty": 1.6
+      }
+     ],
+     "labor_min": 10,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "ALK-05",
+     "instruction": "Winter dose: from 1 November to 31 March add 3 kg bentonite anti-settling agent (RM-120).",
+     "materials": [
+      {
+       "code": "RM-120",
+       "qty": 3
+      }
+     ],
+     "labor_min": 5,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": "winter"
+    },
+    {
+     "id": "ALK-06",
+     "instruction": "Disperse at 1,400 rpm until fineness of grind is at least 6 Hegman (approx. 40 min).",
+     "materials": [],
+     "labor_min": 10,
+     "energy_kwh": 30,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "ALK-07",
+     "instruction": "Cool the batch below 40 °C before solvent letdown and record the temperature (hold up to 30 min).",
+     "materials": [],
+     "labor_min": 3,
+     "energy_kwh": 0.0,
+     "disperser_min": 30,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "ALK-08",
+     "instruction": "Let down with 320 kg white spirit D40 (RM-131) at 600 rpm.",
+     "materials": [
+      {
+       "code": "RM-131",
+       "qty": 400
+      }
+     ],
+     "labor_min": 10,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "ALK-09",
+     "instruction": "Add 9 kg Co/Zr drier pack (RM-140) and 4 kg MEKO anti-skinning agent (RM-141).",
+     "materials": [
+      {
+       "code": "RM-140",
+       "qty": 9
+      },
+      {
+       "code": "RM-141",
+       "qty": 4
+      }
+     ],
+     "labor_min": 6,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "ALK-10",
+     "instruction": "Transfer to holding tank and rest the batch 12 h before QC sampling.",
+     "materials": [],
+     "labor_min": 5,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 12,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "ALK-11",
+     "instruction": "Filter through 50 µm bag filter and fill 20 L tins on line FL-2.",
+     "materials": [],
+     "labor_min": 45,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    }
+   ]
+  },
+  {
+   "id": "EPX",
+   "code": "EF-210 A",
+   "name": "EF-210 epoxy floor coating, Part A",
+   "kind": "batch recipe",
+   "revision": "Rev 9",
+   "revision_date": "2022-01-20",
+   "batch_size": "1,600 kg",
+   "equipment": [
+    "D-1",
+    "HB-1",
+    "VS-1",
+    "FL-2"
+   ],
+   "steps": [
+    {
+     "id": "EPX-01",
+     "instruction": "Run disperser D-1 empty for 5 min before charging (warm-up).",
+     "materials": [],
+     "labor_min": 5,
+     "energy_kwh": 3.75,
+     "disperser_min": 5,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "EPX-02",
+     "instruction": "Pre-heat epoxy resin drums in hot box HB-1 at 40 °C for 12 h before use.",
+     "materials": [],
+     "labor_min": 15,
+     "energy_kwh": 36,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "EPX-03",
+     "instruction": "Charge 860 kg liquid epoxy resin KO-Epox 410 LC (RM-201).",
+     "materials": [
+      {
+       "code": "RM-201",
+       "qty": 860
+      }
+     ],
+     "labor_min": 12,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "EPX-04",
+     "instruction": "Add 80 kg reactive diluent (RM-205); mix 10 min.",
+     "materials": [
+      {
+       "code": "RM-205",
+       "qty": 80
+      }
+     ],
+     "labor_min": 5,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "EPX-05",
+     "instruction": "Wait 20 min after the diluent addition before taking the viscosity sample.",
+     "materials": [],
+     "labor_min": 0,
+     "energy_kwh": 0.0,
+     "disperser_min": 20,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "EPX-06",
+     "instruction": "Sieve quartz flour through the 1 mm vibrating screen VS-1 before charging.",
+     "materials": [],
+     "labor_min": 15,
+     "energy_kwh": 1.5,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "EPX-07",
+     "instruction": "Add 500 kg quartz flour (RM-210) and 40 kg micro-silica (RM-212) under vacuum (-0.8 bar).",
+     "materials": [
+      {
+       "code": "RM-210",
+       "qty": 500
+      },
+      {
+       "code": "RM-212",
+       "qty": 40
+      }
+     ],
+     "labor_min": 10,
+     "energy_kwh": 8,
+     "disperser_min": 25,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "EPX-08",
+     "instruction": "Add 4.8 kg silicone defoamer (RM-220).",
+     "materials": [
+      {
+       "code": "RM-220",
+       "qty": 4.8
+      }
+     ],
+     "labor_min": 3,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "EPX-09",
+     "instruction": "Sample and test epoxy equivalent weight (EEW) against specification 190-210 g/eq.",
+     "materials": [],
+     "labor_min": 20,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "EPX-10",
+     "instruction": "Flush each 20 kg pail with nitrogen (approx. 0.06 m³ per pail) before filling.",
+     "materials": [],
+     "labor_min": 10,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 2.4,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "EPX-11",
+     "instruction": "Fill 20 kg pails on line FL-2, close and label.",
+     "materials": [],
+     "labor_min": 40,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "EPX-12",
+     "instruction": "Store filled pails upside down for 24 h before palletising.",
+     "materials": [],
+     "labor_min": 10,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    }
+   ]
+  },
+  {
+   "id": "SOL",
+   "code": "SOP-07",
+   "name": "SOP-07 solvent cleaning of dispersers and mixing vessels",
+   "kind": "standard operating procedure",
+   "revision": "Rev 8",
+   "revision_date": "2021-03-01",
+   "batch_size": "per cleaning",
+   "equipment": [
+    "D-1..D-4",
+    "T-1..T-6",
+    "solvent station"
+   ],
+   "steps": [
+    {
+     "id": "SOL-01",
+     "instruction": "Drain residual product into the recovery drum.",
+     "materials": [],
+     "labor_min": 6,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "SOL-02",
+     "instruction": "Bond and earth the vessel and the solvent drum before any solvent transfer.",
+     "materials": [],
+     "labor_min": 3,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "SOL-03",
+     "instruction": "First rinse: circulate 40 L acetone (RM-301) for 10 min; drain to waste solvent.",
+     "materials": [
+      {
+       "code": "RM-301",
+       "qty": 40
+      }
+     ],
+     "labor_min": 12,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 40,
+     "runs_basis": null
+    },
+    {
+     "id": "SOL-04",
+     "instruction": "Second rinse with 20 L fresh acetone (RM-301); drain to waste solvent.",
+     "materials": [
+      {
+       "code": "RM-301",
+       "qty": 20
+      }
+     ],
+     "labor_min": 8,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 20,
+     "runs_basis": null
+    },
+    {
+     "id": "SOL-05",
+     "instruction": "Wipe agitator shaft and blades with a xylene-soaked rag (approx. 1 L xylene, RM-305).",
+     "materials": [
+      {
+       "code": "RM-305",
+       "qty": 1
+      }
+     ],
+     "labor_min": 6,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 1,
+     "runs_basis": null
+    },
+    {
+     "id": "SOL-06",
+     "instruction": "Before any vessel entry: force-ventilate 15 min and check O₂ and LEL with the gas detector.",
+     "materials": [],
+     "labor_min": 4,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "SOL-07",
+     "instruction": "Leave the vessel lid open overnight after cleaning.",
+     "materials": [],
+     "labor_min": 1,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "SOL-08",
+     "instruction": "Wait at least 60 min after cleaning before charging the next batch.",
+     "materials": [],
+     "labor_min": 0,
+     "energy_kwh": 0.0,
+     "disperser_min": 60,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "SOL-09",
+     "instruction": "Record the cleaning in the vessel logbook and sign.",
+     "materials": [],
+     "labor_min": 2,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    }
+   ]
+  },
+  {
+   "id": "TNK",
+   "code": "TL-5",
+   "name": "TL-5 tank sealing compound (1K moisture-cure polyurethane)",
+   "kind": "batch recipe",
+   "revision": "Rev 8",
+   "revision_date": "2021-02-15",
+   "batch_size": "1,200 kg",
+   "equipment": [
+    "VD-1",
+    "D-4",
+    "MS-1",
+    "OV-1"
+   ],
+   "steps": [
+    {
+     "id": "TNK-01",
+     "instruction": "Charge 900 kg polyether polyol NP-310 Dry (RM-401) and dry under vacuum at 90 °C in VD-1 until water < 0.05 %.",
+     "materials": [
+      {
+       "code": "RM-401",
+       "qty": 900
+      }
+     ],
+     "labor_min": 15,
+     "energy_kwh": 60,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "TNK-02",
+     "instruction": "Add 2 kg molecular sieve 3A (RM-405).",
+     "materials": [
+      {
+       "code": "RM-405",
+       "qty": 2
+      }
+     ],
+     "labor_min": 5,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "TNK-03",
+     "instruction": "Establish a nitrogen blanket on D-4 before the isocyanate addition.",
+     "materials": [],
+     "labor_min": 3,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 4,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "TNK-04",
+     "instruction": "Add 280 kg MDI prepolymer (RM-410) at max. 2 kg/min.",
+     "materials": [
+      {
+       "code": "RM-410",
+       "qty": 280
+      }
+     ],
+     "labor_min": 10,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "TNK-05",
+     "instruction": "Add 0.6 kg DBTDL catalyst (RM-415).",
+     "materials": [
+      {
+       "code": "RM-415",
+       "qty": 0.6
+      }
+     ],
+     "labor_min": 3,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "TNK-06",
+     "instruction": "Hold at 60 °C for 45 min under agitation.",
+     "materials": [],
+     "labor_min": 0,
+     "energy_kwh": 10,
+     "disperser_min": 45,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "TNK-07",
+     "instruction": "Pass the product through magnetic separator MS-1 before canning.",
+     "materials": [],
+     "labor_min": 8,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "TNK-08",
+     "instruction": "Pre-dry empty 5 L cans in oven OV-1 at 60 °C for 2 h.",
+     "materials": [],
+     "labor_min": 15,
+     "energy_kwh": 44,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "TNK-09",
+     "instruction": "Fill 5 L cans under dry nitrogen and seal.",
+     "materials": [],
+     "labor_min": 40,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 1.5,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    }
+   ]
+  },
+  {
+   "id": "QC",
+   "code": "QP-02",
+   "name": "QP-02 batch QC release plan",
+   "kind": "quality control plan",
+   "revision": "Rev 6",
+   "revision_date": "2021-06-07",
+   "batch_size": "per release",
+   "equipment": [
+    "QC laboratory",
+    "XRF-01",
+    "SC-2B"
+   ],
+   "steps": [
+    {
+     "id": "QC-01",
+     "instruction": "Viscosity: Ford cup No. 4 (AF-12) or Brookfield (EF-210, TL-5) against product specification.",
+     "materials": [],
+     "labor_min": 8,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "QC-02",
+     "instruction": "Fineness of grind (Hegman gauge) on AF-12 and EF-210.",
+     "materials": [],
+     "labor_min": 5,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "QC-03",
+     "instruction": "Chloride content of every AF-12 batch (limit 400 ppm).",
+     "materials": [],
+     "labor_min": 20,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": "ALK"
+    },
+    {
+     "id": "QC-04",
+     "instruction": "XRF lead screening of every incoming pigment lot.",
+     "materials": [],
+     "labor_min": 15,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": "pigment_lots"
+    },
+    {
+     "id": "QC-05",
+     "instruction": "Retain a 0.5 L sample of every batch for 5 years.",
+     "materials": [],
+     "labor_min": 3,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    },
+    {
+     "id": "QC-06",
+     "instruction": "Re-weigh every pigment addition on bench scale SC-2B and countersign.",
+     "materials": [],
+     "labor_min": 6,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": "pigment_additions"
+    },
+    {
+     "id": "QC-07",
+     "instruction": "Gloss at 60° on drawdown (AF-12).",
+     "materials": [],
+     "labor_min": 6,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": "ALK"
+    },
+    {
+     "id": "QC-08",
+     "instruction": "Odour check of every batch by the QC technician.",
+     "materials": [],
+     "labor_min": 2,
+     "energy_kwh": 0.0,
+     "disperser_min": 0,
+     "holding_h": 0.0,
+     "nitrogen_m3": 0.0,
+     "waste_solvent_l": 0.0,
+     "runs_basis": null
+    }
+   ]
+  }
+ ]
+}

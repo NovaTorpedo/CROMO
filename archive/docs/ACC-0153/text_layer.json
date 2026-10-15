@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "7 June 2021",
+"bbox": [
+78,
+150,
+174,
+171
+]
+},
+{
+"text": "QP-02 batch release - acceptance criteria",
+"bbox": [
+78,
+179,
+506,
+207
+]
+},
+{
+"text": "Viscosity and fineness of grind are release criteria for all products (product specifications",
+"bbox": [
+78,
+219,
+917,
+245
+]
+},
+{
+"text": "and customer contracts).",
+"bbox": [
+78,
+245,
+315,
+271
+]
+},
+{
+"text": "Gloss 60° on AF-12: 80 GU minimum.",
+"bbox": [
+78,
+281,
+435,
+307
+]
+},
+{
+"text": "Chloride on AF-12: maximum 400 ppm.",
+"bbox": [
+78,
+317,
+452,
+343
+]
+}
+]
+}
+]
+}

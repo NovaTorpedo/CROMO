@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. LT-2018-022 14 May 2018",
+"bbox": [
+78,
+150,
+319,
+171
+]
+},
+{
+"text": "Laboratory report LT-2018-022 - water content of TL-5",
+"bbox": [
+78,
+179,
+643,
+207
+]
+},
+{
+"text": "Karl Fischer water of 30 TL-5 batches after VD-1 drying: 0.012-0.028 %.",
+"bbox": [
+78,
+219,
+765,
+245
+]
+},
+{
+"text": "The molecular sieve addition reduces water by less than 0.002 % - not measurable",
+"bbox": [
+78,
+255,
+861,
+281
+]
+},
+{
+"text": "within the method error.",
+"bbox": [
+78,
+281,
+308,
+307
+]
+},
+{
+"text": "Prepared by: R. Ferrandi",
+"bbox": [
+78,
+335,
+254,
+355
+]
+}
+]
+}
+]
+}

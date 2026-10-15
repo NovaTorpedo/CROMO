@@ -1,0 +1,56 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "From: Marco Viale",
+"bbox": [
+78,
+78,
+265,
+101
+]
+},
+{
+"text": "To: Department heads",
+"bbox": [
+78,
+101,
+298,
+124
+]
+},
+{
+"text": "Date: 5 Dec 2020",
+"bbox": [
+78,
+124,
+254,
+147
+]
+},
+{
+"text": "Subject: Visit of the fire brigade",
+"bbox": [
+78,
+147,
+452,
+170
+]
+},
+{
+"text": "Inspection on Tuesday 10:00, solvent room and warehouse M5.",
+"bbox": [
+78,
+186,
+727,
+209
+]
+}
+]
+}
+]
+}

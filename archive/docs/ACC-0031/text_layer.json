@@ -1,0 +1,92 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. EHS-2021-07 5 July 2021",
+"bbox": [
+78,
+150,
+313,
+171
+]
+},
+{
+"text": "EHS memo - xylene exposure reduction",
+"bbox": [
+78,
+179,
+483,
+207
+]
+},
+{
+"text": "Xylene is now used at the plant only for the agitator wipe in SOP-07 (about 3,900 L per",
+"bbox": [
+78,
+219,
+894,
+245
+]
+},
+{
+"text": "year).",
+"bbox": [
+78,
+245,
+132,
+271
+]
+},
+{
+"text": "Action: substitute or eliminate xylene where possible; health surveillance continues for",
+"bbox": [
+78,
+281,
+899,
+307
+]
+},
+{
+"text": "cleaning operators.",
+"bbox": [
+78,
+307,
+261,
+333
+]
+},
+{
+"text": "Prepared by: S. Adeyemi",
+"bbox": [
+78,
+361,
+255,
+381
+]
+}
+]
+}
+]
+}

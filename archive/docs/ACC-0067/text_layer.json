@@ -1,0 +1,83 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "QUARZI MONTEROSSO S.p.A.",
+"bbox": [
+78,
+78,
+522,
+111
+]
+},
+{
+"text": "Cariche minerali",
+"bbox": [
+78,
+117,
+181,
+134
+]
+},
+{
+"text": "28 August 2024",
+"bbox": [
+78,
+150,
+200,
+171
+]
+},
+{
+"text": "FATTURA / INVOICE n. 6823/24",
+"bbox": [
+78,
+179,
+410,
+207
+]
+},
+{
+"text": "Bill to: Valdorso Coatings S.p.A., Via delle Fornaci 7, Borgo Valdorso (TO).",
+"bbox": [
+78,
+219,
+770,
+245
+]
+},
+{
+"text": "Item: Quartz flour 0.1 mm, big-bag 1 t. Quantity: 1,000 kg. Unit price: 0.34 EUR.",
+"bbox": [
+78,
+255,
+830,
+281
+]
+},
+{
+"text": "Total excl. VAT: 343 EUR. Payment: 60 days end of month.",
+"bbox": [
+78,
+291,
+630,
+317
+]
+},
+{
+"text": "Delivery note: DDT 6020 of 28/08/2024.",
+"bbox": [
+78,
+327,
+466,
+353
+]
+}
+]
+}
+]
+}

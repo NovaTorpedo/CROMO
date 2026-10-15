@@ -1,0 +1,101 @@
+{
+"pages": [
+{
+"page": 1,
+"width": 1000,
+"height": 1414,
+"lines": [
+{
+"text": "VALDORSO COATINGS S.p.A.",
+"bbox": [
+78,
+78,
+515,
+111
+]
+},
+{
+"text": "Via delle Fornaci 7 · Borgo Valdorso (TO) · Production plant",
+"bbox": [
+78,
+117,
+447,
+134
+]
+},
+{
+"text": "Ref. IR-2008-003 14 April 2008",
+"bbox": [
+78,
+150,
+323,
+171
+]
+},
+{
+"text": "Incident report IR-2008-003",
+"bbox": [
+78,
+179,
+378,
+207
+]
+},
+{
+"text": "An operator entered tank T-3 after cleaning to recover a dropped tool and became dizzy",
+"bbox": [
+78,
+219,
+907,
+245
+]
+},
+{
+"text": "after about 2 minutes. A colleague pulled him out; he recovered in the infirmary.",
+"bbox": [
+78,
+245,
+834,
+271
+]
+},
+{
+"text": "Acetone vapour concentration estimated above 5,000 ppm. The portable gas detector",
+"bbox": [
+78,
+281,
+890,
+307
+]
+},
+{
+"text": "was not used.",
+"bbox": [
+78,
+307,
+208,
+333
+]
+},
+{
+"text": "Corrective action: CR-2008-005.",
+"bbox": [
+78,
+343,
+389,
+369
+]
+},
+{
+"text": "Prepared by: S. Adeyemi",
+"bbox": [
+78,
+397,
+255,
+417
+]
+}
+]
+}
+]
+}
