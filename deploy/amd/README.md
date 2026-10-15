@@ -31,6 +31,15 @@ Totals stay at or below 0.88, which leaves headroom for the ROCm runtime. Adjust
 `GEMMA_UTIL=0.55 MAXLEN=16384 ./serve_vllm.sh start`, or swap the model with `GEMMA_MODEL=...`. If you change
 models, update the `CROMO_*_MODEL` names in CROMO's `.env`.
 
+## Short on time or after a failure
+Run `session.sh` inside `tmux new -s cromo`; reattach with `tmux attach -t cromo`.
+- `QUICK=1` serves Gemma + bge-m3 only and skips the vision A/B.
+- `STEPS="ALK-04 SOL-02 SOL-08"` investigates only those steps, giving a partial run with no evaluation score.
+- `RESUME=1` keeps the running servers and continues the benchmark from its saved progress.
+- `finalize_partial.sh` publishes what an interrupted run measured, marked PARTIAL.
+
+Details and the prize impact of each case: [docs/FALLBACK.md](../../docs/FALLBACK.md).
+
 ## Security
 - Every endpoint requires `--api-key` (`VLLM_API_KEY`); an unprotected vLLM endpoint would be open to anyone.
 - Only SSH and the vLLM ports (8000–8002) are open.

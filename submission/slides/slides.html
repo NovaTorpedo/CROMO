@@ -84,15 +84,15 @@ th { color: #86827a; font-weight: 500; font-size: 24px; }
         <p>Replace a solvent, and the fences that guarded against it may become fossils - re-investigate, trial, approve.</p></div>
         <img class="shot" src="../../docs/img/tripwires.png">
       </div><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
-      <div class="eyebrow">How it works · the whole pipeline on one AMD Instinct MI300X</div>
+      <div class="eyebrow">How it works · the whole pipeline on one AMD Instinct MI300X (AMD Developer Cloud, ROCm + vLLM) (planned)</div>
       <h2>Read the archive. Follow the paper trail. Decide with rules.</h2>
       <table>
         <tr><th>Role</th><th>Open model</th><th>On AMD</th></tr>
-        <tr><td>Vision: scans, faxes, handwritten Italian logbooks</td><td>Gemma 4 26B-A4B-it (Google DeepMind)</td><td>vLLM · ROCm · native image input</td></tr>
-        <tr><td>Reasoner: reads passages, follows leads, proposes verdicts</td><td>same Gemma 4 server</td><td>vLLM · ROCm · gemma4 tool calling · 0.70</td></tr>
-        <tr><td>Embeddings: multilingual retrieval</td><td>BAAI/bge-m3</td><td>vLLM pooling · 0.08</td></tr>
-      </table>
-      <p style="margin-top:36px">Ingestion → hybrid index → multi-hop investigation (9 hops max, streamed) → verified citations → evidence-strength rules → tripwires, change-check, trials.</p><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
+        <tr><td>Vision: scans, faxes, handwritten Italian logbooks</td><td>Gemma 4 26B-A4B-it (Google DeepMind)</td><td>vLLM · ROCm · image input</td></tr>
+        <tr><td>Reasoner: reads passages, follows leads, proposes verdicts</td><td>same model</td><td>vLLM · ROCm · tool calling</td></tr>
+        <tr><td>Embeddings: multilingual retrieval</td><td>bge-m3</td><td>vLLM · ROCm</td></tr>
+      </table><p style="margin-top:28px"><b>Gemma 4</b>, Google DeepMind's open model, is both the eyes and the brain: one model reads every scanned, faxed and handwritten page and does all the reasoning, with native image input and tool calling.</p>
+      <p style="margin-top:28px">Ingestion → hybrid index → multi-hop investigation (9 hops max, streamed) → verified citations → evidence-strength rules → tripwires, change-check, trials.</p><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
       <div class="eyebrow">Measured on AMD · benchmark pending</div>
       <h2>Real numbers, never estimates.</h2>
       <div class="kpis">
@@ -101,7 +101,7 @@ th { color: #86827a; font-weight: 500; font-size: 24px; }
         <div class="kpi"><div class="big" style="font-size:80px"><span class="pending">pending</span></div><div class="l">GPU cost of a full plant audit (49 steps, 178 docs)</div></div>
       </div>
       <p style="margin-top:60px">Handwriting & scans read by the VLM: character error rate <b><span class="pending">pending</span></b> ·
-      <span class="pending">pending</span> model calls per step · price $1.99/GPU-h (AMD Developer Cloud list price)</p><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
+      <span class="pending">pending</span> model calls per step</p><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
       <div class="eyebrow">Evaluation · 49 steps with planted ground truth (12 fossils, 9 fences, 22 active, 6 unknown)</div>
       <h2>Missing a fence is the dangerous error.</h2>
       <table>
@@ -118,8 +118,8 @@ th { color: #86827a; font-weight: 500; font-size: 24px; }
       <div class="grid2">
         <img class="shot" src="../../docs/img/trials.png">
         <div><p><b>Workflow</b>: fossil → trial plan → AI Tool brief for the engineer → approval record → decision → status back in CROMO.</p>
-        <p><b>AI Tool compare</b>: what changed when a step was added. <b>Extractor</b>: scans → structured records.
-        <b>Library + agent</b> on our AMD vLLM model.</p>
+        <p><b>AI Tool compare</b>: what changed when a step was added. <b>Knowledge library</b>: the 178-document archive.
+        </p>
         <p class="note">All driven through the Evolus REST API; created via POST /workflows.</p></div>
       </div><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
       <div class="eyebrow">Business value · roadmap · team</div>

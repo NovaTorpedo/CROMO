@@ -119,6 +119,8 @@ by page type, latency, failures). The reasoner can be A/B tested on the ground-t
 Everything runs on **one AMD Instinct MI300X (192 GB)**: [`deploy/amd/serve_vllm.sh`](deploy/amd/serve_vllm.sh) (official
 `vllm/vllm-openai-rocm` image, API-key protected) plus [`firewall.sh`](deploy/amd/firewall.sh).
 The AMD Token Factory works too: every role is configured by environment variables ([`LINK_AMD.md`](LINK_AMD.md)).
+Interrupted runs resume from saved progress, and a partial run is published only with a PARTIAL label
+([`docs/FALLBACK.md`](docs/FALLBACK.md)).
 [`scripts/check_amd.py`](scripts/check_amd.py) verifies auth, model, chat, structured output, tool calling, vision on a
 real scan, and embeddings. [`scripts/benchmark_amd.py`](scripts/benchmark_amd.py) measures everything and records every
 investigation for replay.

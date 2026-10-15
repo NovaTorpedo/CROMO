@@ -7,6 +7,10 @@ steps. Commands on your PC run from the repo folder with the project virtualenv 
 > Create it → run the session (≈ 45 min) → connect Evolus and record the video → **destroy it**.
 > One MI300X is $1.99/h list price, so one full session costs about $3–5 of credits.
 
+> **Short on time, only a Token Factory key, or a run that failed partway?** See [docs/FALLBACK.md](docs/FALLBACK.md)
+> for the minimum steps in each case and which prizes each one keeps. Run `session.sh` inside `tmux new -s cromo` so a
+> dropped SSH connection doesn't stop it; `RESUME=1 ./deploy/amd/session.sh` continues an interrupted run.
+
 ## Route B — own vLLM on AMD Developer Cloud (needed for the Evolus track; gives the measured MI300X numbers)
 
 1. **Create the droplet.** In AMD Developer Cloud, click **GPU Droplets → Create GPU Droplet**:
@@ -88,11 +92,17 @@ steps. Commands on your PC run from the repo folder with the project virtualenv 
    CROMO_REASONER_BASE_URL=<base URL ending in /v1>
    CROMO_REASONER_API_KEY=<token factory key>
    CROMO_REASONER_MODEL=<model>
+   CROMO_HARDWARE_LABEL=AMD Token Factory (AMD Instinct GPUs)
    ```
-   If the catalogue has a vision or embedding model, also set the `CROMO_VISION_*` / `CROMO_EMBEDDINGS_*` lines. Without
-   them, scans use recorded transcriptions and retrieval uses local embeddings; the System page says so.
+   `.env.example` presets the vision model to Gemma 4. Set `CROMO_VISION_MODEL` to the catalogue's image-capable model
+   id (the same as the reasoner if it's Gemma 4), or leave it **empty** if there is none. Do the same for
+   `CROMO_EMBEDDINGS_MODEL`. Without them, scans use recorded transcriptions and retrieval uses local embeddings; the
+   System page, slides and submission text say so, and no transcription accuracy is claimed.
 3. `.venv\Scripts\python scripts\check_amd.py` must end with `ALL REQUIRED CHECKS PASSED`; every failure prints what to fix.
-4. `.venv\Scripts\python scripts\benchmark_amd.py`, then step 6 above.
+4. `.venv\Scripts\python scripts\benchmark_amd.py --concurrency 4` (if a rate limit stops it, rerun with `--resume`),
+   then step 6 above. On this route no GPU-hour audit cost is claimed: the Token Factory has no per-GPU billing.
+5. Evolus: the Evolus track asks for *your own vLLM endpoint on AMD Developer Cloud*, so this route alone may not
+   qualify for it. Ask the organisers before relying on it (docs/FALLBACK.md, case 1).
 
 ## Troubleshooting
 - **`check_amd.py` says tool calling WARN.** The reasoner must run with `--enable-auto-tool-choice --tool-call-parser gemma4` (Gemma 4) or `hermes` (Qwen). `serve_vllm.sh` already does this.

@@ -11,6 +11,8 @@ Measures (on the configured AMD endpoints, nothing estimated):
 and saves every investigation's event stream to data/recorded/runs/<step>.json (used by demo replay).
 
   CROMO_PROVIDER=amd python scripts/benchmark_amd.py [--skip-ingest] [--steps ALK-04 SOL-02] [--rocm-smi FILE]
+  ... --resume            continue an interrupted run (progress is saved after the ingest and after every step)
+  ... --finalize-partial  publish what an interrupted run measured, clearly marked partial (no eval score, no audit cost)
 
 Writes data/recorded/benchmark_amd.json (read by the System page and README).
 """
@@ -77,22 +79,83 @@ def gpu_info(path: str | None) -> dict | None:
     return None
 
 
+def _partial_path(tag: str) -> Path:
+    return config.settings.recorded_dir / f"benchmark_amd{'_' + tag if tag else ''}.partial.json"
+
+
+def _save_partial(out: dict, tag: str) -> None:
+    p = _partial_path(tag)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(out, indent=1), encoding="utf-8")
+
+
+def _cost(s, seconds: float, complete: bool) -> dict:
+    if s.amd_route == "tokenfactory":  # shared serving: our GPU time is not observable, so no audit cost is claimed
+        return {"gpu_hours": None, "price_per_gpu_hour": None, "per_plant_audit_usd": None,
+                "basis": "AMD Token Factory (shared serving, no per-GPU billing): GPU time per audit is not observable"}
+    gpu_hours = seconds / 3600
+    return {"gpu_hours": round(gpu_hours, 3), "price_per_gpu_hour": s.gpu_price_per_hour,
+            "per_plant_audit_usd": round(gpu_hours * s.gpu_price_per_hour, 2) if complete else None,
+            "basis": "wall-clock time of full ingestion + all investigations on one GPU, times the list price"
+            if complete else "partial run: GPU time of the measured part only; no full-audit cost is claimed",
+            "price_source": s.gpu_price_source}
+
+
+def finalize_partial(args) -> None:
+    s = config.settings
+    p = _partial_path(args.tag)
+    if not p.exists():
+        sys.exit(f"No partial run found ({p.name}).")
+    out = json.loads(p.read_text(encoding="utf-8"))
+    d = sorted(out.get("durations", {}).values())
+    n_all = len(archive.steps())
+    out["complete"] = False
+    out["investigation"] = {"steps": len(d), "of_steps": n_all, "wall_seconds": round(out.get("inv_wall_s", 0.0), 1),
+                            "p50_s": round(statistics.median(d), 1) if d else None,
+                            "p95_s": round(d[min(len(d) - 1, int(0.95 * len(d)))], 1) if d else None,
+                            "concurrency": args.concurrency}
+    lat = system.latency_stats("amd")
+    out["latency"] = lat
+    out["tokens"] = {"in": sum(m["tokens_in"] for m in lat), "out": sum(m["tokens_out"] for m in lat)}
+    out["cost"] = _cost(s, (out.get("ingest") or {}).get("seconds", 0.0) + out.get("inv_wall_s", 0.0), False)
+    out["gpu"] = gpu_info(args.rocm_smi)
+    out["finished_at"] = time.time()
+    out["tag"] = args.tag or "primary"
+    out["note"] = f"PARTIAL run: {len(d)} of {n_all} steps investigated on AMD; no evaluation score is reported for a partial run."
+    for k in ("durations", "inv_wall_s"):
+        out.pop(k, None)
+    dest = s.recorded_dir / f"benchmark_amd{'_' + args.tag if args.tag else ''}.json"
+    dest.write_text(json.dumps(out, indent=1), encoding="utf-8")
+    print(out["note"])
+    print("written", dest)
+
+
 async def run(args):
     s = config.settings
     if not s.is_live:
         sys.exit("Live AMD mode is not configured. Set CROMO_PROVIDER=amd and the CROMO_*_BASE_URL/MODEL variables, then run "
                  "scripts/check_amd.py first.")
-    started = time.time()
-    db.ex("DELETE FROM metrics")
     from cromo import veteran
 
     veteran.purge()  # testimony recorded in demos must not influence measured results
-    out: dict = {"started_at": started, "provider": "amd", "route": s.amd_route, "hardware": s.hardware_label,
-                 "models": {r: llm.model_name(r) for r in ("reasoner", "vision", "embeddings")}}
+    models = {r: llm.model_name(r) for r in ("reasoner", "vision", "embeddings")}
+    pp = _partial_path(args.tag)
+    out: dict | None = None
+    if args.resume and pp.exists():
+        out = json.loads(pp.read_text(encoding="utf-8"))
+        if out.get("models") != models:
+            sys.exit("--resume: the configured models differ from the interrupted run; start a fresh run instead.")
+        print(f"[bench] resuming: ingest {'done' if out.get('ingest') else 'pending'}, "
+              f"{len(out.get('durations', {}))} step(s) already investigated", flush=True)
+    if out is None:
+        db.ex("DELETE FROM metrics")
+        out = {"started_at": time.time(), "provider": "amd", "route": s.amd_route, "hardware": s.hardware_label,
+               "models": models, "durations": {}, "inv_wall_s": 0.0}
+        _save_partial(out, args.tag)
 
     # 1. ingestion -----------------------------------------------------------
-    t_ingest = 0.0
-    if not args.skip_ingest:
+    t_ingest = (out.get("ingest") or {}).get("seconds", 0.0)
+    if not args.skip_ingest and not out.get("ingest"):
         print("[bench] ingesting the archive on AMD ...", flush=True)
         t0 = time.perf_counter()
         st = await ingest.ingest_all(force=True, progress=lambda i, n, a: print(f"  {i}/{n}", flush=True) if i % 25 == 0 else None)
@@ -107,14 +170,23 @@ async def run(args):
             "vision_p50_ms_per_page": vis[0]["p50_ms"] if vis else None, "vision_calls": vis_calls,
             "concurrency": s.max_concurrency,
         }
-        out["vision_accuracy"] = vision_accuracy()
+        if s.vision.configured:
+            out["vision_accuracy"] = vision_accuracy()
+        else:  # recorded transcriptions were used: their "accuracy" would be meaningless, so none is reported
+            out["ingest"]["scanned_pages_per_min"] = None
+            out["vision_accuracy"] = {"pages": 0, "mean_cer": None, "median_cer": None, "worst": [],
+                                      "note": "No AMD vision model configured: scanned pages used recorded transcriptions (not measured)."}
         print("[bench] ingest:", out["ingest"], flush=True)
+        _save_partial(out, args.tag)
 
     # 2. investigations (recorded for replay) ---------------------------------
     steps = args.steps or [x["id"] for x in archive.steps()]
     runs_dir = s.recorded_dir / ("runs" if not args.tag else f"runs_{args.tag}")
     runs_dir.mkdir(parents=True, exist_ok=True)
-    durations, calls_before = [], db.q1("SELECT COUNT(*) n FROM metrics WHERE role='reasoner'")["n"]
+    done: dict = out["durations"]
+    todo = [x for x in steps if x not in done]
+    prior_wall = out.get("inv_wall_s", 0.0)
+    calls_before = db.q1("SELECT COUNT(*) n FROM metrics WHERE role='reasoner'")["n"]
     sem = asyncio.Semaphore(args.concurrency)
     t0 = time.perf_counter()
 
@@ -126,21 +198,23 @@ async def run(args):
                 events.append(ev)
 
             v = await investigate.investigate(sid, emit)
-            durations.append(v["duration_s"])
+            done[sid] = v["duration_s"]
             (runs_dir / f"{sid}.json").write_text(json.dumps({
                 "step_id": sid, "recorded_at": time.time(), "provider": "amd", "hardware": s.hardware_label,
                 "models": out["models"], "events": events}, ensure_ascii=False), encoding="utf-8")
+            out["inv_wall_s"] = prior_wall + (time.perf_counter() - t0)
+            _save_partial(out, args.tag)
             print(f"  {sid}: {v['verdict']} ({v['duration_s']}s)", flush=True)
 
-    print(f"[bench] investigating {len(steps)} steps (concurrency {args.concurrency}) ...", flush=True)
-    await asyncio.gather(*(one(x) for x in steps))
-    t_inv = time.perf_counter() - t0
+    print(f"[bench] investigating {len(todo)} of {len(steps)} steps (concurrency {args.concurrency}) ...", flush=True)
+    await asyncio.gather(*(one(x) for x in todo))
+    t_inv = prior_wall + (time.perf_counter() - t0)
     calls = db.q1("SELECT COUNT(*) n FROM metrics WHERE role='reasoner'")["n"] - calls_before
-    durations.sort()
+    durations = sorted(done[x] for x in steps if x in done)
     out["investigation"] = {
         "steps": len(steps), "wall_seconds": round(t_inv, 1), "p50_s": round(statistics.median(durations), 1),
         "p95_s": round(durations[min(len(durations) - 1, int(0.95 * len(durations)))], 1),
-        "calls_per_step": round(calls / max(1, len(steps)), 1), "concurrency": args.concurrency,
+        "calls_per_step": round(calls / max(1, len(todo)), 1), "concurrency": args.concurrency,
     }
     print("[bench] investigations:", out["investigation"], flush=True)
 
@@ -158,19 +232,25 @@ async def run(args):
     lat = system.latency_stats("amd")
     out["latency"] = lat
     out["tokens"] = {"in": sum(m["tokens_in"] for m in lat), "out": sum(m["tokens_out"] for m in lat)}
-    gpu_hours = (t_ingest + t_inv) / 3600
-    out["cost"] = {"gpu_hours": round(gpu_hours, 3), "price_per_gpu_hour": s.gpu_price_per_hour,
-                   "per_plant_audit_usd": round(gpu_hours * s.gpu_price_per_hour, 2),
-                   "basis": "wall-clock time of full ingestion + all investigations on one GPU, times the list price",
-                   "price_source": s.gpu_price_source}
+    full = not args.steps and not args.skip_ingest
+    out["cost"] = _cost(s, t_ingest + t_inv, full)
+    out["complete"] = full
+    if not full:
+        n_all = len(archive.steps())
+        out["investigation"]["of_steps"] = n_all
+        out["note"] = (f"PARTIAL run: {len(steps)} of {n_all} steps investigated on AMD"
+                       + ("" if not args.skip_ingest else ", ingest not re-measured") + "; no evaluation score is reported.")
+    for k in ("durations", "inv_wall_s"):
+        out.pop(k, None)
     out["gpu"] = gpu_info(args.rocm_smi)
     out["finished_at"] = time.time()
     out["tag"] = args.tag or "primary"
     p = s.recorded_dir / f"benchmark_amd{'_' + args.tag if args.tag else ''}.json"
     p.write_text(json.dumps(out, indent=1), encoding="utf-8")
+    _partial_path(args.tag).unlink(missing_ok=True)
     if not args.steps and not args.tag:
         print("snapshot:", db.export_snapshot())
-    print(f"[bench] cost per plant audit: ${out['cost']['per_plant_audit_usd']} ({out['cost']['gpu_hours']} GPU-h)")
+    print(f"[bench] cost per plant audit: {out['cost']['per_plant_audit_usd']} USD ({out['cost']['gpu_hours']} GPU-h)")
     print("written", p)
     await llm.aclose()
 
@@ -182,7 +262,13 @@ def main():
     ap.add_argument("--concurrency", type=int, default=6)
     ap.add_argument("--rocm-smi", help="file with rocm-smi output captured on the GPU host")
     ap.add_argument("--tag", default="", help="secondary A/B run (e.g. qwen): results go to *_<tag>.json; no replays/snapshot")
-    asyncio.run(run(ap.parse_args()))
+    ap.add_argument("--resume", action="store_true", help="continue an interrupted run from its saved progress")
+    ap.add_argument("--finalize-partial", action="store_true", help="publish an interrupted run's measurements, marked partial")
+    a = ap.parse_args()
+    if a.finalize_partial:
+        finalize_partial(a)
+    else:
+        asyncio.run(run(a))
 
 
 if __name__ == "__main__":

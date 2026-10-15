@@ -25,10 +25,26 @@ def pct(x):
 
 
 def col(ev: dict | None, bench: dict | None, baseline: bool) -> list[str]:
-    if not ev:
+    if not ev and (baseline or not bench):
         return ["*pending AMD benchmark*"] + ["*pending*"] * 9
+    if not ev:  # partial AMD run: throughput and latency were measured, the evaluation was not
+        rows = ["*not scored (partial run)*"] * 8
+    else:
+        rows = _eval_rows(ev)
+    if baseline or not bench:
+        rows += ["n/a (recorded transcriptions)" if baseline else "*pending*", "n/a" if baseline else "*pending*"]
+    else:
+        ing, va, inv, cost = bench.get("ingest") or {}, bench.get("vision_accuracy") or {}, bench.get("investigation") or {}, bench.get("cost") or {}
+        audit = (f"${cost['per_plant_audit_usd']} ({cost.get('gpu_hours')} GPU-h)" if cost.get("per_plant_audit_usd") is not None
+                 else "audit cost n/a (" + ("partial run" if bench.get("complete") is False else "Token Factory, no per-GPU billing") + ")")
+        rows += [f"{ing.get('pages_per_min', '–')} pages/min · CER {pct(va.get('mean_cer'))}",
+                 f"{inv.get('p50_s', '–')} s · {audit}"]
+    return rows
+
+
+def _eval_rows(ev: dict) -> list[str]:
     dang = ev["dangerous_errors"]
-    rows = [
+    return [
         pct(ev["fence_recall"]), pct(ev["false_fossil_rate"]),
         f"{len(dang)}" + (f" ({', '.join(dang)})" if dang else ""),
         pct(ev["accuracy"]), pct(ev["citations"]["precision"]),
@@ -36,13 +52,6 @@ def col(ev: dict | None, bench: dict | None, baseline: bool) -> list[str]:
         f"{pct(ev['change_checks']['accuracy'])} of {len(ev['change_checks']['cases'])}",
         "passed" if ev["injection"]["passed"] else "**failed**",
     ]
-    if baseline or not bench:
-        rows += ["n/a (recorded transcriptions)" if baseline else "*pending*", "n/a" if baseline else "*pending*"]
-    else:
-        ing, va, inv, cost = bench.get("ingest", {}), bench.get("vision_accuracy", {}), bench.get("investigation", {}), bench.get("cost", {})
-        rows += [f"{ing.get('pages_per_min', '–')} pages/min · CER {pct(va.get('mean_cer'))}",
-                 f"{inv.get('p50_s', '–')} s · ${cost.get('per_plant_audit_usd', '–')} ({cost.get('gpu_hours', '–')} GPU-h)"]
-    return rows
 
 
 def main():

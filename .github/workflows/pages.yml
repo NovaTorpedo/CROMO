@@ -35,6 +35,9 @@ jobs:
         with: { path: site }
   deploy:
     needs: build
+    # Pages needs a public repository on the free plan, and Settings > Pages > Source = "GitHub Actions".
+    # While the repo is private the build still runs (it proves the demo builds) and the deploy is skipped.
+    if: ${{ !github.event.repository.private }}
     runs-on: ubuntu-latest
     environment: { name: github-pages, url: "${{ steps.deployment.outputs.page_url }}" }
     steps:
