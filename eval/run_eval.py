@@ -37,6 +37,10 @@ def prf(tp, fp, fn):
 async def evaluate(rerun: bool = False) -> dict:
     gt = json.loads((ROOT / "eval" / "ground_truth.json").read_text(encoding="utf-8"))
     truth = gt["steps"]
+    from cromo import veteran
+
+    if rerun and veteran.purge():
+        print("removed interview records before the evaluation run")
     if rerun or not investigate.all_stored():
         await investigate.investigate_all(concurrency=config.settings.max_concurrency)
     vs = investigate.all_stored()

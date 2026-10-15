@@ -47,7 +47,8 @@ class BodyLimit(BaseHTTPMiddleware):
 
     async def dispatch(self, request, call_next):
         cl = request.headers.get("content-length")
-        if cl and cl.isdigit() and int(cl) > MAX_BODY_BYTES:
+        limit = 11 * 1024 * 1024 if request.url.path.endswith("/testimony") else MAX_BODY_BYTES
+        if cl and cl.isdigit() and int(cl) > limit:
             from starlette.responses import JSONResponse
 
             return JSONResponse({"detail": "Request body too large."}, status_code=413)

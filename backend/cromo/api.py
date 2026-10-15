@@ -18,7 +18,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse
 from pydantic import BaseModel, Field, field_validator
 
-from . import (archive, ask, changecheck, config, costs, db, evolus, investigate, llm, system, trials, tripwires)
+from fastapi import File, Form, UploadFile
+
+from . import (archive, ask, changecheck, config, costs, db, evolus, investigate, llm, system, trials, tripwires, veteran)
 from .security import BodyLimit, SecurityHeaders, rate_limit, require_write, token_ok
 
 STEP_RE = re.compile(r"^(ALK|EPX|SOL|TNK|QC)-\d{2}$")
@@ -193,11 +195,45 @@ async def replay(sid: str, speed: float = 1.0):
 
 
 # ---------------------------------------------------------------------------
+# Veteran interviews
+# ---------------------------------------------------------------------------
+AUDIO_TYPES = {"audio/webm", "audio/wav", "audio/x-wav", "audio/mpeg", "audio/mp4", "audio/ogg", "audio/x-m4a"}
+MAX_AUDIO = 10 * 1024 * 1024
+
+
+@app.post("/api/steps/{sid}/veteran-questions", dependencies=[Depends(require_write)])
+async def veteran_questions(sid: str):
+    return await veteran.questions(_step_id(sid))
+
+
+@app.post("/api/steps/{sid}/testimony", dependencies=[Depends(require_write)])
+async def testimony(sid: str, name: str = Form(..., min_length=2, max_length=80), role: str = Form("", max_length=120),
+                    answer: str = Form("", max_length=6000), audio: UploadFile | None = File(None)):
+    sid = _step_id(sid)
+    source = "typed"
+    if audio is not None and audio.filename:
+        if (audio.content_type or "") not in AUDIO_TYPES:
+            raise HTTPException(415, "Unsupported audio type (webm, wav, mp3, m4a, ogg).")
+        data = await audio.read(MAX_AUDIO + 1)
+        if len(data) > MAX_AUDIO:
+            raise HTTPException(413, "Audio larger than 10 MB.")
+        try:
+            answer = await llm.transcribe_audio(data, "answer" + (audio.filename[-5:] if "." in audio.filename else ""), audio.content_type)
+        except llm.ProviderError as e:
+            raise HTTPException(503, str(e)) from None
+        source = "voice"
+    if len(answer.strip()) < 20:
+        raise HTTPException(422, "Please give an answer of at least a sentence.")
+    return await veteran.record(sid, name, role, answer, source=source)
+
+
+# ---------------------------------------------------------------------------
 # Documents
 # ---------------------------------------------------------------------------
 @app.get("/api/docs/{acc}")
 def get_doc(acc: str):
-    archive.doc_dir(acc)
+    if not veteran.INT_RE.match(acc):
+        archive.doc_dir(acc)
     d = db.q1("SELECT acc, pages, has_text_layer, title, doc_type, date, lang, refs_json, entities_json, summary, "
               "meta_source, text_source, injection_flag FROM documents WHERE acc=?", (acc,))
     if not d:

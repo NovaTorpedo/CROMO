@@ -237,6 +237,26 @@ async def transcribe(image_bytes: bytes, *, mime: str = "image/webp") -> dict:
 
 
 # ----------------------------------------------------------------------------
+# Speech (veteran interviews)
+# ----------------------------------------------------------------------------
+async def transcribe_audio(data: bytes, filename: str, mime: str) -> str:
+    """Whisper-style transcription on the AMD SPEECH endpoint (OpenAI-compatible /audio/transcriptions)."""
+    s = config.settings
+    if not (s.is_live and s.speech.configured):
+        raise ProviderError("No speech model is configured (CROMO_SPEECH_*). Type the answer instead.")
+    role = s.speech
+    t0 = time.perf_counter()
+    async with httpx.AsyncClient(base_url=role.base_url, verify=_ssl_context(), timeout=httpx.Timeout(300, connect=15),
+                                 headers={"Authorization": f"Bearer {role.api_key}"} if role.api_key else {}) as c:
+        r = await c.post("/audio/transcriptions", data={"model": role.model}, files={"file": (filename, data, mime)})
+    ms = (time.perf_counter() - t0) * 1000
+    db.record_metric("speech.transcribe", "speech", role.model, "amd", ms, ok=r.status_code < 400)
+    if r.status_code >= 400:
+        raise ProviderError(f"speech endpoint HTTP {r.status_code}")
+    return (r.json().get("text") or "").strip()
+
+
+# ----------------------------------------------------------------------------
 # Embeddings
 # ----------------------------------------------------------------------------
 async def embed(texts: list[str], *, stage: str = "embed") -> np.ndarray:

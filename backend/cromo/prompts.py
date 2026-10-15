@@ -148,6 +148,15 @@ def _match(p: dict) -> tuple[str, str]:
     return sys, f"CATALOGUE:\n{cat}\n\nQUESTION: <question>{esc(p['question'])}</question>"
 
 
+def _veteran(p: dict) -> tuple[str, str]:
+    sys = ("You prepare a short interview with an experienced (possibly retired) plant employee to recover why a recipe "
+           "step exists, because the archive does not document it reliably. Write 3 to 5 concrete, neutral questions that "
+           "help establish: when and why the step was introduced, what problem it prevented, whether that problem still "
+           "exists, and what would happen without it. Do not suggest answers. Also list who_to_ask: names or roles that "
+           "appear in the evidence (people who worked there at the time). Return JSON {questions, who_to_ask}.")
+    return sys, json.dumps(p, ensure_ascii=False)[:6000] + "\nReturn only the JSON object."
+
+
 TASKS: dict[str, TaskSpec] = {
     "extract.metadata": TaskSpec(_meta, max_tokens=700),
     "investigate.read": TaskSpec(_read, max_tokens=1800),
@@ -157,4 +166,5 @@ TASKS: dict[str, TaskSpec] = {
     "trial.draft": TaskSpec(_trial, max_tokens=1000, temperature=0.2),
     "ask.answer": TaskSpec(_ask, max_tokens=900),
     "ask.match": TaskSpec(_match, max_tokens=120),
+    "veteran.questions": TaskSpec(_veteran, max_tokens=500, temperature=0.2),
 }

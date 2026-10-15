@@ -84,6 +84,9 @@ async def run(args):
                  "scripts/check_amd.py first.")
     started = time.time()
     db.ex("DELETE FROM metrics")
+    from cromo import veteran
+
+    veteran.purge()  # testimony recorded in demos must not influence measured results
     out: dict = {"started_at": started, "provider": "amd", "route": s.amd_route, "hardware": s.hardware_label,
                  "models": {r: llm.model_name(r) for r in ("reasoner", "vision", "embeddings")}}
 

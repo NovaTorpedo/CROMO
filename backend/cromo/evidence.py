@@ -119,8 +119,10 @@ def strength(v: dict, evidence: dict[str, dict]) -> dict:
     if len(docs) == 1:
         br.append({"label": "Single source", "points": -1})
     kinds = {(d.get("doc_type") or "") for d in docs.values()}
-    if docs and kinds <= {"logbook page", "email", "meeting minutes"}:
-        br.append({"label": "Only informal sources (logbook / email / minutes)", "points": -1})
+    if docs and kinds <= {"logbook page", "email", "meeting minutes", "interview record"}:
+        br.append({"label": "Only informal sources (logbook / email / minutes / testimony)", "points": -1})
+    if any((d.get("doc_type") or "") == "interview record" for d in docs.values()) and len(docs) <= 2:
+        br.append({"label": "Rests on recent testimony - confirm with a record or a trial", "points": -1})
     score = sum(b["points"] for b in br)
     if v["verdict"] == "UNKNOWN":
         grade = "Insufficient"

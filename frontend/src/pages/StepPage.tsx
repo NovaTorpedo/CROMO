@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowLeft, CircleX, ClipboardCheck, GitCompare, Play, RotateCcw, Scale, ShieldAlert, ShieldCheck, TriangleAlert } from "lucide-react";
 import { eur, get, post, streamNdjson } from "../api";
+import VeteranCard from "../components/VeteranCard";
 import { ErrorBox, Skeleton, Spinner, StrengthMeter, VERDICT_LABEL, VerdictIcon, fmtDate, go, timeAgo, useApp } from "../components/common";
 import type { Cost, Evidence, InvEvent, Verdict, VerdictData } from "../types";
 
@@ -279,6 +280,9 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
             </div>
           )}
           {warnings.map((w, i) => <div key={i} className="note warn" style={{ marginTop: 8 }}><TriangleAlert size={16} /> {w}</div>)}
+          {v && !running && (v.verdict === "UNKNOWN" || v.strength.grade === "Weak") && (
+            <VeteranCard stepId={st.id} onRecorded={() => run("live")} />
+          )}
           {hops.length > 0 && <DigLog hops={hops} docsRead={docsRead} open={running} />}
         </div>
 
@@ -304,7 +308,7 @@ function TimelineItem({ e }: { e: Evidence }) {
       <div className={`tl-dot st-${e.stance}`} />
       <div className={`tl-card ${e.suspicious ? "suspicious" : ""}`} onClick={open} role="button" tabIndex={0} onKeyDown={(k) => k.key === "Enter" && open()}>
         <div className="tl-meta">
-          <span className={`tl-tag ${cls}`}>{e.doc_type === "recipe" && e.stance === "context" ? "Recipe" : label}</span>
+          <span className={`tl-tag ${cls}`}>{e.doc_type === "recipe" && e.stance === "context" ? "Recipe" : e.doc_type === "interview record" ? "Testimony" : label}</span>
           <span style={{ textTransform: "capitalize" }}>{e.doc_type ?? "document"}</span>
           <span>· {fmtDate(e.date)}</span>
           <span>· {e.acc}</span>

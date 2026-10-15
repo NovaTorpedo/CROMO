@@ -54,6 +54,7 @@ export default function DocDrawer({ target, onClose }: { target: DocTarget; onCl
   const pg = doc?.pages_data.find((p) => p.page === page);
   const hits = useMemo(() => (pg ? matchLines(pg.lines, target.quote) : new Set<number>()), [pg, target.quote]);
   const digital = pg?.source === "text_layer";
+  const testimony = pg?.source === "testimony";
 
   return (
     <>
@@ -94,6 +95,9 @@ export default function DocDrawer({ target, onClose }: { target: DocTarget; onCl
                   ))}
                 </div>
               )}
+              {testimony ? (
+                <div className="card card-pad small">Interview record captured in CROMO (no scanned page). The transcript is on the right.</div>
+              ) : (
               <div className="page-wrap">
                 <img src={pageUrl(doc.acc, page)} alt={`Page ${page} of archive document ${doc.acc}`} />
                 {digital && pg &&
@@ -114,6 +118,7 @@ export default function DocDrawer({ target, onClose }: { target: DocTarget; onCl
                     );
                   })}
               </div>
+              )}
               <div className="tiny muted">
                 Synthetic archive page (fictional plant). {digital ? "Born-digital: highlight placed from the embedded text layer." : "Scanned: text below was read from the image."}
               </div>
@@ -131,7 +136,9 @@ export default function DocDrawer({ target, onClose }: { target: DocTarget; onCl
               <div className="card card-pad small">
                 <div className="eyebrow" style={{ marginBottom: 6 }}>How this page was read</div>
                 <div>
-                  {digital ? (
+                  {testimony ? (
+                    <>Testimony recorded in CROMO ({doc.text_source === "voice" ? "transcribed from a voice recording" : "typed"}).</>
+                  ) : digital ? (
                     <>Text layer of a born-digital document (no model needed).</>
                   ) : pg?.source === "vision" ? (
                     <>

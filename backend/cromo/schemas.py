@@ -164,6 +164,11 @@ class AskOut(_Base):
     insufficient_evidence: bool = False
 
 
+class VeteranQuestionsOut(_Base):
+    questions: list[str] = Field(default_factory=list)
+    who_to_ask: list[str] = Field(default_factory=list)
+
+
 class StepMatchOut(_Base):
     step_id: str | None = None
     is_question_about_step: bool = False

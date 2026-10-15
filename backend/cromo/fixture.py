@@ -81,7 +81,8 @@ DOC_TYPES = [
     ("calibration certificate", ["calibration certificate"]), ("waste manifest", ["waste transport"]),
     ("training record", ["training record"]), ("audit report", ["internal audit"]),
     ("technical data sheet", ["technical data sheet"]), ("safety data sheet", ["safety data sheet"]),
-    ("portfolio memo", ["portfolio memo"]), ("letter", ["termination of", "quality department", "we apologise"]),
+    ("portfolio memo", ["portfolio memo"]), ("interview record", ["interview record"]),
+    ("letter", ["termination of", "quality department", "we apologise"]),
 ]
 PRIMARY = {"deviation report", "incident report", "near-miss report", "change request", "lab test report",
            "supplier qualification", "equipment record", "regulatory notice", "compliance memo", "customer claim",
@@ -203,7 +204,7 @@ def _step_terms(step_text: str) -> list[str]:
 
 REASON_TYPES = {"change request", "deviation report", "incident report", "near-miss report", "work instruction",
                 "logbook page", "lab test report", "customer claim", "customer specification", "regulatory notice",
-                "compliance memo", "quality note"}
+                "compliance memo", "quality note", "interview record"}
 SPEC_TYPES = {"technical data sheet", "quality plan", "quality note", "safety data sheet"}
 
 
@@ -445,6 +446,16 @@ def trial_draft(p: dict) -> dict:
     }
 
 
+def veteran_questions(p: dict) -> dict:
+    s = p["step_text"].rstrip(".")
+    qs = [f"Do you remember when the plant started to \"{s[0].lower() + s[1:]}\", and who decided it?",
+          "What problem was it meant to prevent? Was there an incident, a complaint or a bad batch at the time?",
+          "Is that problem still possible today - same supplier, material, equipment or customer requirement?",
+          "Has anyone ever skipped this step? What happened?",
+          "Is there anyone else, or any document, that could confirm what you remember?"]
+    return {"questions": qs, "who_to_ask": p.get("people") or ["long-serving shift foremen", "retired process engineers"]}
+
+
 def run(task: str, payload: dict) -> dict:
     if task == "extract.metadata":
         return metadata(payload["acc"], payload["text"])
@@ -460,6 +471,8 @@ def run(task: str, payload: dict) -> dict:
         return ask_answer(payload)
     if task == "trial.draft":
         return trial_draft(payload)
+    if task == "veteran.questions":
+        return veteran_questions(payload)
     if task == "tripwire.assess":
         return {"effects": [{"step_id": c["step_id"], "effect": c["rule_effect"], "explanation": c["rule_explanation"],
                              "evidence": c.get("evidence_ids", [])[:2]} for c in payload["candidates"]]}
