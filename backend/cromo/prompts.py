@@ -63,11 +63,11 @@ def _meta(p: dict) -> tuple[str, str]:
 
 # --- investigation: read passages ------------------------------------------------
 READ_EXAMPLE = (
-    '{"evidence": [{"passage_id": "ACC-0074#0", "relevant": true, "stance": "reason", '
-    '"claim": "A 1995 change request added the step to stop paint gelling caused by alkaline pigment lots.", '
-    '"quote": "add ammonium chloride, 0.8 kg per 1000 kg of batch", "entities": ["ammonium chloride", "CL-77"]}, '
-    '{"passage_id": "ACC-0101#2", "relevant": false, "stance": "context", "claim": "", "quote": "", "entities": []}], '
-    '"follow_up": {"open_refs": ["DR-1995-031"], "queries": [{"query": "CL-77 pigment supplier replaced", "purpose": "status"}]}, '
+    '{"evidence": [{"passage_id": "<id of passage 1>", "relevant": true, "stance": "<reason|status|counter|context>", '
+    '"claim": "<your paraphrase with the year>", "quote": "<5-25 words copied exactly from that passage>", '
+    '"entities": ["<supplier/material/equipment>"]}, '
+    '{"passage_id": "<id of passage 2>", "relevant": false, "stance": "context", "claim": "", "quote": "", "entities": []}], '
+    '"follow_up": {"open_refs": ["<document number cited in a passage>"], "queries": [{"query": "<short search>", "purpose": "status"}]}, '
     '"suspicious_passages": []}'
 )
 
@@ -90,7 +90,7 @@ def _read(p: dict) -> tuple[str, str]:
            "Then follow_up: open_refs = document numbers cited in relevant passages that should be opened next (e.g. CR-1995-009); "
            "queries = up to 3 short archive searches (purpose origin|status|counter) to check whether each condition behind the "
            "reason still holds, and to look for incidents or reversals. Mark passages about other steps relevant=false.\n"
-           + UNTRUSTED + "\nOutput shape example (values are illustrative only):\n" + READ_EXAMPLE)
+           + UNTRUSTED + "\nOutput format (replace every <...> placeholder; never copy placeholder text):\n" + READ_EXAMPLE)
     known = "\n".join(f"- {e}" for e in p.get("known", [])[:12]) or "- (nothing yet)"
     user = (f"STEP UNDER INVESTIGATION: {p['step_id']} - {p['step_text']}\n"
             f"Process: {p['process']}\nCurrent focus: {p['purpose']}\n"
@@ -101,14 +101,13 @@ def _read(p: dict) -> tuple[str, str]:
 
 # --- investigation: conclude -----------------------------------------------------
 CONCLUDE_EXAMPLE = (
-    '{"verdict": "FOSSIL", "reason": "Added in 1995 to neutralise alkaline pigment lots; the supplier fixed its process in 1996 and '
-    'the pigment was replaced in 2007.", "origin_year": 1995, "origin_evidence": ["E3"], '
-    '"chain": [{"claim": "A 1995 change request added the step because pigment lots were too alkaline.", "evidence": ["E3", "E4"]}, '
-    '{"claim": "The pigment was phased out in 2006 and replaced by a neutral one.", "evidence": ["E9"]}], '
-    '"dependencies": [{"name": "alkaline CL-77 pigment lots from Cromopigmenti Lazzeretti", "type": "material", "holds": false, '
-    '"evidence": ["E9"], "note": "replaced in 2007"}], '
-    '"counter_evidence": [{"claim": "Sales believes it helps drying.", "evidence": ["E11"], "resolved": true, '
-    '"resolution": "A 2020 lab test found no effect on drying."}], "open_questions": []}'
+    '{"verdict": "<FOSSIL|FENCE|ACTIVE|UNKNOWN>", "reason": "<max 60 words, only facts from the evidence>", '
+    '"origin_year": <year or null>, "origin_evidence": ["<E id>"], '
+    '"chain": [{"claim": "<fact from the evidence>", "evidence": ["<E id>", "<E id>"]}], '
+    '"dependencies": [{"name": "<specific condition the reason relied on>", "type": "<material|supplier|equipment|product|regulation|hazard|facility|step>", '
+    '"holds": <true|false|null>, "evidence": ["<E id>"], "note": ""}], '
+    '"counter_evidence": [{"claim": "<fact>", "evidence": ["<E id>"], "resolved": <true|false>, "resolution": "<why, or empty>"}], '
+    '"open_questions": []}'
 )
 
 
@@ -128,7 +127,7 @@ def _conclude(p: dict) -> tuple[str, str]:
            "resolved. Return JSON with keys verdict, reason (max 60 words), origin_year, origin_evidence, chain "
            "[{claim, evidence}], dependencies [{name, type, holds, evidence, note}], counter_evidence "
            "[{claim, evidence, resolved, resolution}], open_questions.\n"
-           "Output shape example (illustrative only):\n" + CONCLUDE_EXAMPLE)
+           "Output format (replace every <...> placeholder; never copy placeholder text):\n" + CONCLUDE_EXAMPLE)
     ev = "\n".join(f"{e['id']} [{e['acc']}, {e.get('date') or 'undated'}, {e.get('doc_type') or 'document'}, stance={e['stance']}]: "
                    f"{e['claim']} | quote: \"{e['quote']}\"" for e in p["evidence"])
     user = (f"STEP: {p['step_id']} - {p['step_text']}\nProcess: {p['process']}\n"
