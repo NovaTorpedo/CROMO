@@ -62,17 +62,35 @@ def _meta(p: dict) -> tuple[str, str]:
 
 
 # --- investigation: read passages ------------------------------------------------
+READ_EXAMPLE = (
+    '{"evidence": [{"passage_id": "ACC-0074#0", "relevant": true, "stance": "reason", '
+    '"claim": "A 1995 change request added the step to stop paint gelling caused by alkaline pigment lots.", '
+    '"quote": "add ammonium chloride, 0.8 kg per 1000 kg of batch", "entities": ["ammonium chloride", "CL-77"]}, '
+    '{"passage_id": "ACC-0101#2", "relevant": false, "stance": "context", "claim": "", "quote": "", "entities": []}], '
+    '"follow_up": {"open_refs": ["DR-1995-031"], "queries": [{"query": "CL-77 pigment supplier replaced", "purpose": "status"}]}, '
+    '"suspicious_passages": []}'
+)
+
+
 def _read(p: dict) -> tuple[str, str]:
     sys = ("You are CROMO, an investigator that recovers WHY a step exists in a factory recipe or procedure, using only the "
-           "plant's own archive. You read archive passages and extract evidence about the step under investigation. "
-           "For each passage return: passage_id, relevant (true/false), stance (reason = explains why the step was introduced; "
-           "status = tells whether the condition behind the reason still exists today; counter = suggests the step is still "
-           "needed or contradicts another claim; context = related background), claim (your own paraphrase, max 30 words, "
-           "English), quote (an EXACT contiguous excerpt of 5-25 words copied from the passage, in its original language), and "
-           "entities (suppliers, materials, equipment, products, regulations involved). Then propose follow_up: open_refs "
-           "(document numbers mentioned in relevant passages that should be opened next, e.g. CR-1995-009) and queries "
-           "(short archive search queries with purpose origin|status|counter) to check whether each condition behind the "
-           "reason still holds and to look for counter-evidence. Mark irrelevant passages relevant=false. " + UNTRUSTED)
+           "plant's own archive (1994-2026, English and Italian). Read the passages and extract evidence about the step under "
+           "investigation.\n"
+           "For EVERY passage return one item: passage_id (copy it), relevant (true/false), stance, claim, quote, entities.\n"
+           "stance: reason = explains why the step was introduced (an incident, defect, complaint, regulation, supplier or "
+           "equipment problem); status = says whether the condition behind that reason still exists today (a supplier, material, "
+           "equipment, product or rule that was replaced, discontinued, repealed - or is still in use); counter = indicates the "
+           "step is still needed (a later incident, a failed attempt to remove or shorten it) or contradicts another claim; "
+           "context = related background only.\n"
+           "claim: your own paraphrase in English, max 30 words, stating the fact and its year.\n"
+           "quote: copy 5-25 consecutive words EXACTLY as they appear in the passage (same language, spelling, punctuation and "
+           "numbers - do not translate, fix or shorten inside the quote). Quotes are checked character by character against "
+           "the source; an inexact quote is discarded.\n"
+           "entities: the specific suppliers, materials, equipment tags, products and regulations involved.\n"
+           "Then follow_up: open_refs = document numbers cited in relevant passages that should be opened next (e.g. CR-1995-009); "
+           "queries = up to 3 short archive searches (purpose origin|status|counter) to check whether each condition behind the "
+           "reason still holds, and to look for incidents or reversals. Mark passages about other steps relevant=false.\n"
+           + UNTRUSTED + "\nOutput shape example (values are illustrative only):\n" + READ_EXAMPLE)
     known = "\n".join(f"- {e}" for e in p.get("known", [])[:12]) or "- (nothing yet)"
     user = (f"STEP UNDER INVESTIGATION: {p['step_id']} - {p['step_text']}\n"
             f"Process: {p['process']}\nCurrent focus: {p['purpose']}\n"
@@ -82,17 +100,35 @@ def _read(p: dict) -> tuple[str, str]:
 
 
 # --- investigation: conclude -----------------------------------------------------
+CONCLUDE_EXAMPLE = (
+    '{"verdict": "FOSSIL", "reason": "Added in 1995 to neutralise alkaline pigment lots; the supplier fixed its process in 1996 and '
+    'the pigment was replaced in 2007.", "origin_year": 1995, "origin_evidence": ["E3"], '
+    '"chain": [{"claim": "A 1995 change request added the step because pigment lots were too alkaline.", "evidence": ["E3", "E4"]}, '
+    '{"claim": "The pigment was phased out in 2006 and replaced by a neutral one.", "evidence": ["E9"]}], '
+    '"dependencies": [{"name": "alkaline CL-77 pigment lots from Cromopigmenti Lazzeretti", "type": "material", "holds": false, '
+    '"evidence": ["E9"], "note": "replaced in 2007"}], '
+    '"counter_evidence": [{"claim": "Sales believes it helps drying.", "evidence": ["E11"], "resolved": true, '
+    '"resolution": "A 2020 lab test found no effect on drying."}], "open_questions": []}'
+)
+
+
 def _conclude(p: dict) -> tuple[str, str]:
     sys = ("You are CROMO. Decide the status of a recipe/procedure step from the evidence collected in the plant archive. "
-           + VERDICTS +
-           " Rules: every claim must cite evidence ids (E1, E2, ...) from the list; do not invent ids or facts. "
-           "List the dependencies the original reason relies on (supplier, material, equipment, product, regulation, hazard, "
-           "facility, step) and whether each still holds (true / false / null if unknown) with evidence ids. List counter-evidence "
-           "and whether it is resolved. A step is a FOSSIL only if the documented reason exists AND the conditions it depended on "
-           "have demonstrably ended. If safety or quality incidents show the step still protects against a present hazard, it is "
-           "a FENCE. Return JSON with keys: verdict, reason (max 60 words), origin_year, origin_evidence, chain "
+           + VERDICTS + "\n"
+           "Decision rules:\n"
+           "1. FOSSIL only if a documented reason exists AND every condition it depended on has demonstrably ended (with evidence) "
+           "AND nothing shows a hazard that is still present.\n"
+           "2. FENCE if the reason is a safety, quality or compliance problem (fire, injury, vapour, defect, claim, rule) and "
+           "the hazard or requirement is still present - or if the step was once removed or shortened and problems followed.\n"
+           "3. ACTIVE if the step serves the product's current function or specification.\n"
+           "4. UNKNOWN if there is no documented reason, if only hearsay or speculation explains it, or if the evidence conflicts.\n"
+           "Every claim must cite evidence ids (E1, E2, ...) from the list; never invent ids, dates or facts. Name dependencies "
+           "as the specific condition the reason relied on (e.g. 'damp cans from supplier X stored outdoors'), not the step's "
+           "own material, with holds = true / false / null (unknown) and evidence ids. List counter-evidence and whether it is "
+           "resolved. Return JSON with keys verdict, reason (max 60 words), origin_year, origin_evidence, chain "
            "[{claim, evidence}], dependencies [{name, type, holds, evidence, note}], counter_evidence "
-           "[{claim, evidence, resolved, resolution}], open_questions.")
+           "[{claim, evidence, resolved, resolution}], open_questions.\n"
+           "Output shape example (illustrative only):\n" + CONCLUDE_EXAMPLE)
     ev = "\n".join(f"{e['id']} [{e['acc']}, {e.get('date') or 'undated'}, {e.get('doc_type') or 'document'}, stance={e['stance']}]: "
                    f"{e['claim']} | quote: \"{e['quote']}\"" for e in p["evidence"])
     user = (f"STEP: {p['step_id']} - {p['step_text']}\nProcess: {p['process']}\n"
