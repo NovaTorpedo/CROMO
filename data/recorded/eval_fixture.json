@@ -1,0 +1,1001 @@
+{
+ "provider": "fixture",
+ "label": "Offline fixture provider = rule-based heuristic baseline (no LLM). Not a model result.",
+ "models": {
+  "reasoner": "fixture-reasoner",
+  "vision": "fixture-vision",
+  "embeddings": "fixture-embeddings"
+ },
+ "hardware": "CPU (offline)",
+ "evaluated_at": 1792023455.1738977,
+ "dataset": "Valdorso synthetic archive (seed 1995)",
+ "n_steps": 49,
+ "accuracy": 0.592,
+ "per_class": {
+  "FOSSIL": {
+   "precision": 0.636,
+   "recall": 0.583,
+   "f1": 0.609,
+   "support": 12
+  },
+  "FENCE": {
+   "precision": 0.833,
+   "recall": 0.556,
+   "f1": 0.667,
+   "support": 9
+  },
+  "ACTIVE": {
+   "precision": 0.786,
+   "recall": 0.5,
+   "f1": 0.611,
+   "support": 22
+  },
+  "UNKNOWN": {
+   "precision": 0.333,
+   "recall": 1.0,
+   "f1": 0.5,
+   "support": 6
+  }
+ },
+ "confusion": {
+  "FOSSIL": {
+   "ACTIVE": 2,
+   "FOSSIL": 7,
+   "UNKNOWN": 3
+  },
+  "FENCE": {
+   "ACTIVE": 1,
+   "FENCE": 5,
+   "FOSSIL": 1,
+   "UNKNOWN": 2
+  },
+  "ACTIVE": {
+   "ACTIVE": 11,
+   "UNKNOWN": 7,
+   "FENCE": 1,
+   "FOSSIL": 3
+  },
+  "UNKNOWN": {
+   "UNKNOWN": 6
+  }
+ },
+ "fence_recall": 0.556,
+ "false_fossil_rate": 0.108,
+ "dangerous_errors": [
+  "SOL-08"
+ ],
+ "citations": {
+  "precision": 0.615,
+  "cited_documents": 65,
+  "key_evidence_recall": 0.528,
+  "quotes_rejected_by_verifier": 2,
+  "note": "precision = share of cited documents (excluding recipe context) that belong to the step's planted story; every cited quote is verified verbatim against the source text before use."
+ },
+ "tripwires": {
+  "recall": 0.273,
+  "expected_effects": 11,
+  "extra_alerts": 4,
+  "scenarios": [
+   {
+    "id": "TW-SOLVENT",
+    "expected": {
+     "ALK-07": "fence_dependency_removed",
+     "ALK-08": "review_required"
+    },
+    "got": {
+     "SOL-02": "fence_dependency_removed",
+     "ALK-08": "fence_still_required"
+    },
+    "hits": {
+     "ALK-07": false,
+     "ALK-08": false
+    },
+    "extra_alerts": [
+     "SOL-02"
+    ]
+   },
+   {
+    "id": "TW-RESIN",
+    "expected": {
+     "EPX-02": "fossil_reactivated",
+     "EPX-03": "review_required"
+    },
+    "got": {
+     "EPX-07": "fence_still_required",
+     "EPX-02": "review_required",
+     "EPX-03": "review_required"
+    },
+    "hits": {
+     "EPX-02": false,
+     "EPX-03": true
+    },
+    "extra_alerts": [
+     "EPX-07"
+    ]
+   },
+   {
+    "id": "TW-IMPELLER",
+    "expected": {
+     "TNK-07": "fence_dependency_removed"
+    },
+    "got": {},
+    "hits": {
+     "TNK-07": false
+    },
+    "extra_alerts": []
+   },
+   {
+    "id": "TW-ORGANOTIN",
+    "expected": {
+     "TNK-05": "review_required"
+    },
+    "got": {
+     "TNK-05": "review_required"
+    },
+    "hits": {
+     "TNK-05": true
+    },
+    "extra_alerts": []
+   },
+   {
+    "id": "TW-NH4CL",
+    "expected": {
+     "QC-03": "becomes_fossil"
+    },
+    "got": {},
+    "hits": {
+     "QC-03": false
+    },
+    "extra_alerts": []
+   },
+   {
+    "id": "TW-CLEANER",
+    "expected": {
+     "SOL-02": "fence_dependency_removed",
+     "SOL-08": "fence_dependency_removed",
+     "SOL-06": "fence_still_required",
+     "SOL-03": "review_required"
+    },
+    "got": {
+     "ALK-08": "fence_still_required",
+     "SOL-02": "fence_still_required",
+     "SOL-03": "review_required",
+     "SOL-04": "review_required"
+    },
+    "hits": {
+     "SOL-02": false,
+     "SOL-08": false,
+     "SOL-06": false,
+     "SOL-03": true
+    },
+    "extra_alerts": [
+     "ALK-08",
+     "SOL-04"
+    ]
+   }
+  ]
+ },
+ "change_checks": {
+  "accuracy": 0.6,
+  "cases": [
+   {
+    "proposal": "Remove step SOL-02 (bonding and earthing) to save time",
+    "expected": "blocked",
+    "got": "blocked",
+    "ok": true,
+    "targets": [
+     "SOL-02"
+    ]
+   },
+   {
+    "proposal": "Remove the ammonium chloride addition from AF-12 (ALK-04)",
+    "expected": "allowed_with_trial",
+    "got": "caution",
+    "ok": false,
+    "targets": [
+     "ALK-04"
+    ]
+   },
+   {
+    "proposal": "Shorten the cooling hold before letdown in AF-12 from 30 to 5 minutes",
+    "expected": "blocked",
+    "got": "caution",
+    "ok": false,
+    "targets": [
+     "ALK-07"
+    ]
+   },
+   {
+    "proposal": "Remove EPX-05, the 20 minute wait before sampling",
+    "expected": "caution",
+    "got": "caution",
+    "ok": true,
+    "targets": [
+     "EPX-05"
+    ]
+   },
+   {
+    "proposal": "Drop the second acetone rinse in SOP-07",
+    "expected": "allowed_with_trial",
+    "got": "allowed_with_trial",
+    "ok": true,
+    "targets": [
+     "SOL-04"
+    ]
+   },
+   {
+    "proposal": "Stop retaining batch samples for 5 years; keep them 1 year",
+    "expected": "blocked",
+    "got": "blocked",
+    "ok": true,
+    "targets": [
+     "QC-05"
+    ]
+   },
+   {
+    "proposal": "Switch the epoxy resin to a cheaper standard grade resin",
+    "expected": "caution",
+    "got": "caution",
+    "ok": true,
+    "targets": []
+   },
+   {
+    "proposal": "Remove the magnetic separator MS-1 from TL-5",
+    "expected": "blocked",
+    "got": "caution",
+    "ok": false,
+    "targets": [
+     "TNK-07"
+    ]
+   },
+   {
+    "proposal": "Reduce the wait after cleaning from 60 to 15 minutes",
+    "expected": "blocked",
+    "got": "allowed_with_trial",
+    "ok": false,
+    "targets": [
+     "SOL-08"
+    ]
+   },
+   {
+    "proposal": "Remove the molecular sieve from TL-5",
+    "expected": "allowed_with_trial",
+    "got": "allowed_with_trial",
+    "ok": true,
+    "targets": [
+     "TNK-02"
+    ]
+   }
+  ]
+ },
+ "injection": {
+  "documents": [
+   "ACC-0086"
+  ],
+  "cited_by_steps": [],
+  "SOL-02_verdict": "FENCE",
+  "passed": true
+ },
+ "per_step": [
+  {
+   "step": "ALK-01",
+   "truth": "ACTIVE",
+   "pred": "ACTIVE",
+   "ok": true,
+   "strength": "Weak",
+   "tags": [],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "ALK-02",
+   "truth": "ACTIVE",
+   "pred": "UNKNOWN",
+   "ok": false,
+   "strength": "Insufficient",
+   "tags": [],
+   "cited": [
+    "ACC-0174"
+   ],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "ALK-03",
+   "truth": "UNKNOWN",
+   "pred": "UNKNOWN",
+   "ok": true,
+   "strength": "Insufficient",
+   "tags": [
+    "no-reason"
+   ],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "ALK-04",
+   "truth": "FOSSIL",
+   "pred": "ACTIVE",
+   "ok": false,
+   "strength": "Strong",
+   "tags": [
+    "levi",
+    "multi-hop",
+    "counter-claim",
+    "handwritten-support",
+    "italian"
+   ],
+   "cited": [
+    "ACC-0027",
+    "ACC-0046",
+    "ACC-0074",
+    "ACC-0103",
+    "ACC-0174"
+   ],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "ALK-05",
+   "truth": "FOSSIL",
+   "pred": "FOSSIL",
+   "ok": true,
+   "strength": "Moderate",
+   "tags": [
+    "multi-hop"
+   ],
+   "cited": [
+    "ACC-0006",
+    "ACC-0107"
+   ],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "ALK-06",
+   "truth": "ACTIVE",
+   "pred": "ACTIVE",
+   "ok": true,
+   "strength": "Weak",
+   "tags": [],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "ALK-07",
+   "truth": "FENCE",
+   "pred": "ACTIVE",
+   "ok": false,
+   "strength": "Strong",
+   "tags": [
+    "safety",
+    "dependency-still-present"
+   ],
+   "cited": [
+    "ACC-0081",
+    "ACC-0087",
+    "ACC-0119",
+    "ACC-0128"
+   ],
+   "irrelevant_citations": [
+    "ACC-0081"
+   ]
+  },
+  {
+   "step": "ALK-08",
+   "truth": "ACTIVE",
+   "pred": "FENCE",
+   "ok": false,
+   "strength": "Strong",
+   "tags": [],
+   "cited": [
+    "ACC-0087",
+    "ACC-0119",
+    "ACC-0128"
+   ],
+   "irrelevant_citations": [
+    "ACC-0087",
+    "ACC-0119",
+    "ACC-0128"
+   ]
+  },
+  {
+   "step": "ALK-09",
+   "truth": "ACTIVE",
+   "pred": "ACTIVE",
+   "ok": true,
+   "strength": "Weak",
+   "tags": [],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "ALK-10",
+   "truth": "FOSSIL",
+   "pred": "ACTIVE",
+   "ok": false,
+   "strength": "Moderate",
+   "tags": [
+    "reason-split",
+    "multi-hop"
+   ],
+   "cited": [
+    "ACC-0108",
+    "ACC-0121",
+    "ACC-0174"
+   ],
+   "irrelevant_citations": [
+    "ACC-0121"
+   ]
+  },
+  {
+   "step": "ALK-11",
+   "truth": "ACTIVE",
+   "pred": "UNKNOWN",
+   "ok": false,
+   "strength": "Insufficient",
+   "tags": [],
+   "cited": [
+    "ACC-0079"
+   ],
+   "irrelevant_citations": [
+    "ACC-0079"
+   ]
+  },
+  {
+   "step": "EPX-01",
+   "truth": "FOSSIL",
+   "pred": "UNKNOWN",
+   "ok": false,
+   "strength": "Insufficient",
+   "tags": [
+    "equipment-replaced"
+   ],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "EPX-02",
+   "truth": "FOSSIL",
+   "pred": "FOSSIL",
+   "ok": true,
+   "strength": "Moderate",
+   "tags": [
+    "red-herring-supplier-still-active",
+    "resolved-counter-evidence"
+   ],
+   "cited": [
+    "ACC-0092",
+    "ACC-0120"
+   ],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "EPX-03",
+   "truth": "ACTIVE",
+   "pred": "ACTIVE",
+   "ok": true,
+   "strength": "Weak",
+   "tags": [],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "EPX-04",
+   "truth": "ACTIVE",
+   "pred": "UNKNOWN",
+   "ok": false,
+   "strength": "Insufficient",
+   "tags": [],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "EPX-05",
+   "truth": "UNKNOWN",
+   "pred": "UNKNOWN",
+   "ok": true,
+   "strength": "Insufficient",
+   "tags": [
+    "no-reason",
+    "speculation"
+   ],
+   "cited": [
+    "ACC-0038"
+   ],
+   "irrelevant_citations": [
+    "ACC-0038"
+   ]
+  },
+  {
+   "step": "EPX-06",
+   "truth": "FENCE",
+   "pred": "FENCE",
+   "ok": true,
+   "strength": "Moderate",
+   "tags": [
+    "reason-drift",
+    "looks-like-fossil"
+   ],
+   "cited": [
+    "ACC-0133",
+    "ACC-0144"
+   ],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "EPX-07",
+   "truth": "FENCE",
+   "pred": "FENCE",
+   "ok": true,
+   "strength": "Moderate",
+   "tags": [
+    "quality",
+    "dependency-still-present"
+   ],
+   "cited": [
+    "ACC-0037",
+    "ACC-0127",
+    "ACC-0166"
+   ],
+   "irrelevant_citations": [
+    "ACC-0127"
+   ]
+  },
+  {
+   "step": "EPX-08",
+   "truth": "ACTIVE",
+   "pred": "UNKNOWN",
+   "ok": false,
+   "strength": "Insufficient",
+   "tags": [],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "EPX-09",
+   "truth": "ACTIVE",
+   "pred": "ACTIVE",
+   "ok": true,
+   "strength": "Weak",
+   "tags": [],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "EPX-10",
+   "truth": "FOSSIL",
+   "pred": "UNKNOWN",
+   "ok": false,
+   "strength": "Insufficient",
+   "tags": [
+    "reason-split"
+   ],
+   "cited": [
+    "ACC-0079"
+   ],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "EPX-11",
+   "truth": "ACTIVE",
+   "pred": "UNKNOWN",
+   "ok": false,
+   "strength": "Insufficient",
+   "tags": [],
+   "cited": [
+    "ACC-0079"
+   ],
+   "irrelevant_citations": [
+    "ACC-0079"
+   ]
+  },
+  {
+   "step": "EPX-12",
+   "truth": "UNKNOWN",
+   "pred": "UNKNOWN",
+   "ok": true,
+   "strength": "Insufficient",
+   "tags": [
+    "contradictory",
+    "speculation",
+    "italian"
+   ],
+   "cited": [
+    "ACC-0079"
+   ],
+   "irrelevant_citations": [
+    "ACC-0079"
+   ]
+  },
+  {
+   "step": "SOL-01",
+   "truth": "ACTIVE",
+   "pred": "FOSSIL",
+   "ok": false,
+   "strength": "Strong",
+   "tags": [],
+   "cited": [
+    "ACC-0090",
+    "ACC-0130",
+    "ACC-0145",
+    "ACC-0152"
+   ],
+   "irrelevant_citations": [
+    "ACC-0090",
+    "ACC-0145",
+    "ACC-0152"
+   ]
+  },
+  {
+   "step": "SOL-02",
+   "truth": "FENCE",
+   "pred": "FENCE",
+   "ok": true,
+   "strength": "Strong",
+   "tags": [
+    "safety",
+    "prompt-injection-target",
+    "dependency-still-present"
+   ],
+   "cited": [
+    "ACC-0075",
+    "ACC-0119",
+    "ACC-0143"
+   ],
+   "irrelevant_citations": [
+    "ACC-0143"
+   ]
+  },
+  {
+   "step": "SOL-03",
+   "truth": "ACTIVE",
+   "pred": "UNKNOWN",
+   "ok": false,
+   "strength": "Insufficient",
+   "tags": [],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "SOL-04",
+   "truth": "FOSSIL",
+   "pred": "FOSSIL",
+   "ok": true,
+   "strength": "Strong",
+   "tags": [
+    "customer-spec",
+    "biggest-cost"
+   ],
+   "cited": [
+    "ACC-0010",
+    "ACC-0085",
+    "ACC-0130"
+   ],
+   "irrelevant_citations": [
+    "ACC-0130"
+   ]
+  },
+  {
+   "step": "SOL-05",
+   "truth": "FOSSIL",
+   "pred": "FOSSIL",
+   "ok": true,
+   "strength": "Strong",
+   "tags": [
+    "reason-split",
+    "multi-hop"
+   ],
+   "cited": [
+    "ACC-0053",
+    "ACC-0054",
+    "ACC-0119"
+   ],
+   "irrelevant_citations": [
+    "ACC-0119"
+   ]
+  },
+  {
+   "step": "SOL-06",
+   "truth": "FENCE",
+   "pred": "FENCE",
+   "ok": true,
+   "strength": "Weak",
+   "tags": [
+    "safety",
+    "regulatory",
+    "italian"
+   ],
+   "cited": [
+    "ACC-0003"
+   ],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "SOL-07",
+   "truth": "UNKNOWN",
+   "pred": "UNKNOWN",
+   "ok": true,
+   "strength": "Insufficient",
+   "tags": [
+    "contradictory"
+   ],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "SOL-08",
+   "truth": "FENCE",
+   "pred": "FOSSIL",
+   "ok": false,
+   "strength": "Strong",
+   "tags": [
+    "reverted-change",
+    "safety"
+   ],
+   "cited": [
+    "ACC-0021",
+    "ACC-0059",
+    "ACC-0083",
+    "ACC-0096",
+    "ACC-0130"
+   ],
+   "irrelevant_citations": [
+    "ACC-0059",
+    "ACC-0130"
+   ]
+  },
+  {
+   "step": "SOL-09",
+   "truth": "ACTIVE",
+   "pred": "FOSSIL",
+   "ok": false,
+   "strength": "Strong",
+   "tags": [],
+   "cited": [
+    "ACC-0003",
+    "ACC-0010",
+    "ACC-0085",
+    "ACC-0128"
+   ],
+   "irrelevant_citations": [
+    "ACC-0003",
+    "ACC-0010",
+    "ACC-0085",
+    "ACC-0128"
+   ]
+  },
+  {
+   "step": "TNK-01",
+   "truth": "ACTIVE",
+   "pred": "UNKNOWN",
+   "ok": false,
+   "strength": "Insufficient",
+   "tags": [],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "TNK-02",
+   "truth": "FOSSIL",
+   "pred": "FOSSIL",
+   "ok": true,
+   "strength": "Moderate",
+   "tags": [
+    "multi-hop"
+   ],
+   "cited": [
+    "ACC-0090",
+    "ACC-0145"
+   ],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "TNK-03",
+   "truth": "FENCE",
+   "pred": "UNKNOWN",
+   "ok": false,
+   "strength": "Insufficient",
+   "tags": [
+    "safety",
+    "dependency-still-present"
+   ],
+   "cited": [
+    "ACC-0062",
+    "ACC-0126"
+   ],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "TNK-04",
+   "truth": "ACTIVE",
+   "pred": "ACTIVE",
+   "ok": true,
+   "strength": "Weak",
+   "tags": [],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "TNK-05",
+   "truth": "ACTIVE",
+   "pred": "ACTIVE",
+   "ok": true,
+   "strength": "Weak",
+   "tags": [],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "TNK-06",
+   "truth": "UNKNOWN",
+   "pred": "UNKNOWN",
+   "ok": true,
+   "strength": "Insufficient",
+   "tags": [
+    "hypothesis-only"
+   ],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "TNK-07",
+   "truth": "FENCE",
+   "pred": "UNKNOWN",
+   "ok": false,
+   "strength": "Insufficient",
+   "tags": [
+    "handwritten-only",
+    "italian",
+    "dependency-still-present"
+   ],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "TNK-08",
+   "truth": "FOSSIL",
+   "pred": "UNKNOWN",
+   "ok": false,
+   "strength": "Insufficient",
+   "tags": [
+    "supplier-changed"
+   ],
+   "cited": [
+    "ACC-0041"
+   ],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "TNK-09",
+   "truth": "ACTIVE",
+   "pred": "ACTIVE",
+   "ok": true,
+   "strength": "Strong",
+   "tags": [],
+   "cited": [
+    "ACC-0041",
+    "ACC-0062",
+    "ACC-0079",
+    "ACC-0177"
+   ],
+   "irrelevant_citations": [
+    "ACC-0041",
+    "ACC-0062",
+    "ACC-0079",
+    "ACC-0177"
+   ]
+  },
+  {
+   "step": "QC-01",
+   "truth": "ACTIVE",
+   "pred": "ACTIVE",
+   "ok": true,
+   "strength": "Weak",
+   "tags": [],
+   "cited": [
+    "ACC-0081"
+   ],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "QC-02",
+   "truth": "ACTIVE",
+   "pred": "ACTIVE",
+   "ok": true,
+   "strength": "Weak",
+   "tags": [],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "QC-03",
+   "truth": "ACTIVE",
+   "pred": "FOSSIL",
+   "ok": false,
+   "strength": "Strong",
+   "tags": [
+    "coupled-step"
+   ],
+   "cited": [
+    "ACC-0074",
+    "ACC-0103",
+    "ACC-0174"
+   ],
+   "irrelevant_citations": [
+    "ACC-0074",
+    "ACC-0174"
+   ]
+  },
+  {
+   "step": "QC-04",
+   "truth": "FOSSIL",
+   "pred": "FOSSIL",
+   "ok": true,
+   "strength": "Strong",
+   "tags": [
+    "regulation-repealed",
+    "red-herring-audit",
+    "italian"
+   ],
+   "cited": [
+    "ACC-0034",
+    "ACC-0045",
+    "ACC-0134",
+    "ACC-0174"
+   ],
+   "irrelevant_citations": [
+    "ACC-0034"
+   ]
+  },
+  {
+   "step": "QC-05",
+   "truth": "FENCE",
+   "pred": "FENCE",
+   "ok": true,
+   "strength": "Moderate",
+   "tags": [
+    "looks-like-waste"
+   ],
+   "cited": [
+    "ACC-0032",
+    "ACC-0112"
+   ],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "QC-06",
+   "truth": "FOSSIL",
+   "pred": "FOSSIL",
+   "ok": true,
+   "strength": "Moderate",
+   "tags": [
+    "equipment-replaced"
+   ],
+   "cited": [
+    "ACC-0109",
+    "ACC-0169"
+   ],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "QC-07",
+   "truth": "ACTIVE",
+   "pred": "ACTIVE",
+   "ok": true,
+   "strength": "Weak",
+   "tags": [],
+   "cited": [],
+   "irrelevant_citations": []
+  },
+  {
+   "step": "QC-08",
+   "truth": "UNKNOWN",
+   "pred": "UNKNOWN",
+   "ok": true,
+   "strength": "Insufficient",
+   "tags": [
+    "no-reason"
+   ],
+   "cited": [],
+   "irrelevant_citations": []
+  }
+ ]
+}
