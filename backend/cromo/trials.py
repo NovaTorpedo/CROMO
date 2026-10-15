@@ -122,9 +122,8 @@ def _workflow_status(execution: dict) -> str | None:
 def _brief(execution: dict) -> str:
     m = re.search(r'approver_brief\\*"\s*:\s*\\*"(.{0,1500}?)\\*"\s*,\s*\\*"recorded_at', json.dumps(execution, ensure_ascii=False))
     txt = m.group(1) if m else ""
-    for _ in range(2):
-        txt = txt.replace("\\\\", "\\").replace("\n", "
-").replace('\\"', '"')
+    for _ in range(2):  # the brief is JSON-escaped twice (output JSON inside the execution JSON)
+        txt = txt.replace("\\\\", "\\").replace("\\n", "\n").replace('\\"', '"')
     return txt[:1200]
 
 
