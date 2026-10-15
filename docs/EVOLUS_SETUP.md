@@ -43,10 +43,10 @@ Its id is in `.env` as `EVOLUS_TRIAL_WORKFLOW_ID`.
 1. Evolus → **Your models** → **Add model**.
 2. Fill in:
    - OpenAI-compatible base URL: `http://<droplet-ip>:8000/v1`
-   - Model: `Qwen/Qwen3-30B-A3B-Instruct-2507`
+   - Model: `google/gemma-4-26B-A4B-it` (Gemma 4)
    - API key: the `VLLM_API_KEY` you set on the droplet
 3. **Test connection** → **Save**. Note the model key Evolus shows (`own/...`).
-4. The vLLM server already runs with `--enable-auto-tool-choice --tool-call-parser hermes` (Evolus agents use tools).
+4. The vLLM server already runs with `--enable-auto-tool-choice --tool-call-parser gemma4` (Evolus agents use tools).
 
 ### 5. Library, extractor, agent
 ```

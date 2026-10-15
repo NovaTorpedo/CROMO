@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import base64
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -113,8 +114,8 @@ def check_reasoner(role, c):
         report("reasoner: tool calling", OK, f"{ms:.0f} ms, called {calls[0]['function']['name']}")
     else:
         report("reasoner: tool calling", FAIL if r.status_code >= 400 else WARN,
-               "no tool call. Evolus agents need it: start vLLM with --enable-auto-tool-choice --tool-call-parser hermes "
-               "(Qwen family). " + (r.text[:150] if r.status_code >= 400 else ""))
+               "no tool call. Evolus agents need it: start vLLM with --enable-auto-tool-choice --tool-call-parser gemma4 "
+               "(Gemma 4; hermes for Qwen). " + (r.text[:150] if r.status_code >= 400 else ""))
 
 
 def scanned_page() -> tuple[str, bytes, str] | None:
@@ -147,7 +148,7 @@ def check_vision(role, c):
     ms = (time.perf_counter() - t0) * 1000
     if r.status_code >= 400:
         report("vision: read a scanned page", FAIL,
-               f"HTTP {r.status_code}: {r.text[:200]}. Is CROMO_VISION_MODEL a vision-language model (e.g. Qwen2.5-VL)?")
+               f"HTTP {r.status_code}: {r.text[:200]}. Is CROMO_VISION_MODEL a vision-language model (e.g. google/gemma-4-26B-A4B-it)?")
         return
     out = r.json()["choices"][0]["message"].get("content") or ""
     import difflib
@@ -222,6 +223,13 @@ def main():
                     fn(role, c)
                 except httpx.HTTPError as e:
                     report(f"{name}: request", FAIL, type(e).__name__)
+    alt = {k: os.environ.get(f"CROMO_VISION_ALT_{k}", "") for k in ("BASE_URL", "API_KEY", "MODEL")}
+    if alt["BASE_URL"] and alt["MODEL"] and (not a.role or a.role == "vision"):
+        print(f"\nVISION (A/B alternative)  model={alt['MODEL']}")
+        ar = config.RoleConfig("vision-alt", alt["BASE_URL"].rstrip("/"), alt["API_KEY"], alt["MODEL"])
+        with client(ar) as c:
+            if check_models(ar, c):
+                check_vision(ar, c)
     if not a.role or a.role == "evolus":
         print("\nEVOLUS")
         check_evolus()

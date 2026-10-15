@@ -106,7 +106,8 @@ class Settings:
     def public_summary(self) -> dict:
         """Safe, secret-free description for the UI."""
         def role(r: RoleConfig) -> dict:
-            return {"configured": r.configured, "model": r.model if r.configured else None,
+            fam = "gemma" if "gemma" in r.model.lower() else ("qwen" if "qwen" in r.model.lower() else "other")
+            return {"configured": r.configured, "model": r.model if r.configured else None, "family": fam if r.configured else None,
                     "endpoint_host": _host(r.base_url) if r.configured else None}
 
         return {

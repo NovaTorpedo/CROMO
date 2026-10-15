@@ -2,8 +2,8 @@
 
 ```
                      ┌──────────────────────── AMD Instinct MI300X (ROCm + vLLM) ────────────────────────┐
-                     │  REASONER  Qwen3-30B-A3B-Instruct-2507  :8000  (tool calling, hermes parser)       │
-                     │  VISION    Qwen2.5-VL-7B-Instruct       :8001  (reads scans, faxes, handwriting)   │
+                     │  REASONER  Gemma 4 26B-A4B-it (Google)  :8000  (tool calling, gemma4 parser)       │
+                     │  VISION    same Gemma 4 server          :8000  (reads scans, faxes, handwriting)   │
                      │  EMBED     BAAI/bge-m3                  :8002  (multilingual retrieval)            │
                      └───────────────▲───────────────────────────────────────────▲────────────────────────┘
                                      │ OpenAI-compatible HTTP (API key)          │ (Evolus agent uses the same reasoner)
@@ -48,10 +48,10 @@
 | Python + FastAPI, SQLite, numpy | Small, reliable, one container; no external DB to operate. Parameterised queries only. |
 | React + Vite + TypeScript, no UI kit | A distinctive, fast UI (93 KB gzipped JS) with no heavy dependencies; fonts self-hosted (OFL). |
 | One OpenAI-compatible client for every role | Switching between AMD Token Factory and own vLLM is configuration only (`LINK_AMD.md`). |
-| Qwen3-30B-A3B-Instruct-2507 (Apache-2.0) | Mixture-of-experts with ~3B active parameters: fast on one MI300X, strong at JSON and tool calling; hermes parser recommended by vLLM/Evolus for Qwen. Fits in 0.55 of 192 GB with a 32k context. |
-| Qwen2.5-VL-7B-Instruct (Apache-2.0) | Proven document/handwriting reader on vLLM ROCm; reads Italian. |
-| BAAI/bge-m3 (MIT) | Multilingual (IT/EN) embeddings, natively supported by vLLM's pooling runner. |
-| All three on one MI300X | ~0.88 of HBM; one GPU-hour price covers the whole pipeline ("the whole pipeline on AMD"). |
+| Gemma 4 26B-A4B-it (Google DeepMind, Apache-2.0) for reasoner **and** vision | One open multimodal model: mixture-of-experts with ~4B active parameters (fast on one MI300X), native image input with OCR and handwriting recognition, native function calling (vLLM `gemma4` tool and reasoning parsers), 256K context, day-0 vLLM ROCm support. One server instead of two halves memory traffic and keeps the reading and reasoning consistent. ~52 GB bf16 weights in 0.70 of 192 GB. |
+| Measured A/B instead of assumed quality | `PROFILE=compare` serves Qwen2.5-VL-7B next to Gemma; `scripts/compare_models.py` scores both on the scanned pages (CER by page type). The reasoner can be compared on the ground-truth eval (`PROFILE=qwen`, `--tag qwen`). Results are shown on the System page whichever model wins. |
+| BAAI/bge-m3 (MIT) | Multilingual (IT/EN) embeddings, natively supported by vLLM's pooling runner; ungated. |
+| Everything on one MI300X | ~0.78 of HBM (0.85 with the A/B model); one GPU-hour price covers the whole pipeline. |
 | Rules decide safety-critical outcomes | LLMs find and read evidence; deterministic rules decide what may be removed. Auditable, and the dangerous error (calling a fence a fossil) is guarded twice. |
 | JSON outputs validated with pydantic + retry | Robust with open models; `json_schema` structured output when the endpoint supports it. |
 | Offline fixture provider | The whole product runs and is tested without a GPU; clearly labelled; it doubles as a heuristic baseline in the evaluation. |

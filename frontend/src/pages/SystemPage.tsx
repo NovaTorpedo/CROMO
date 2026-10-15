@@ -3,7 +3,10 @@ import { Cpu, Database, FlaskConical, Gauge, ShieldCheck, Workflow } from "lucid
 import { get } from "../api";
 import { ErrorBox, Section, Skeleton } from "../components/common";
 
-interface Role { configured: boolean; model: string | null; endpoint_host: string | null }
+interface Role { configured: boolean; model: string | null; family?: string | null; endpoint_host: string | null }
+interface VisSide { model: string; pages: number; failures: number; mean_cer: number | null; cer_by_kind: Record<string, number | null>; p50_ms: number | null }
+interface VisCmp { A: VisSide; B: VisSide; verdict?: string; note: string; measured_at: number; hardware: string }
+interface RsnSide { model: string | null; accuracy: number; fence_recall: number; false_fossil_rate: number; dangerous_errors: string[]; citation_precision: number | null }
 interface Lat { stage: string; role: string; model: string; provider: string; calls: number; errors: number; p50_ms: number; p95_ms: number; tokens_in: number; tokens_out: number }
 interface EvalRes {
   provider: string; label: string; models: Record<string, string>; hardware: string; evaluated_at: number; n_steps: number; accuracy: number;
@@ -25,6 +28,52 @@ interface Sys {
   gpu: { source: string; data?: unknown; summary?: string } | null;
   evolus: { calls?: { endpoint: string; n: number; credits: number; ok: number }[]; credits_logged?: number; cached?: Record<string, number>; budget?: number; configured?: boolean };
   recordings: string[];
+  vision_comparison?: VisCmp | null;
+  reasoner_comparison?: { primary: RsnSide | null; alternative: RsnSide | null } | null;
+}
+
+const FAMILY: Record<string, string> = { gemma: "Gemma 4 · Google DeepMind", qwen: "Qwen · Alibaba" };
+const cerPct = (x: number | null | undefined) => (x === null || x === undefined ? "–" : `${(x * 100).toFixed(1)}%`);
+
+function VisionAB({ v }: { v: VisCmp }) {
+  const kinds = Array.from(new Set([...Object.keys(v.A.cer_by_kind), ...Object.keys(v.B.cer_by_kind)]));
+  return (
+    <div className="card">
+      <table className="table">
+        <thead><tr><th>Vision model</th><th>Mean CER</th>{kinds.map((k) => <th key={k}>{k}</th>)}<th>p50</th><th>Failures</th></tr></thead>
+        <tbody>
+          {(["A", "B"] as const).map((t) => (
+            <tr key={t}>
+              <td className="mono">{v[t].model}</td>
+              <td><strong>{cerPct(v[t].mean_cer)}</strong></td>
+              {kinds.map((k) => <td key={k}>{cerPct(v[t].cer_by_kind[k])}</td>)}
+              <td>{v[t].p50_ms != null ? `${v[t].p50_ms} ms` : "–"}</td>
+              <td>{v[t].failures}/{v[t].pages}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="card-pad small">{v.verdict ?? "No verdict: a model failed on every page."} <span className="muted tiny">{v.note} {v.hardware} · {new Date(v.measured_at * 1000).toLocaleString()}</span></div>
+    </div>
+  );
+}
+
+function ReasonerAB({ p, a }: { p: RsnSide; a: RsnSide }) {
+  return (
+    <div className="card">
+      <table className="table">
+        <thead><tr><th>Reasoner model</th><th>Verdict accuracy</th><th>FENCE recall</th><th>False FOSSIL</th><th>Citation precision</th><th>Dangerous errors</th></tr></thead>
+        <tbody>
+          {[p, a].map((r, i) => (
+            <tr key={i}>
+              <td className="mono">{r.model ?? "–"}</td><td><strong>{pct(r.accuracy)}</strong></td><td>{pct(r.fence_recall)}</td>
+              <td>{pct(r.false_fossil_rate)}</td><td>{pct(r.citation_precision)}</td><td>{r.dangerous_errors?.length ? r.dangerous_errors.join(", ") : "none"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 const CLASSES = ["FOSSIL", "FENCE", "ACTIVE", "UNKNOWN"];
@@ -107,7 +156,8 @@ export default function SystemPage() {
                 return (
                   <tr key={r}>
                     <td className="mono">{r.toUpperCase()}</td>
-                    <td className="mono">{role?.configured ? role.model : r === "speech" ? "not used" : s.models_in_use[r] ?? "–"}</td>
+                    <td className="mono">{role?.configured ? role.model : r === "speech" ? "not used" : s.models_in_use[r] ?? "–"}
+                      {role?.configured && role.family && FAMILY[role.family] && <span className={`pill ${role.family === "gemma" ? "amd" : ""}`} style={{ marginLeft: 8 }}>{FAMILY[role.family]}</span>}</td>
                     <td>{role?.configured ? role.endpoint_host : <span className="muted">not configured</span>}</td>
                     <td>{role?.configured ? s.config.hardware : <span className="c-FOSSIL">offline fixture (CPU)</span>}</td>
                   </tr>
@@ -115,6 +165,23 @@ export default function SystemPage() {
               })}
             </tbody>
           </table>
+        </div>
+        <p className="small muted" style={{ marginTop: 8 }}>
+          Default stack: Google DeepMind's Gemma 4 26B-A4B (Apache-2.0, open weights) reads every scanned, faxed and handwritten page
+          and does all the reasoning, served by vLLM on ROCm on one AMD Instinct MI300X; BAAI bge-m3 makes the retrieval embeddings.
+        </p>
+      </Section>
+
+      <Section title="Model A/B on AMD" eyebrow="Quality test, same GPU">
+        <div className="col" style={{ gap: 12 }}>
+          {s.vision_comparison ? <VisionAB v={s.vision_comparison} /> : (
+            <div className="card card-pad small muted">Vision A/B (Gemma 4 vs Qwen2.5-VL on the archive's scanned pages): pending — runs automatically in <span className="mono">deploy/amd/session.sh</span>. No numbers are shown until they are measured.</div>
+          )}
+          {s.reasoner_comparison?.primary && s.reasoner_comparison.alternative ? (
+            <ReasonerAB p={s.reasoner_comparison.primary} a={s.reasoner_comparison.alternative} />
+          ) : (
+            <div className="card card-pad small muted">Reasoner A/B (Gemma 4 vs Qwen on the 49-step ground-truth eval): pending — optional second run with <span className="mono">PROFILE=qwen ./deploy/amd/session.sh</span>.</div>
+          )}
         </div>
       </Section>
 

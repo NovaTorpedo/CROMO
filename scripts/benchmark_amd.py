@@ -112,7 +112,7 @@ async def run(args):
 
     # 2. investigations (recorded for replay) ---------------------------------
     steps = args.steps or [x["id"] for x in archive.steps()]
-    runs_dir = s.recorded_dir / "runs"
+    runs_dir = s.recorded_dir / ("runs" if not args.tag else f"runs_{args.tag}")
     runs_dir.mkdir(parents=True, exist_ok=True)
     durations, calls_before = [], db.q1("SELECT COUNT(*) n FROM metrics WHERE role='reasoner'")["n"]
     sem = asyncio.Semaphore(args.concurrency)
@@ -149,7 +149,7 @@ async def run(args):
         from run_eval import evaluate
 
         ev = await evaluate(rerun=False)
-        (s.recorded_dir / "eval_amd.json").write_text(json.dumps(ev, indent=1), encoding="utf-8")
+        (s.recorded_dir / f"eval_amd{'_' + args.tag if args.tag else ''}.json").write_text(json.dumps(ev, indent=1), encoding="utf-8")
         out["eval"] = {k: ev[k] for k in ("accuracy", "fence_recall", "false_fossil_rate", "dangerous_errors")}
         out["eval"]["citation_precision"] = ev["citations"]["precision"]
         print("[bench] eval:", out["eval"], flush=True)
@@ -165,9 +165,10 @@ async def run(args):
                    "price_source": s.gpu_price_source}
     out["gpu"] = gpu_info(args.rocm_smi)
     out["finished_at"] = time.time()
-    p = s.recorded_dir / "benchmark_amd.json"
+    out["tag"] = args.tag or "primary"
+    p = s.recorded_dir / f"benchmark_amd{'_' + args.tag if args.tag else ''}.json"
     p.write_text(json.dumps(out, indent=1), encoding="utf-8")
-    if not args.steps:
+    if not args.steps and not args.tag:
         print("snapshot:", db.export_snapshot())
     print(f"[bench] cost per plant audit: ${out['cost']['per_plant_audit_usd']} ({out['cost']['gpu_hours']} GPU-h)")
     print("written", p)
@@ -180,6 +181,7 @@ def main():
     ap.add_argument("--steps", nargs="*")
     ap.add_argument("--concurrency", type=int, default=6)
     ap.add_argument("--rocm-smi", help="file with rocm-smi output captured on the GPU host")
+    ap.add_argument("--tag", default="", help="secondary A/B run (e.g. qwen): results go to *_<tag>.json; no replays/snapshot")
     asyncio.run(run(ap.parse_args()))
 
 

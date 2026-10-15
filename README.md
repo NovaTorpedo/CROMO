@@ -86,7 +86,7 @@ We never type benchmark numbers by hand.
 
 ```
 archive (scans, faxes, logbooks, PDFs, emails) ─► ingestion ─► hybrid index ─► investigation ─► verdict + guards ─► map / tripwires / change-check / trials
-                    VISION (Qwen2.5-VL) │ REASONER (Qwen3-30B-A3B) │ EMBEDDINGS (bge-m3)        all on one AMD MI300X (ROCm + vLLM)
+                    VISION + REASONER (Gemma 4 26B-A4B, Google DeepMind) │ EMBEDDINGS (bge-m3)     all on one AMD MI300X (ROCm + vLLM)
 ```
 
 1. **Ingestion.** Born-digital pages are read from their text layer. Scans, faxes and handwritten Italian logbooks go to
@@ -102,11 +102,21 @@ Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 ### AMD stack
 | Role | Model (license) | Serving |
 |---|---|---|
-| Reasoner | `Qwen/Qwen3-30B-A3B-Instruct-2507` (Apache-2.0) | vLLM on ROCm, `--enable-auto-tool-choice --tool-call-parser hermes`, 0.55 of HBM |
-| Vision | `Qwen/Qwen2.5-VL-7B-Instruct` (Apache-2.0) | vLLM on ROCm, 0.25 of HBM |
+| Reasoner | **`google/gemma-4-26B-A4B-it`** (Gemma 4, Google DeepMind, Apache-2.0) | vLLM on ROCm, `--enable-auto-tool-choice --tool-call-parser gemma4 --reasoning-parser gemma4`, 0.70 of HBM |
+| Vision | **the same Gemma 4 server** (native image input, OCR and handwriting) | `--limit-mm-per-prompt '{"image": 2}'`, `--mm-processor-kwargs '{"max_soft_tokens": 1120}'` (high-resolution pages) |
 | Embeddings | `BAAI/bge-m3` (MIT) | vLLM pooling runner, 0.08 of HBM |
 
-All three run on **one AMD Instinct MI300X (192 GB)**: [`deploy/amd/serve_vllm.sh`](deploy/amd/serve_vllm.sh) (official
+**Gemma 4 is CROMO's brain and eyes.** One open-weights Gemma 4 model (a mixture-of-experts with ~4B active parameters,
+256K context) reads every scanned, faxed and handwritten Italian page, reads the passages, proposes leads and verdicts,
+parses change proposals, and powers the Evolus agent through native function calling. It runs on ROCm with vLLM's
+Triton attention backend (`VLLM_ATTENTION_BACKEND=TRITON_ATTN`).
+
+**Measured, not assumed.** `PROFILE=compare` also starts `Qwen/Qwen2.5-VL-7B-Instruct` next to Gemma, and
+[`scripts/compare_models.py`](scripts/compare_models.py) scores both on the archive's scanned pages (character error rate
+by page type, latency, failures). The reasoner can be A/B tested on the ground-truth eval with `PROFILE=qwen` +
+`benchmark_amd.py --tag qwen`. The System page shows both comparisons; if Gemma loses a role, the numbers say so.
+
+Everything runs on **one AMD Instinct MI300X (192 GB)**: [`deploy/amd/serve_vllm.sh`](deploy/amd/serve_vllm.sh) (official
 `vllm/vllm-openai-rocm` image, API-key protected) plus [`firewall.sh`](deploy/amd/firewall.sh).
 The AMD Token Factory works too: every role is configured by environment variables ([`LINK_AMD.md`](LINK_AMD.md)).
 [`scripts/check_amd.py`](scripts/check_amd.py) verifies auth, model, chat, structured output, tool calling, vision on a
@@ -190,7 +200,7 @@ See [SECURITY.md](SECURITY.md).
 
 ## Licenses
 - Code: MIT ([LICENSE](LICENSE)).
-- Models: Apache-2.0 (Qwen), MIT (bge-m3).
+- Models: Apache-2.0 (Gemma 4, Google DeepMind; Qwen for the A/B comparison), MIT (bge-m3).
 - Fonts: IBM Plex, Fraunces, Courier Prime, Libre Baskerville, Caveat, Reenie Beanie (SIL OFL 1.1); Special Elite and
   Homemade Apple (Apache-2.0); license files in `generator/fonts/`.
 - Icons: Lucide (ISC). Frontend: React (MIT), Vite (MIT).

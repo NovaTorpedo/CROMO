@@ -4,6 +4,7 @@
 #   git clone https://github.com/NovaTorpedo/CROMO.git && cd CROMO
 #   export VLLM_API_KEY=$(openssl rand -hex 24); echo "$VLLM_API_KEY"   # keep it: Evolus needs it
 #   ./deploy/amd/session.sh
+#   PROFILE=qwen ./deploy/amd/session.sh   # optional afterwards: reasoner A/B (Gemma 4 vs Qwen3) on the same eval
 #
 # What it does (about 30-45 min, most of it the benchmark):
 #   1. firewall (SSH + vLLM ports, API-key protected)
@@ -20,22 +21,33 @@ say() { printf '\033[1;33m[cromo]\033[0m %s\n' "$*"; }
 say "1/4 firewall"
 ./deploy/amd/firewall.sh >/dev/null
 
-say "2/4 starting the models (first start downloads ~80 GB of weights)"
+# Gemma 4 serves REASONER + VISION. The 'compare' profile also starts Qwen2.5-VL so the vision A/B test can run.
+export PROFILE="${PROFILE:-compare}"
+[ "$PROFILE" = compare ] && export GEMMA_UTIL="${GEMMA_UTIL:-0.62}"
+say "2/4 starting the models, profile $PROFILE (first start downloads the weights)"
 ./deploy/amd/serve_vllm.sh start
 mkdir -p data/recorded
 (rocm-smi --showproductname --showmeminfo vram --showuse > data/recorded/rocm-smi.txt 2>&1) || true
 
 say "3/4 building the CROMO evaluation container"
 umask 077
+# PROFILE=qwen: optional reasoner A/B. Benchmarks the all-Qwen stack into *_qwen files; the Gemma results stay untouched.
+if [ "$PROFILE" = qwen ]; then
+  REASONER_MODEL="${QWEN_REASONER:-Qwen/Qwen3-30B-A3B-Instruct-2507}"; VISION_MODEL="${QWEN_VISION:-Qwen/Qwen2.5-VL-7B-Instruct}"
+  VISION_PORT=8001; BENCH_ARGS="--tag qwen"
+fi
 cat > .env.amd <<EOF
 CROMO_PROVIDER=amd
 CROMO_AMD_ROUTE=vllm
 CROMO_REASONER_BASE_URL=http://127.0.0.1:8000/v1
 CROMO_REASONER_API_KEY=${VLLM_API_KEY}
-CROMO_REASONER_MODEL=${REASONER_MODEL:-Qwen/Qwen3-30B-A3B-Instruct-2507}
-CROMO_VISION_BASE_URL=http://127.0.0.1:8001/v1
+CROMO_REASONER_MODEL=${REASONER_MODEL:-google/gemma-4-26B-A4B-it}
+CROMO_VISION_BASE_URL=http://127.0.0.1:${VISION_PORT:-8000}/v1
 CROMO_VISION_API_KEY=${VLLM_API_KEY}
-CROMO_VISION_MODEL=${VISION_MODEL:-Qwen/Qwen2.5-VL-7B-Instruct}
+CROMO_VISION_MODEL=${VISION_MODEL:-google/gemma-4-26B-A4B-it}
+CROMO_VISION_ALT_BASE_URL=http://127.0.0.1:8001/v1
+CROMO_VISION_ALT_API_KEY=${VLLM_API_KEY}
+CROMO_VISION_ALT_MODEL=${QWEN_VISION:-Qwen/Qwen2.5-VL-7B-Instruct}
 CROMO_EMBEDDINGS_BASE_URL=http://127.0.0.1:8002/v1
 CROMO_EMBEDDINGS_API_KEY=${VLLM_API_KEY}
 CROMO_EMBEDDINGS_MODEL=${EMBED_MODEL:-BAAI/bge-m3}
@@ -50,7 +62,11 @@ $COMPOSE build eval
 say "4/4 check + benchmark (records every investigation for demo replay)"
 $COMPOSE run --rm eval python scripts/check_amd.py || {
   say "check failed: look at the FAIL lines above; if structured output is the only problem, set CROMO_STRUCTURED_OUTPUT=json_object in .env.amd and rerun"; exit 1; }
-$COMPOSE run --rm eval python scripts/benchmark_amd.py --rocm-smi data/recorded/rocm-smi.txt --concurrency 8
+if [ "$PROFILE" = compare ]; then
+  say "vision A/B: Gemma 4 vs Qwen2.5-VL on every scanned page (CER + latency)"
+  $COMPOSE run --rm eval python scripts/compare_models.py vision || say "vision comparison failed (non-blocking)"
+fi
+$COMPOSE run --rm eval python scripts/benchmark_amd.py --rocm-smi data/recorded/rocm-smi.txt --concurrency 8 ${BENCH_ARGS:-}
 rm -f .env.amd
 
 IP=$(curl -s -4 ifconfig.me || hostname -I | awk '{print $1}')

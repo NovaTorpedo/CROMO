@@ -167,8 +167,8 @@ def build(n: dict) -> str:
       <h2>Read the archive. Follow the paper trail. Decide with rules.</h2>
       <table>
         <tr><th>Role</th><th>Open model</th><th>On AMD</th></tr>
-        <tr><td>Vision: scans, faxes, handwritten Italian logbooks</td><td>Qwen2.5-VL-7B-Instruct</td><td>vLLM · ROCm · 0.25 of HBM</td></tr>
-        <tr><td>Reasoner: reads passages, follows leads, proposes verdicts</td><td>Qwen3-30B-A3B-Instruct-2507</td><td>vLLM · ROCm · tool calling · 0.55</td></tr>
+        <tr><td>Vision: scans, faxes, handwritten Italian logbooks</td><td>Gemma 4 26B-A4B-it (Google DeepMind)</td><td>vLLM · ROCm · native image input</td></tr>
+        <tr><td>Reasoner: reads passages, follows leads, proposes verdicts</td><td>same Gemma 4 server</td><td>vLLM · ROCm · gemma4 tool calling · 0.70</td></tr>
         <tr><td>Embeddings: multilingual retrieval</td><td>BAAI/bge-m3</td><td>vLLM pooling · 0.08</td></tr>
       </table>
       <p style="margin-top:36px">Ingestion → hybrid index → multi-hop investigation (9 hops max, streamed) → verified citations → evidence-strength rules → tripwires, change-check, trials.</p>"""))

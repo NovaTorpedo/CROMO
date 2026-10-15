@@ -56,10 +56,23 @@ def main():
     b = col(amd, bench, False)
     head = f"| | Rule-based baseline (offline fixture provider, no LLM) | CROMO on {hw}{(' · ' + model) if model else ''} |"
     lines = [head, "|---|---|---|"] + [f"| {lab} | {x} | {y} |" for lab, x, y in zip(labels, a, b)]
+    vc = load("vision_comparison.json")
+    if vc:  # measured Gemma-vs-alternative reading quality, same pages, same GPU
+        lines += ["", "**Vision A/B on AMD** (character error rate on the archive's scanned pages, lower is better):", "",
+                  "| Model | Mean CER | p50 latency | Failures |", "|---|---|---|---|"]
+        lines += [f"| `{vc[t]['model']}` | {'–' if vc[t]['mean_cer'] is None else format(vc[t]['mean_cer'], '.1%')} | {vc[t]['p50_ms']} ms | {vc[t]['failures']}/{vc[t]['pages']} |" for t in ("A", "B")]
+        if vc.get("verdict"):
+            lines += ["", vc["verdict"]]
+    alt = load("eval_amd_qwen.json")
+    if amd and alt:  # optional reasoner A/B (benchmark_amd.py --tag qwen)
+        lines += ["", "**Reasoner A/B on AMD** (same 49-step ground truth):", "",
+                  "| Model | Accuracy | FENCE recall | False-FOSSIL rate | Dangerous errors |", "|---|---|---|---|---|"]
+        lines += [f"| `{(e.get('models') or {}).get('reasoner', '')}` | {pct(e.get('accuracy'))} | {pct(e.get('fence_recall'))} | "
+                  f"{pct(e.get('false_fossil_rate'))} | {len(e.get('dangerous_errors') or [])} |" for e in (amd, alt)]
     readme = ROOT / "README.md"
     s = readme.read_text(encoding="utf-8")
     s = re.sub(r"(<!-- RESULTS:START -->\n).*?(\n<!-- RESULTS:END -->)", lambda m: m.group(1) + "\n".join(lines) + m.group(2), s, flags=re.S)
-    readme.write_text(s, encoding="utf-8")
+    readme.write_text(s, encoding="utf-8", newline="\n")
     print("\n".join(lines))
 
 

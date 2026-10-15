@@ -35,9 +35,10 @@ Around the verdicts, CROMO offers:
 - **Safe trials:** controlled trial plans approved by an engineer through an Evolus workflow.
 
 The whole AI pipeline runs on one AMD Instinct MI300X with ROCm and vLLM:
-- Qwen3-30B-A3B as the reasoner, with tool calling;
-- Qwen2.5-VL-7B reading scans and handwriting;
-- bge-m3 for multilingual retrieval.
+- **Gemma 4 (Google DeepMind, 26B-A4B, open weights)** as both the eyes and the brain: it reads every scanned,
+  faxed and handwritten Italian page, reasons over the evidence, and drives the Evolus agent through native tool calling;
+- bge-m3 for multilingual retrieval;
+- a measured A/B against Qwen2.5-VL on the same GPU, so Gemma's reading quality is shown, not assumed.
 
 The AMD Token Factory is supported by configuration. Evolus building blocks are driven through the REST API:
 - a workflow for trial approval (created and run via the API);
@@ -59,7 +60,7 @@ stay server-side, and the demo runs end to end offline in a clearly labelled fix
 Intelligent Industry (main) · Evolus Business Agents on AMD (partner)
 
 ## Technology tags
-AMD Instinct MI300X · AMD ROCm · AMD Developer Cloud · AMD Token Factory · vLLM · Qwen3 · Qwen2.5-VL · bge-m3 · Evolus · FastAPI · React · Python · TypeScript · Docker
+AMD Instinct MI300X · AMD ROCm · AMD Developer Cloud · AMD Token Factory · vLLM · Gemma · Gemma 4 · Google DeepMind · Qwen2.5-VL · bge-m3 · Evolus · FastAPI · React · Python · TypeScript · Docker
 
 ## Links
 - Public demo (read-only, recorded results): https://novatorpedo.github.io/CROMO/

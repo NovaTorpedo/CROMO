@@ -14,8 +14,9 @@ steps. Commands on your PC run from the repo folder with the project virtualenv 
    - Image: **vLLM** (Quick Start)
    - Add your SSH key, then **Create**.
    - Wait until it's **Active** and copy its public IP.
-2. **Run the one-command session on the droplet.** It handles the firewall, starts the three models, checks every
-   endpoint, runs the full benchmark and evaluation on the GPU, and records all investigations for replay:
+2. **Run the one-command session on the droplet.** It handles the firewall, starts Gemma 4 (reasoner + vision, :8000),
+   bge-m3 (:8002) and, for the A/B test, Qwen2.5-VL (:8001); checks every endpoint, compares the two vision models on the
+   scanned pages, runs the full benchmark and evaluation on the GPU with Gemma, and records all investigations for replay:
    ```bash
    ssh root@<IP>
    git clone https://github.com/NovaTorpedo/CROMO.git && cd CROMO
@@ -32,7 +33,7 @@ steps. Commands on your PC run from the repo folder with the project virtualenv 
 4. **Connect Evolus to the AMD model and create the agent.** Steps 4–6 of `docs/EVOLUS_SETUP.md`:
    - Your models → Add model:
      - URL: `http://<IP>:8000/v1`
-     - Model: `Qwen/Qwen3-30B-A3B-Instruct-2507`
+     - Model: `google/gemma-4-26B-A4B-it`
      - Key: the `VLLM_API_KEY`
    - Then:
    ```
@@ -49,7 +50,7 @@ steps. Commands on your PC run from the repo folder with the project virtualenv 
    ```
    CROMO_PROVIDER=amd
    CROMO_REASONER_BASE_URL=http://<IP>:8000/v1
-   CROMO_VISION_BASE_URL=http://<IP>:8001/v1
+   CROMO_VISION_BASE_URL=http://<IP>:8000/v1
    CROMO_EMBEDDINGS_BASE_URL=http://<IP>:8002/v1
    CROMO_REASONER_API_KEY=<VLLM_API_KEY>
    CROMO_VISION_API_KEY=<VLLM_API_KEY>
@@ -57,7 +58,16 @@ steps. Commands on your PC run from the repo folder with the project virtualenv 
    ```
    Then start CROMO: `.venv\Scripts\python -m uvicorn cromo.api:app --app-dir backend --port 8000`, and open
    http://localhost:8000. The header says **Live on AMD**. Delete `data\runtime\cromo.db` first so CROMO starts from
-   the AMD snapshot.
+   the AMD snapshot. (The model names default to Gemma 4 in `.env.example`: `CROMO_REASONER_MODEL` and
+   `CROMO_VISION_MODEL` = `google/gemma-4-26B-A4B-it`.)
+5b. **Optional: reasoner A/B (Gemma 4 vs Qwen3-30B-A3B), about 40 more minutes of droplet time.** After the video,
+   on the droplet:
+   ```bash
+   PROFILE=qwen ./deploy/amd/session.sh
+   ```
+   It swaps the servers to the all-Qwen stack and benchmarks it into `eval_amd_qwen.json` / `benchmark_amd_qwen.json` (the
+   Gemma results are not touched). Repeat step 3 to copy the results; the System page then shows both reasoners side by
+   side on the 49-step eval. Finish with step 6 and 7.
 6. **Update the README, slides and cover with the measured numbers, and publish them:**
    ```
    .venv\Scripts\python scripts\update_readme.py
@@ -68,8 +78,9 @@ steps. Commands on your PC run from the repo folder with the project virtualenv 
 7. **Destroy the droplet.** In AMD Developer Cloud: your droplet → **Destroy**. Powering it off does *not* stop billing.
 
 ## Route A — AMD Token Factory (event API, no billing) for live use without a droplet
-1. In Token Factory (notebooks.amd.com/tokenfactory), copy the **base URL**, your **API key** and an instruct **model
-   name** from the catalogue (plus a vision or embedding model if it offers one).
+1. In Token Factory (notebooks.amd.com/tokenfactory), copy the **base URL**, your **API key** and a **model name** from
+   the catalogue. Prefer a **Gemma 4** model if the catalogue lists one (it covers reasoner *and* vision); otherwise any
+   instruct model, plus a vision or embedding model if offered.
 2. In `.env` set:
    ```
    CROMO_PROVIDER=amd
@@ -84,6 +95,7 @@ steps. Commands on your PC run from the repo folder with the project virtualenv 
 4. `.venv\Scripts\python scripts\benchmark_amd.py`, then step 6 above.
 
 ## Troubleshooting
-- **`check_amd.py` says tool calling WARN.** The reasoner must run with `--enable-auto-tool-choice --tool-call-parser hermes`. `serve_vllm.sh` already does this.
+- **`check_amd.py` says tool calling WARN.** The reasoner must run with `--enable-auto-tool-choice --tool-call-parser gemma4` (Gemma 4) or `hermes` (Qwen). `serve_vllm.sh` already does this.
 - **A model is still downloading.** `./deploy/amd/serve_vllm.sh logs` on the droplet shows progress.
-- **Out of GPU memory.** Lower `REASONER_UTIL` (e.g. `REASONER_UTIL=0.5 ./deploy/amd/serve_vllm.sh start`) or set `REASONER_MAXLEN=16384`.
+- **Out of GPU memory.** Lower `GEMMA_UTIL` (e.g. `GEMMA_UTIL=0.55 ./deploy/amd/serve_vllm.sh start`) or set `MAXLEN=16384`.
+- **Gemma fails to start on ROCm.** Check `serve_vllm.sh logs`; the script already sets `VLLM_ATTENTION_BACKEND=TRITON_ATTN`. As a fallback, `PROFILE=qwen` serves the previous all-Qwen stack (then set the `CROMO_*_MODEL` names to the Qwen models).

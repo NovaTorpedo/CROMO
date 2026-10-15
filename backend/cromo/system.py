@@ -18,6 +18,14 @@ def _load(name: str):
     return json.loads(p.read_text(encoding="utf-8")) if p.is_file() else None
 
 
+def _brief_eval(e: dict | None) -> dict | None:
+    if not e:
+        return None
+    return {"model": (e.get("models") or {}).get("reasoner"), "accuracy": e.get("accuracy"), "fence_recall": e.get("fence_recall"),
+            "false_fossil_rate": e.get("false_fossil_rate"), "dangerous_errors": e.get("dangerous_errors"),
+            "citation_precision": (e.get("citations") or {}).get("precision")}
+
+
 def latency_stats(provider: str | None = None) -> list[dict]:
     rows = db.q("SELECT stage, role, model, provider, latency_ms, tokens_in, tokens_out, ok FROM metrics" +
                 (" WHERE provider=?" if provider else ""), (provider,) if provider else ())
@@ -60,6 +68,9 @@ def summary() -> dict:
         "ingest": db.kv_get("ingest_stats"),
         "latency": latency_stats(),
         "benchmark": _load("benchmark_amd.json"),
+        "vision_comparison": {k: v for k, v in (_load("vision_comparison.json") or {}).items() if k != "pages"} or None,
+        "reasoner_comparison": {"primary": _brief_eval(_load("eval_amd.json")), "alternative": _brief_eval(_load("eval_amd_qwen.json"))}
+        if _load("eval_amd_qwen.json") else None,
         "eval": {"amd": _load("eval_amd.json"), "fixture": _load("eval_fixture.json")},
         "gpu": gpu_snapshot(),
         "evolus": evolus.usage() if s.evolus_configured else {"configured": False},
