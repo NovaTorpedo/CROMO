@@ -100,8 +100,10 @@ export interface Ctx {
   mode: "amd" | "fixture";
   modelLabel: string;
   openDoc: (t: DocTarget) => void;
+  /** demo mode: investigations replay the recorded AMD run instead of calling the models */
+  demo: boolean;
 }
-export const AppCtx = createContext<Ctx>({ mode: "fixture", modelLabel: "", openDoc: () => {} });
+export const AppCtx = createContext<Ctx>({ mode: "fixture", modelLabel: "", openDoc: () => {}, demo: false });
 export const useApp = () => useContext(AppCtx);
 
 export function Section({ title, eyebrow, children, right }: { title: string; eyebrow?: string; children: ReactNode; right?: ReactNode }) {

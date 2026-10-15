@@ -13,7 +13,7 @@ import SystemPage from "./pages/SystemPage";
 import CoverPage from "./pages/CoverPage";
 
 interface Health { ok: boolean; mode: "amd" | "fixture"; results?: { provider: string; model: string } | null }
-interface SysLite { config: { roles: { reasoner: { model: string | null } } } }
+interface SysLite { config: { roles: { reasoner: { model: string | null } } }; recordings: string[] }
 
 const NAV: [string, string][] = [
   ["", "Plant map"],
@@ -39,6 +39,21 @@ export default function App() {
   const [mode, setMode] = useState<"amd" | "fixture">("fixture");
   const [modelLabel, setModelLabel] = useState("");
   const [recorded, setRecorded] = useState<string | null>(null);
+  const [hasRecordings, setHasRecordings] = useState(false);
+  const [demo, setDemo] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem("cromo.demo") === "1";
+    } catch {
+      return false;
+    }
+  });
+  useEffect(() => {
+    try {
+      localStorage.setItem("cromo.demo", demo ? "1" : "0");
+    } catch {
+      /* storage unavailable */
+    }
+  }, [demo]);
   const [doc, setDoc] = useState<DocTarget | null>(null);
   const [needPass, setNeedPass] = useState(false);
   const [pass, setPass] = useState("");
@@ -59,7 +74,12 @@ export default function App() {
         if (h.mode === "fixture" && h.results?.provider === "amd") setRecorded(h.results.model);
       })
       .catch(() => {});
-    get<SysLite>("/api/system").then((s) => setModelLabel(s.config.roles.reasoner.model ?? "")).catch(() => {});
+    get<SysLite>("/api/system")
+      .then((s) => {
+        setModelLabel(s.config.roles.reasoner.model ?? "");
+        setHasRecordings((s.recordings ?? []).length > 0);
+      })
+      .catch(() => {});
     return onAuthRequired(() => setNeedPass(true));
   }, []);
 
@@ -77,7 +97,7 @@ export default function App() {
   else content = <MapPage />;
 
   return (
-    <AppCtx.Provider value={{ mode, modelLabel, openDoc }}>
+    <AppCtx.Provider value={{ mode, modelLabel, openDoc, demo: demo && hasRecordings }}>
       <div className="app">
         <header className="topbar">
           <a className="logo" href="#/" aria-label="CROMO home">
@@ -94,6 +114,12 @@ export default function App() {
             <span className="dot" />
             {STATIC ? (recorded ? `Public demo · recorded AMD results` : "Public demo · offline results") : mode === "amd" ? `Live on AMD · ${modelLabel || "vLLM"}` : recorded ? `Recorded AMD results · ${recorded}` : "Offline mode · no AMD model connected"}
           </a>
+          {hasRecordings && !STATIC && (
+            <label className={`pill ${demo ? "replay" : ""}`} title="Demo mode: investigations replay recorded AMD runs (survives GPU or network failure)" style={{ cursor: "pointer" }}>
+              <input type="checkbox" checked={demo} onChange={(e) => setDemo(e.target.checked)} style={{ margin: 0 }} />
+              Demo mode (replay)
+            </label>
+          )}
           <button className="icon-btn" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} aria-label="Toggle dark mode">
             {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
           </button>

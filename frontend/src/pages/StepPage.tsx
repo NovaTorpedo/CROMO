@@ -69,7 +69,7 @@ function parse(events: InvEvent[]) {
 }
 
 export default function StepPage({ stepId, query }: { stepId: string; query: URLSearchParams }) {
-  const { mode } = useApp();
+  const { mode, demo } = useApp();
   const [info, setInfo] = useState<StepInfo | null>(null);
   const [err, setErr] = useState<unknown>(null);
   const [events, setEvents] = useState<InvEvent[]>([]);
@@ -114,6 +114,7 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
   }, [stepId]);
 
   async function run(src: Source) {
+    if (src === "live" && demo && info?.has_recording) src = "replay";
     reset();
     setSource(src);
     setBusy(true);
@@ -131,6 +132,11 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
     }
   }
 
+  function runReplayFor(i: StepInfo) {
+    setInfo(i);
+    run("replay");
+  }
+
   useEffect(() => {
     setInfo(null);
     setErr(null);
@@ -138,7 +144,7 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
     get<StepInfo>(`/api/steps/${stepId}`)
       .then((i) => {
         setInfo(i);
-        if (query.get("live") === "1") run("live");
+        if (query.get("live") === "1") (demo && i.has_recording ? runReplayFor(i) : run("live"));
         else if (query.get("replay") === "1" && i.has_recording) run("replay");
         else if (i.verdict) showStored().catch(setErr);
       })

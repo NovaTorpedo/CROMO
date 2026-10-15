@@ -86,3 +86,23 @@ def test_oversized_body_rejected(client):
     r = client.post("/api/v1/change-check", content=b"{" + b" " * 300_000 + b"}",
                     headers={"Content-Type": "application/json"})
     assert r.status_code == 413
+
+
+def test_replay_streams_recorded_run_with_label(client):
+    import json as _json
+
+    from cromo import config as _c, investigate
+
+    runs = _c.settings.recorded_dir / "runs"
+    runs.mkdir(parents=True, exist_ok=True)
+    f = runs / "ALK-04.json"
+    f.write_text(_json.dumps({"step_id": "ALK-04", "recorded_at": 1.0, "provider": "test-recording", "models": {"reasoner": "x"},
+                              "hardware": "test", "events": investigate.stored_events("ALK-04")}), encoding="utf-8")
+    try:
+        r = client.get("/api/steps/ALK-04/replay?speed=8")
+        lines = [_json.loads(x) for x in r.text.splitlines() if x.strip()]
+        assert lines[0]["type"] == "replay" and lines[0]["provider"] == "test-recording"
+        assert lines[-1]["type"] == "verdict"
+        assert client.get("/api/steps/EPX-01/replay").status_code == 404
+    finally:
+        f.unlink()
