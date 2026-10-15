@@ -68,7 +68,7 @@ export default function App() {
   let content;
   if (page === "step" && route.path[1]) content = <StepPage stepId={route.path[1].toUpperCase()} query={route.query} />;
   else if (page === "ask") content = <AskPage initial={route.query.get("q") ?? ""} />;
-  else if (page === "tripwires") content = <TripwiresPage />;
+  else if (page === "tripwires") content = <TripwiresPage preset={route.query.get("preset") ?? ""} />;
   else if (page === "change") content = <ChangePage initial={route.query.get("p") ?? ""} />;
   else if (page === "trials") content = <TrialsPage focus={route.query.get("id") ?? ""} />;
   else if (page === "system") content = <SystemPage />;

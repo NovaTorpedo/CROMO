@@ -91,6 +91,22 @@ def candidates(event: dict) -> list[dict]:
         else:
             dep_from = [d for d in deps if _match(frm, d["name"]) >= 0.5]
             dep_to = [d for d in deps if d.get("holds") is False and _match(to, d["name"]) >= 0.75]
+            if v["verdict"] == "FOSSIL" and not dep_to:
+                # does the new situation bring back the original problem described in the cited evidence?
+                to_plain = set(tokens(event.get("to", ""))) - GENERIC
+                cited = {i for c in v.get("chain", []) for i in c.get("evidence", [])}
+                ended_names = [fold(d["name"]) for d in deps if d.get("holds") is False]
+                ctx = set()
+                for i, e in v.get("evidence", {}).items():
+                    q = e.get("quote", "")
+                    if (i in cited and e.get("stance") == "reason") or any(n and n in fold(q) for n in ended_names):
+                        ctx |= set(tokens(q))
+                for d in deps:
+                    ctx |= set(tokens(d["name"]))
+                hit = to_plain & ctx
+                novel = hit - set(tokens(instr))
+                if to_plain and len(hit) >= max(2, 0.6 * len(to_plain)) and novel:
+                    dep_to = [d for d in deps if d.get("holds") is False] or [{"name": ", ".join(sorted(novel)), "evidence": list(cited)[:2]}]
             uses = _match(frm, instr) >= 0.5
             ev_hit = _match(frm, _evidence_text(v)) >= 0.5
             if v["verdict"] == "FOSSIL" and dep_to:

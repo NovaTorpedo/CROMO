@@ -21,7 +21,7 @@ export const EFFECT_LABEL: Record<string, string> = {
   review_required: "Review this step",
 };
 
-export default function TripwiresPage() {
+export default function TripwiresPage({ preset = "" }: { preset?: string }) {
   const { openDoc } = useApp();
   const [data, setData] = useState<Data | null>(null);
   const [err, setErr] = useState<unknown>(null);
@@ -30,8 +30,18 @@ export default function TripwiresPage() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    get<Data>("/api/tripwires").then(setData, setErr);
-  }, []);
+    get<Data>("/api/tripwires")
+      .then((d) => {
+        setData(d);
+        const p = d.presets.find((x) => x.id === preset);
+        if (p) {
+          setEv(p.event);
+          simulate(p.event);
+        }
+      })
+      .catch(setErr);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preset]);
 
   async function simulate(e: Ev) {
     setBusy(true);

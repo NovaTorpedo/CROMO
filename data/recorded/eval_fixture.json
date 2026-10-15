@@ -7,7 +7,7 @@
   "embeddings": "fixture-embeddings"
  },
  "hardware": "CPU (offline)",
- "evaluated_at": 1792024769.3279777,
+ "evaluated_at": 1792027591.7232459,
  "dataset": "Valdorso synthetic archive (seed 1995)",
  "n_steps": 49,
  "accuracy": 0.653,
@@ -71,7 +71,7 @@
   "note": "precision = share of cited documents (excluding recipe context) that belong to the step's planted story; every cited quote is verified verbatim against the source text before use."
  },
  "tripwires": {
-  "recall": 0.273,
+  "recall": 0.364,
   "expected_effects": 11,
   "extra_alerts": 4,
   "scenarios": [
@@ -100,12 +100,12 @@
      "EPX-03": "review_required"
     },
     "got": {
+     "EPX-02": "fossil_reactivated",
      "EPX-07": "fence_still_required",
-     "EPX-02": "review_required",
      "EPX-03": "review_required"
     },
     "hits": {
-     "EPX-02": false,
+     "EPX-02": true,
      "EPX-03": true
     },
     "extra_alerts": [
