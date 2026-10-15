@@ -1,0 +1,11 @@
+# Override used only on the AMD droplet by deploy/amd/session.sh:
+# the evaluation container reaches the vLLM servers on the host directly and writes results to ./data/recorded.
+services:
+  eval:
+    network_mode: host
+    env_file:
+      - path: .env.amd
+        required: true
+    user: "0:0"
+    volumes:
+      - ./data/recorded:/app/data/recorded
