@@ -21,6 +21,10 @@ def _p(*a):
 
 
 async def _bootstrap(force: bool = False):
+    if not force:
+        db.close()
+        if db.import_snapshot_if_empty():
+            _p("[cromo] seeded the database from data/recorded/snapshot.db (recorded AMD results)")
     have_docs = db.q1("SELECT COUNT(*) n FROM documents")["n"]
     if force or not have_docs:
         _p(f"[cromo] ingesting archive ({llm.mode()} mode)...")

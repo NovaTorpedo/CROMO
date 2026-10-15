@@ -164,6 +164,8 @@ async def run(args):
     out["finished_at"] = time.time()
     p = s.recorded_dir / "benchmark_amd.json"
     p.write_text(json.dumps(out, indent=1), encoding="utf-8")
+    if not args.steps:
+        print("snapshot:", db.export_snapshot())
     print(f"[bench] cost per plant audit: ${out['cost']['per_plant_audit_usd']} ({out['cost']['gpu_hours']} GPU-h)")
     print("written", p)
     await llm.aclose()

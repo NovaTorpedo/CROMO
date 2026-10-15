@@ -35,3 +35,6 @@ data/*.db-*
 Thumbs.db
 .idea/
 .vscode/
+
+# --- static demo build output ---
+site/

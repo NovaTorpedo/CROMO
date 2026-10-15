@@ -1,0 +1,42 @@
+name: public-demo
+# Builds the read-only public demo (static files, no server, no keys) and publishes it on GitHub Pages.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - run: pip install -r backend/requirements.txt
+      - name: export demo data (uses data/recorded/snapshot.db when present)
+        env: { CROMO_EVOLUS_ENABLED: "false", CROMO_PROVIDER: "fixture" }
+        run: python scripts/export_static.py site/data
+      - name: build static UI
+        working-directory: frontend
+        env: { VITE_STATIC: "1", CROMO_BASE: "/${{ github.event.repository.name }}/", CROMO_OUT: "../site" }
+        run: npm ci --no-audit --no-fund && npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: site }
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: { name: github-pages, url: "${{ steps.deployment.outputs.page_url }}" }
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

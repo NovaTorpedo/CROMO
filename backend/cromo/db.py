@@ -123,3 +123,39 @@ def record_metric(stage: str, role: str, model: str, provider: str, latency_ms: 
                   tokens_out: int = 0, ok: bool = True) -> None:
     ex("INSERT INTO metrics(stage, role, model, provider, latency_ms, tokens_in, tokens_out, ok, ts) VALUES(?,?,?,?,?,?,?,?,?)",
        (stage, role, model, provider, latency_ms, tokens_in, tokens_out, int(ok), time.time()))
+
+
+def snapshot_path() -> Path:
+    return config.settings.recorded_dir / "snapshot.db"
+
+
+def export_snapshot(dest: Path | None = None) -> Path:
+    """Copy the current database (AMD-computed results) to data/recorded/snapshot.db for public demos."""
+    dest = dest or snapshot_path()
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    if dest.exists():
+        dest.unlink()
+    with _lock:
+        out = sqlite3.connect(dest)
+        connect().backup(out)
+        out.execute("DELETE FROM evolus_calls")
+        out.execute("DELETE FROM change_events")
+        out.commit()
+        out.execute("VACUUM")
+        out.close()
+    return dest
+
+
+def import_snapshot_if_empty() -> bool:
+    """On first start, seed the runtime database from the recorded AMD snapshot when one is shipped."""
+    snap = snapshot_path()
+    path = config.settings.db_path
+    if not snap.is_file() or (path.exists() and path.stat().st_size > 0):
+        return False
+    path.parent.mkdir(parents=True, exist_ok=True)
+    src = sqlite3.connect(snap)
+    dst = sqlite3.connect(path)
+    src.backup(dst)
+    src.close()
+    dst.close()
+    return True

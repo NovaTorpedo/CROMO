@@ -1,6 +1,11 @@
 // Thin client for the CROMO API. The browser never holds model or Evolus keys; the only
 // secret it may send is the demo passcode a viewer types in (X-Access-Token).
+//
+// STATIC mode (VITE_STATIC=1) serves the public read-only demo from pre-exported JSON
+// files (scripts/export_static.py) so it can be hosted for free on GitHub Pages.
 
+export const STATIC = import.meta.env.VITE_STATIC === "1";
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 const TOKEN_KEY = "cromo.passcode";
 
 export function getToken(): string {
@@ -35,6 +40,24 @@ export function onAuthRequired(fn: Listener) {
   };
 }
 
+export const slug = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
+
+/** Map an API path to a static JSON file of the exported demo. */
+function staticPath(path: string): string {
+  const [p, q] = path.split("?");
+  const qs = new URLSearchParams(q || "");
+  let m;
+  if ((m = p.match(/^\/api\/steps\/([A-Z]+-\d+)\/events$/))) return `${BASE}/data/events/${m[1]}.json`;
+  if ((m = p.match(/^\/api\/steps\/([A-Z]+-\d+)$/))) return `${BASE}/data/steps/${m[1]}.json`;
+  if ((m = p.match(/^\/api\/docs\/(ACC-\d+)$/))) return `${BASE}/data/docs/${m[1]}.json`;
+  if (p === "/api/compare") return `${BASE}/data/compare/${qs.get("a")}_${qs.get("b")}.json`;
+  return `${BASE}/data${p.replace(/^\/api/, "")}.json`;
+}
+
+export function pageUrl(acc: string, page: number) {
+  return STATIC ? `${BASE}/data/pages/${acc}-${page}.webp` : `/api/docs/${acc}/pages/${page}`;
+}
+
 function headers(json = true): HeadersInit {
   const h: Record<string, string> = {};
   if (json) h["Content-Type"] = "application/json";
@@ -59,20 +82,59 @@ async function handle<T>(r: Response): Promise<T> {
 }
 
 export async function get<T>(path: string): Promise<T> {
+  if (STATIC) {
+    const r = await fetch(staticPath(path));
+    if (!r.ok) throw new ApiError(404, "Not included in the public demo. Run CROMO locally for this.");
+    return r.json() as Promise<T>;
+  }
   return handle<T>(await fetch(path, { headers: headers(false) }));
 }
 
+const READ_ONLY = "This public demo is read-only (pre-recorded results). Run CROMO locally - `docker compose up` - for live use.";
+
+async function staticPost<T>(path: string, body: any): Promise<T> {
+  let file: string | null = null;
+  if (path === "/api/v1/change-check") file = `${BASE}/data/change/${slug(body.proposal)}.json`;
+  else if (path === "/api/tripwires/simulate") file = `${BASE}/data/tripwires/${slug(`${body.from}-${body.to}`)}.json`;
+  else if (path === "/api/ask") file = `${BASE}/data/ask/${slug(body.question)}.json`;
+  if (file) {
+    const r = await fetch(file);
+    if (r.ok) return r.json() as Promise<T>;
+    throw new ApiError(403, "The public demo includes pre-computed answers for the example buttons only. " + READ_ONLY);
+  }
+  throw new ApiError(403, READ_ONLY);
+}
+
 export async function post<T>(path: string, body?: unknown): Promise<T> {
+  if (STATIC) return staticPost<T>(path, body);
   return handle<T>(await fetch(path, { method: "POST", headers: headers(), body: body === undefined ? undefined : JSON.stringify(body) }));
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 /** Stream newline-delimited JSON events (investigations, replays). */
-export async function streamNdjson(
-  path: string,
-  method: "GET" | "POST",
-  onEvent: (ev: any) => void,
-  signal?: AbortSignal,
-): Promise<void> {
+export async function streamNdjson(path: string, method: "GET" | "POST", onEvent: (ev: any) => void, signal?: AbortSignal): Promise<void> {
+  if (STATIC) {
+    // live investigations and replays both replay the recorded event stream with its original timing
+    const step = path.match(/\/api\/steps\/([A-Z]+-\d+)\//)?.[1];
+    let rec: { events: any[]; recorded_at?: number; provider?: string; models?: any; hardware?: string } | null = null;
+    const r = await fetch(`${BASE}/data/runs/${step}.json`);
+    if (r.ok) rec = await r.json();
+    else {
+      const e = await fetch(`${BASE}/data/events/${step}.json`);
+      if (!e.ok) throw new ApiError(404, "No recorded run for this step.");
+      rec = await e.json();
+    }
+    if (rec?.recorded_at) onEvent({ type: "replay", recorded_at: rec.recorded_at, provider: rec.provider, models: rec.models, hardware: rec.hardware });
+    let prev: number | null = null;
+    for (const ev of rec!.events) {
+      if (signal?.aborted) return;
+      if (prev !== null && ev.t) await sleep(Math.min(1800, Math.max(60, (ev.t - prev) * 1000)));
+      prev = ev.t ?? prev;
+      onEvent(ev);
+    }
+    return;
+  }
   const r = await fetch(path, { method, headers: headers(false), signal });
   if (!r.ok || !r.body) {
     await handle(r);

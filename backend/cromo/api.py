@@ -28,11 +28,9 @@ _live_sem = asyncio.Semaphore(3)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    db.connect()
-    if not db.q1("SELECT COUNT(*) n FROM documents")["n"] or not db.q1("SELECT COUNT(*) n FROM investigations")["n"]:
-        from .cli import _bootstrap
+    from .cli import _bootstrap
 
-        await _bootstrap()
+    await _bootstrap()
     yield
     await llm.aclose()
 
@@ -66,8 +64,10 @@ async def _archive_err(_, exc):
 # ---------------------------------------------------------------------------
 @app.get("/api/health")
 def health():
+    r = db.q1("SELECT provider, model, MAX(created_at) ts, COUNT(*) n FROM investigations GROUP BY provider ORDER BY n DESC LIMIT 1")
     return {"ok": True, "mode": llm.mode(), "documents": db.q1("SELECT COUNT(*) n FROM documents")["n"],
-            "investigations": db.q1("SELECT COUNT(*) n FROM investigations")["n"]}
+            "investigations": db.q1("SELECT COUNT(*) n FROM investigations")["n"],
+            "results": {"provider": r["provider"], "model": r["model"], "computed_at": r["ts"]} if r else None}
 
 
 @app.get("/api/system")

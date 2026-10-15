@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { FileText, ShieldAlert, X } from "lucide-react";
-import { get } from "../api";
+import { get, pageUrl } from "../api";
 import type { DocData } from "../types";
 import { ErrorBox, Skeleton, fmtDate, type DocTarget } from "./common";
 
@@ -95,7 +95,7 @@ export default function DocDrawer({ target, onClose }: { target: DocTarget; onCl
                 </div>
               )}
               <div className="page-wrap">
-                <img src={`/api/docs/${doc.acc}/pages/${page}`} alt={`Page ${page} of archive document ${doc.acc}`} />
+                <img src={pageUrl(doc.acc, page)} alt={`Page ${page} of archive document ${doc.acc}`} />
                 {digital && pg &&
                   [...hits].map((i) => {
                     const b = pg.lines[i]?.bbox;

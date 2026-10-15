@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Lock, Moon, Sun } from "lucide-react";
-import { get, onAuthRequired, setToken } from "./api";
+import { STATIC, get, onAuthRequired, setToken } from "./api";
 import { AppCtx, useRoute, type DocTarget } from "./components/common";
 import DocDrawer from "./components/DocDrawer";
 import MapPage from "./pages/MapPage";
@@ -11,7 +11,7 @@ import ChangePage from "./pages/ChangePage";
 import TrialsPage from "./pages/TrialsPage";
 import SystemPage from "./pages/SystemPage";
 
-interface Health { ok: boolean; mode: "amd" | "fixture" }
+interface Health { ok: boolean; mode: "amd" | "fixture"; results?: { provider: string; model: string } | null }
 interface SysLite { config: { roles: { reasoner: { model: string | null } } } }
 
 const NAV: [string, string][] = [
@@ -37,6 +37,7 @@ export default function App() {
   const [theme, setTheme] = useState(initialTheme);
   const [mode, setMode] = useState<"amd" | "fixture">("fixture");
   const [modelLabel, setModelLabel] = useState("");
+  const [recorded, setRecorded] = useState<string | null>(null);
   const [doc, setDoc] = useState<DocTarget | null>(null);
   const [needPass, setNeedPass] = useState(false);
   const [pass, setPass] = useState("");
@@ -51,7 +52,12 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
-    get<Health>("/api/health").then((h) => setMode(h.mode)).catch(() => {});
+    get<Health>("/api/health")
+      .then((h) => {
+        setMode(h.mode);
+        if (h.mode === "fixture" && h.results?.provider === "amd") setRecorded(h.results.model);
+      })
+      .catch(() => {});
     get<SysLite>("/api/system").then((s) => setModelLabel(s.config.roles.reasoner.model ?? "")).catch(() => {});
     return onAuthRequired(() => setNeedPass(true));
   }, []);
@@ -82,9 +88,9 @@ export default function App() {
             ))}
           </nav>
           <div className="spacer" />
-          <a href="#/system" className={`pill ${mode}`} title="Where the models run">
+          <a href="#/system" className={`pill ${recorded ? "replay" : mode}`} title="Where the models run">
             <span className="dot" />
-            {mode === "amd" ? `Live on AMD · ${modelLabel || "vLLM"}` : "Offline mode · no AMD model connected"}
+            {STATIC ? (recorded ? `Public demo · recorded AMD results` : "Public demo · offline results") : mode === "amd" ? `Live on AMD · ${modelLabel || "vLLM"}` : recorded ? `Recorded AMD results · ${recorded}` : "Offline mode · no AMD model connected"}
           </a>
           <button className="icon-btn" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} aria-label="Toggle dark mode">
             {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
