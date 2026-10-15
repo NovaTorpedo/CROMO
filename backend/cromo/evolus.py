@@ -257,7 +257,9 @@ async def library_upload(acc: str) -> dict:
     lang = "it" if (r["lang"] or "en") == "it" else "en"
     resp = await _request("POST", f"/memories/{s.evolus_library_id}/documents?language={lang}",
                           files={"file": (f"{acc}.md", md.encode("utf-8"), "text/markdown")})
-    out = {"acc": acc, "response": resp.json() if resp.content else {}, "_cached_at": time.time()}
+    body = resp.json() if resp.content else {}
+    # keep only what CROMO needs; workspace and library ids are not stored in the repo
+    out = {"acc": acc, "document_id": body.get("id") or body.get("documentId"), "indexed": True, "_cached_at": time.time()}
     _write_cache("library", acc, out)
     return out
 

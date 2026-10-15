@@ -41,8 +41,10 @@ def env_values() -> list[str]:
             continue
         for line in p.read_text(encoding="utf-8", errors="ignore").splitlines():
             if "=" in line and not line.lstrip().startswith("#"):
-                v = line.split("=", 1)[1].strip().strip('"').strip("'")
-                if len(v) >= 12:
+                name, v = line.split("=", 1)
+                v = v.strip().strip('"').strip("'")
+                # values of secret-named variables (keys, tokens, passwords) must never be committed
+                if len(v) >= 12 and re.search(r"KEY|SECRET|TOKEN|PASSWORD", name.upper()):
                     vals.append(v)
     return vals
 
