@@ -18,9 +18,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse
 from pydantic import BaseModel, Field, field_validator
 
-from . import (archive, ask, changecheck, config, costs, db, evolus, index, investigate, llm, system, trials,
-               tripwires)
-from .security import SecurityHeaders, rate_limit, require_write
+from . import (archive, ask, changecheck, config, costs, db, evolus, investigate, llm, system, trials, tripwires)
+from .security import BodyLimit, SecurityHeaders, rate_limit, require_write, token_ok
 
 STEP_RE = re.compile(r"^(ALK|EPX|SOL|TNK|QC)-\d{2}$")
 _live_sem = asyncio.Semaphore(3)
@@ -38,6 +37,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="CROMO", version="0.1.0", lifespan=lifespan, docs_url="/api/docs-ui", redoc_url=None,
               openapi_url="/api/openapi.json")
 app.add_middleware(SecurityHeaders)
+app.add_middleware(BodyLimit)
 if config.settings.allowed_origins:
     app.add_middleware(CORSMiddleware, allow_origins=list(config.settings.allowed_origins), allow_methods=["GET", "POST"],
                        allow_headers=["Content-Type", "X-Access-Token"])
@@ -262,13 +262,6 @@ async def ask_endpoint(body: AskIn):
     return res
 
 
-@app.get("/api/search")
-async def search(q: str, request: Request):
-    rate_limit(request, limit=60, bucket="search")
-    q = q[:200]
-    return {"results": await index.search(q, k=8)}
-
-
 # ---------------------------------------------------------------------------
 # Tripwires
 # ---------------------------------------------------------------------------
@@ -378,8 +371,7 @@ async def trial_decision(tid: str, body: DecisionIn):
 
 @app.post("/api/evolus/webhook")
 async def evolus_webhook(request: Request):
-    token = config.settings.access_token
-    if not token or request.query_params.get("token") != token:
+    if not token_ok(request.query_params.get("token", "")):
         raise HTTPException(401, "invalid webhook token")
     exe = request.headers.get("X-Workflow-Execution-Id", "")
     body = await request.body()

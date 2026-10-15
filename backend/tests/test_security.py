@@ -80,3 +80,9 @@ def test_rate_limit(client):
 def test_no_open_cors(client):
     r = client.get("/api/health", headers={"Origin": "https://evil.example"})
     assert r.headers.get("access-control-allow-origin") is None
+
+
+def test_oversized_body_rejected(client):
+    r = client.post("/api/v1/change-check", content=b"{" + b" " * 300_000 + b"}",
+                    headers={"Content-Type": "application/json"})
+    assert r.status_code == 413

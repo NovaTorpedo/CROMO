@@ -39,6 +39,26 @@ def require_write(request: Request) -> None:
     rate_limit(request)
 
 
+MAX_BODY_BYTES = 256 * 1024
+
+
+class BodyLimit(BaseHTTPMiddleware):
+    """Reject oversized request bodies early (all inputs are small JSON documents)."""
+
+    async def dispatch(self, request, call_next):
+        cl = request.headers.get("content-length")
+        if cl and cl.isdigit() and int(cl) > MAX_BODY_BYTES:
+            from starlette.responses import JSONResponse
+
+            return JSONResponse({"detail": "Request body too large."}, status_code=413)
+        return await call_next(request)
+
+
+def token_ok(given: str) -> bool:
+    token = config.settings.access_token
+    return bool(token) and hmac.compare_digest((given or "").encode(), token.encode())
+
+
 class SecurityHeaders(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
         resp = await call_next(request)
