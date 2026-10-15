@@ -23,6 +23,8 @@ steps. Commands on your PC run from the repo folder with the project virtualenv 
    ./deploy/amd/session.sh
    ```
    At the end it prints an `scp` command.
+   (The clone needs the GitHub repository to be public. If it's still private, clone with a personal access token:
+   `git clone https://<token>@github.com/NovaTorpedo/CROMO.git`.)
 3. **Copy the results to your PC.** In a terminal in the CROMO folder, run the printed command:
    ```
    scp -r root@<IP>:/root/CROMO/data/recorded ./data/
