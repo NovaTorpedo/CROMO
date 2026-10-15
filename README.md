@@ -148,8 +148,14 @@ Without Docker (Python 3.12, Node 22):
 python -m venv .venv && .venv/bin/pip install -r backend/requirements-dev.txt   # Windows: .venv\Scripts\...
 cd frontend && npm ci && npm run build && cd ..
 .venv/bin/python -m uvicorn cromo.api:app --app-dir backend --port 8000
-.venv/bin/python -m pytest backend/tests                 # 32 tests incl. a mock-vLLM test of the live path
+.venv/bin/python -m pytest backend/tests                 # incl. a mock-vLLM test of the live path and security tests
 .venv/bin/python eval/run_eval.py --rerun                # evaluation against the planted ground truth
+```
+
+Before your first commit, enable the secret-scanning pre-commit hook (gitleaks is pinned and checksum-verified):
+```bash
+git config core.hooksPath .githooks
+.venv/bin/python scripts/install_gitleaks.py
 ```
 
 ## Configuration
