@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Literal, get_args, get_origin
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 Verdict = Literal["FOSSIL", "FENCE", "ACTIVE", "UNKNOWN"]
 Stance = Literal["reason", "status", "counter", "context"]
@@ -12,7 +12,31 @@ Purpose = Literal["origin", "status", "counter"]
 
 
 class _Base(BaseModel):
+    """Lenient with open models: unknown keys are ignored and null for a field that has a default becomes the default."""
+
     model_config = {"extra": "ignore"}
+
+    @model_validator(mode="before")
+    @classmethod
+    def _nulls_to_defaults(cls, data):
+        if isinstance(data, dict):
+            out = dict(data)
+            for name, f in cls.model_fields.items():
+                if name not in out or f.is_required():
+                    continue
+                if out[name] is None and "None" not in str(f.annotation):  # null where not allowed: use the default
+                    out.pop(name)
+                    continue
+                choices = get_args(f.annotation) if get_origin(f.annotation) is Literal else ()
+                if choices and isinstance(out[name], str):
+                    v = out[name].strip().lower()
+                    match = next((c for c in choices if str(c).lower() == v), None)
+                    if match is None:
+                        out.pop(name)  # unknown choice: use the default
+                    else:
+                        out[name] = match
+            return out
+        return data
 
 
 def _clip(v: str, n: int) -> str:
@@ -79,12 +103,12 @@ class ReadOut(_Base):
 
 
 class ChainClaim(_Base):
-    claim: str
+    claim: str = ""
     evidence: list[str] = Field(default_factory=list)
 
 
 class Dependency(_Base):
-    name: str
+    name: str = ""
     type: str = "other"
     holds: bool | None = None
     evidence: list[str] = Field(default_factory=list)
@@ -92,7 +116,7 @@ class Dependency(_Base):
 
 
 class Counter(_Base):
-    claim: str
+    claim: str = ""
     evidence: list[str] = Field(default_factory=list)
     resolved: bool = False
     resolution: str = ""
@@ -100,6 +124,12 @@ class Counter(_Base):
 
 class ConcludeOut(_Base):
     verdict: Verdict
+
+    @field_validator("verdict", mode="before")
+    @classmethod
+    def _upper(cls, v):
+        return v.strip().upper() if isinstance(v, str) else v
+
     reason: str = ""
     origin_year: int | None = None
     origin_evidence: list[str] = Field(default_factory=list)

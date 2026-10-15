@@ -18,8 +18,11 @@ from __future__ import annotations
 
 import time
 
+import re
+
 from . import archive, investigate, llm, tripwires
 from .schemas import ChangeParseOut
+from .text import STEP_ID
 
 ORDER = ["blocked", "caution", "allowed_with_trial", "allowed_with_review", "allowed"]
 
@@ -34,6 +37,13 @@ async def check(proposal: str) -> dict:
     parsed = await llm.run_task("change.parse", {"proposal": proposal, "steps": steps}, ChangeParseOut)
     known = {s["id"] for s in steps}
     targets = [t.upper() for t in parsed.targets if t.upper() in known]
+    # step ids written in the proposal always count, whatever the model mapped
+    for m in STEP_ID.findall(proposal):
+        if m.upper() in known and m.upper() not in targets:
+            targets.append(m.upper())
+    if (targets and parsed.action in ("other", "substitute_material", "switch_supplier", "replace_equipment")
+            and re.search(r"\b(remove|drop|delete|eliminate|skip|stop)\b", proposal, re.I)):
+        parsed.action = "remove"
     verdicts = investigate.all_stored()
     findings, decisions = [], []
     for sid in targets:
@@ -85,6 +95,11 @@ async def check(proposal: str) -> dict:
         decisions.append("caution")
         findings.append({"step_id": None, "decision": "caution",
                          "why": "The proposal could not be mapped to a recipe step or material. Please name the step or material."})
+    if not decisions or all(f.get("decision") == "info" for f in findings):
+        decisions.append("caution")
+        findings.append({"step_id": None, "decision": "caution",
+                         "why": "CROMO could not identify which steps this change affects, so it cannot clear it. "
+                                "Name the step (e.g. SOL-02) or the material/equipment involved."})
     decision = _worst(decisions)
     return {"proposal": proposal, "parsed": parsed.model_dump(), "decision": decision, "findings": findings,
             "provider": llm.mode(), "duration_s": round(time.perf_counter() - t0, 2),

@@ -30,6 +30,8 @@ def validate(out: ConcludeOut, evidence: dict[str, dict]) -> tuple[dict, list[st
     removed = 0
     chain = []
     for c in out.chain:
+        if not c.claim.strip():
+            continue
         ids = _clean_ids(c.evidence, valid)
         if ids:
             chain.append({"claim": c.claim, "evidence": ids})
@@ -37,6 +39,8 @@ def validate(out: ConcludeOut, evidence: dict[str, dict]) -> tuple[dict, list[st
             removed += 1
     deps = []
     for d in out.dependencies:
+        if not d.name.strip():
+            continue
         ids = _clean_ids(d.evidence, valid)
         holds = d.holds if ids else None
         if d.holds is not None and not ids:
@@ -44,6 +48,8 @@ def validate(out: ConcludeOut, evidence: dict[str, dict]) -> tuple[dict, list[st
         deps.append({"name": d.name, "type": d.type, "holds": holds, "evidence": ids, "note": d.note})
     counters = []
     for c in out.counter_evidence:
+        if not (c.claim.strip() or c.resolution.strip()):
+            continue
         ids = _clean_ids(c.evidence, valid)
         if ids:
             counters.append({"claim": c.claim, "evidence": ids, "resolved": bool(c.resolved), "resolution": c.resolution})

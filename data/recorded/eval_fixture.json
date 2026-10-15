@@ -7,7 +7,7 @@
   "embeddings": "fixture-embeddings"
  },
  "hardware": "CPU (offline)",
- "evaluated_at": 1792027591.7232459,
+ "evaluated_at": 1792049159.1047018,
  "dataset": "Valdorso synthetic archive (seed 1995)",
  "n_steps": 49,
  "accuracy": 0.653,

@@ -106,3 +106,11 @@ def test_replay_streams_recorded_run_with_label(client):
         assert client.get("/api/steps/EPX-01/replay").status_code == 404
     finally:
         f.unlink()
+
+
+def test_unmappable_change_is_never_allowed(client):
+    from cromo import security as _s
+
+    _s._hits.clear()
+    r = client.post("/api/v1/change-check", json={"proposal": "Please make the plant more efficient somehow"})
+    assert r.status_code == 200 and r.json()["decision"] == "caution"
