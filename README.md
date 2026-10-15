@@ -47,6 +47,15 @@ CROMO tells you which is which, with evidence. We recreated Levi's case in our s
 | <img src="docs/img/trials.png" width="430"> | **Safe trials via Evolus.** CROMO never deletes a step. For a fossil it drafts a controlled trial (scope, measurements, acceptance criteria, rollback) and sends it through an **Evolus workflow**. The workflow writes the brief for the approving engineer and records the request and the decision. The status comes back to CROMO. |
 | <img src="docs/img/system.png" width="430"> | **Cost and system.** Annual cost of each step from explicit inputs (MES quantities, ERP prices, labour, energy, occupancy, disposal), with the formula shown. The System page shows the models, AMD hardware, measured latency per stage, throughput, GPU memory, cost per plant audit and the evaluation. |
 
+Also in the app:
+- **Ask a veteran.** For UNKNOWN or weakly evidenced steps, CROMO prepares interview questions for experienced staff. It
+  records the answer as dated testimony, typed or as a voice recording transcribed by a speech model on AMD, and
+  re-investigates. Testimony is an informal source, so it can never make the evidence "Strong" on its own.
+- **Ask why.** Free-text questions about the plant, answered from the archive with every claim tied to a document;
+  optionally also by the Evolus plant agent.
+- **Demo mode.** Investigations replay recorded AMD runs with their original timing, labelled as replays, so a live
+  pitch survives a GPU or network failure.
+
 ## Results
 
 Measured against the planted ground truth: 49 steps, of which 12 fossils, 9 fences, 22 active and 6 unknown.
