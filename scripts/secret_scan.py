@@ -25,8 +25,11 @@ PATTERNS = {
     "hf-token": re.compile(r"\bhf_[A-Za-z0-9]{30,}"),
     "slack-token": re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{10,}"),
     "bearer-literal": re.compile(r"Bearer\s+[A-Za-z0-9_\-\.=]{24,}"),
+    # a quoted literal assigned to a secret-looking name (code references like settings.api_key are fine)
     "assigned-secret": re.compile(
-        r"(?i)\b[A-Z0-9_]*(?:API_KEY|SECRET|TOKEN|PASSWORD)\s*[=:]\s*['\"]?(?!\$|<|\{|your|changeme|example|xxx|none|null|\"\")[A-Za-z0-9_\-\.]{20,}"),
+        r"(?i)\b[A-Z0-9_]*(?:API_KEY|SECRET|TOKEN|PASSWORD)\s*[=:]\s*['\"](?!your|changeme|example|xxx)[A-Za-z0-9_\-\.+/=]{20,}['\"]"),
+    "env-style-secret": re.compile(
+        r"(?m)^\s*[A-Z0-9_]*(?:API_KEY|SECRET|TOKEN|PASSWORD)=(?!\$|<|your|changeme|example)[A-Za-z0-9_\-\.+/=]{20,}\s*$"),
 }
 
 

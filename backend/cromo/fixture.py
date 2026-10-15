@@ -245,7 +245,11 @@ def read(p: dict) -> dict:
 
         best = max(sents, key=sscore)
         words = best.split()
-        quote = " ".join(words[:25])
+        if len(words) > 25:  # keep the most informative 25-word window of the sentence
+            starts = range(0, len(words) - 24)
+            k0 = max(starts, key=lambda k: sscore(" ".join(words[k:k + 25])))
+            words = words[k0:k0 + 25]
+        quote = " ".join(words)
         dt = ps.get("doc_type") or ""
         r, e, h, z = _cues(text, REASON_CUES), _cues(text, END_CUES), _cues(text, HOLD_CUES), _cues(text, HAZARD_CUES)
         if purpose == "origin":
@@ -304,7 +308,7 @@ def conclude(p: dict) -> dict:
     for e in reason:
         for ent in e.get("entities", []):
             fe = fold(ent)
-            if fe in step_f or re.fullmatch(r"(af-12|ef-210|tl-5|sop-07|qp-02)", fe) or ent in dep_names:
+            if fe in step_f or re.fullmatch(r"(af-12|ef-210|tl-5|sop-07|qp-02)", fe) or ent in dep_names or "valdorso" in fe:
                 continue
             dep_names.append(ent)
     deps = []
@@ -312,12 +316,14 @@ def conclude(p: dict) -> dict:
         fname = fold(name)
         mention = [e for e in status + counter if fname in fold(e["quote"] + " " + " ".join(e.get("entities", [])))]
         later = [e for e in mention if not origin_year or (e.get("date") and int(e["date"][:4]) >= origin_year)]
-        holds, used = None, []
-        for e in sorted(later, key=lambda e: e.get("date") or ""):
-            if _cues(e["quote"], END_CUES):
-                holds, used = False, [e["id"]]
-            elif _cues(e["quote"], HOLD_CUES):
-                holds, used = True, [e["id"]]
+        ends = [e for e in later if _cues(e["quote"], END_CUES)]
+        holds_ev = [e for e in later if _cues(e["quote"], HOLD_CUES)]
+        if ends:  # evidence that the condition ended dominates generic 'still/require' wording
+            holds, used = False, [ends[-1]["id"]]
+        elif holds_ev:
+            holds, used = True, [holds_ev[-1]["id"]]
+        else:
+            holds, used = None, []
         deps.append({"name": name, "type": "other", "holds": holds, "evidence": used, "note": ""})
     hazard_reason = [e for e in reason if _cues(e["quote"] + " " + e["claim"], HAZARD_CUES)]
     fence_now = [e for e in counter if (e.get("date") or "0") >= "2010" and _cues(e["quote"], HAZARD_CUES + HOLD_CUES)]

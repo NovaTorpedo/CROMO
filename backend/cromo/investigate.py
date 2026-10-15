@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 import time
 from typing import Awaitable, Callable
 
@@ -38,32 +39,65 @@ def _terms(text: str) -> list[str]:
     return [t for t in tokens(text) if not t.replace(".", "").replace(",", "").isdigit() and not t.startswith("rm-")]
 
 
+ITEM_RE = re.compile(r"^\s*(\d+)\.\s+")
+
+
+def _recipe_items(rows: list[dict]) -> list[tuple[str, dict]]:
+    """Numbered step items of a recipe document, re-joining lines that wrap."""
+    items: list[tuple[str, dict]] = []
+    for r in rows:
+        for ln in r["text"].splitlines():
+            if ITEM_RE.match(ln):
+                items.append((ln.strip(), r))
+            elif items and items[-1][1] is r and ln.strip() and not ln.strip().startswith(("Change note", "Prepared", "##")) \
+                    and not ln.strip()[0].isupper():
+                items[-1] = (items[-1][0] + " " + ln.strip(), r)
+    return items
+
+
+def _rterms(text: str) -> set[str]:
+    return {t for t in tokens(text) if not t.startswith("rm-")}
+
+
 def recipe_history(step: dict) -> dict:
-    """Find the step in archived recipe documents (current + superseded revisions)."""
+    """Find the step in archived recipe documents (current + superseded revisions).
+
+    A numbered line of an old revision is attributed to the current step it matches best (mutual best match among
+    the steps of the same process), tolerating changed quantities and suppliers."""
     ix = index.get()
-    terms = _terms(step["instruction"])
+    proc = archive.process(step["process"])
+    targets = {s["id"]: _rterms(s["instruction"]) for s in proc["steps"]}
     found = []
+    revisions = []
     proc_code = step["process_code"].split()[0].lower()
     for acc, d in ix.docs.items():
         if (d.get("doc_type") or "") != "recipe":
             continue
-        rows = [r for r in ix.rows if r["acc"] == acc]
+        rows = sorted((r for r in ix.rows if r["acc"] == acc), key=lambda r: (r["page"], r["line_start"]))
         text = "\n".join(r["text"] for r in rows).lower()
         if proc_code not in text:
             continue
-        best, best_row, best_line = 0.0, None, ""
-        for r in rows:
-            for k, ln in enumerate(r["text"].splitlines()):
-                lt = _terms(ln)
-                o = overlap(terms, lt)
-                shared = len(set(terms) & set(lt))
-                if shared >= 2 and o > best:
-                    best, best_row, best_line = o, r, ln
-        if best >= 0.5 and best_row:
-            found.append({"acc": acc, "date": d.get("date"), "row": best_row, "line": best_line, "match": round(best, 2),
+        revisions.append((d.get("date") or "", acc))
+        best = None
+        for item, row in _recipe_items(rows):
+            it = _rterms(ITEM_RE.sub("", item))
+            scores = {sid: (len(it & tt) / max(1, min(len(it), len(tt))), len(it & tt)) for sid, tt in targets.items()}
+            sid, (o, shared) = max(scores.items(), key=lambda kv: kv[1])
+            if sid != step["id"] or shared < 1 or o < 0.2 or (shared < 2 and o < 0.99):
+                continue
+            if best is None or o > best[0]:
+                best = (o, item, row)
+        if best:
+            found.append({"acc": acc, "date": d.get("date"), "row": best[2], "line": best[1], "match": round(best[0], 2),
                           "title": d.get("title")})
     found.sort(key=lambda f: f["date"] or "9999")
-    return {"first": found[0] if found else None, "current": found[-1] if found else None, "all": found}
+    first = found[0] if found else None
+    prev = None
+    if first:
+        earlier = sorted(r for r in revisions if r[0] < (first["date"] or ""))
+        prev = earlier[-1][1] if earlier else None
+    return {"first": first, "current": found[-1] if found else None, "all": found,
+            "compare": {"a": prev, "b": first["acc"]} if prev and first else None}
 
 
 class Dig:
@@ -171,7 +205,7 @@ async def investigate(step_id: str, emit: Emit | None = None, *, store: bool = T
     await dig.emit({"type": "hop", "n": dig.hops, "kind": "recipe", "label": "Recipe history",
                     "detail": (f"Found in {len(hist['all'])} archived recipe revision(s); first seen {first_seen or 'unknown'}."
                                if hist["all"] else "Step text not found in archived recipes."),
-                    "evidence": [dig.evidence[e] for e in hop_ev], "query": None})
+                    "evidence": [dig.evidence[e] for e in hop_ev], "query": None, "compare": hist.get("compare")})
 
     seen_recipe_accs = {f["acc"] for f in hist["all"]}
     dig.enqueue("search", "origin", step["instruction"])

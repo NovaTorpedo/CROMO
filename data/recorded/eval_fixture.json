@@ -7,15 +7,15 @@
   "embeddings": "fixture-embeddings"
  },
  "hardware": "CPU (offline)",
- "evaluated_at": 1792023455.1738977,
+ "evaluated_at": 1792024769.3279777,
  "dataset": "Valdorso synthetic archive (seed 1995)",
  "n_steps": 49,
- "accuracy": 0.592,
+ "accuracy": 0.653,
  "per_class": {
   "FOSSIL": {
-   "precision": 0.636,
-   "recall": 0.583,
-   "f1": 0.609,
+   "precision": 0.667,
+   "recall": 0.667,
+   "f1": 0.667,
    "support": 12
   },
   "FENCE": {
@@ -25,23 +25,22 @@
    "support": 9
   },
   "ACTIVE": {
-   "precision": 0.786,
-   "recall": 0.5,
-   "f1": 0.611,
+   "precision": 0.929,
+   "recall": 0.591,
+   "f1": 0.722,
    "support": 22
   },
   "UNKNOWN": {
-   "precision": 0.333,
+   "precision": 0.353,
    "recall": 1.0,
-   "f1": 0.5,
+   "f1": 0.522,
    "support": 6
   }
  },
  "confusion": {
   "FOSSIL": {
-   "ACTIVE": 2,
-   "FOSSIL": 7,
-   "UNKNOWN": 3
+   "FOSSIL": 8,
+   "UNKNOWN": 4
   },
   "FENCE": {
    "ACTIVE": 1,
@@ -50,8 +49,8 @@
    "UNKNOWN": 2
   },
   "ACTIVE": {
-   "ACTIVE": 11,
-   "UNKNOWN": 7,
+   "ACTIVE": 13,
+   "UNKNOWN": 5,
    "FENCE": 1,
    "FOSSIL": 3
   },
@@ -65,9 +64,9 @@
   "SOL-08"
  ],
  "citations": {
-  "precision": 0.615,
-  "cited_documents": 65,
-  "key_evidence_recall": 0.528,
+  "precision": 0.607,
+  "cited_documents": 61,
+  "key_evidence_recall": 0.5,
   "quotes_rejected_by_verifier": 2,
   "note": "precision = share of cited documents (excluding recipe context) that belong to the step's planted story; every cited quote is verified verbatim against the source text before use."
  },
@@ -176,7 +175,7 @@
   ]
  },
  "change_checks": {
-  "accuracy": 0.6,
+  "accuracy": 0.7,
   "cases": [
    {
     "proposal": "Remove step SOL-02 (bonding and earthing) to save time",
@@ -190,8 +189,8 @@
    {
     "proposal": "Remove the ammonium chloride addition from AF-12 (ALK-04)",
     "expected": "allowed_with_trial",
-    "got": "caution",
-    "ok": false,
+    "got": "allowed_with_trial",
+    "ok": true,
     "targets": [
      "ALK-04"
     ]
@@ -314,8 +313,8 @@
   {
    "step": "ALK-04",
    "truth": "FOSSIL",
-   "pred": "ACTIVE",
-   "ok": false,
+   "pred": "FOSSIL",
+   "ok": true,
    "strength": "Strong",
    "tags": [
     "levi",
@@ -326,7 +325,6 @@
    ],
    "cited": [
     "ACC-0027",
-    "ACC-0046",
     "ACC-0074",
     "ACC-0103",
     "ACC-0174"
@@ -383,16 +381,14 @@
    "truth": "ACTIVE",
    "pred": "FENCE",
    "ok": false,
-   "strength": "Strong",
+   "strength": "Moderate",
    "tags": [],
    "cited": [
     "ACC-0087",
-    "ACC-0119",
     "ACC-0128"
    ],
    "irrelevant_citations": [
     "ACC-0087",
-    "ACC-0119",
     "ACC-0128"
    ]
   },
@@ -409,9 +405,9 @@
   {
    "step": "ALK-10",
    "truth": "FOSSIL",
-   "pred": "ACTIVE",
-   "ok": false,
-   "strength": "Moderate",
+   "pred": "FOSSIL",
+   "ok": true,
+   "strength": "Strong",
    "tags": [
     "reason-split",
     "multi-hop"
@@ -480,9 +476,9 @@
   {
    "step": "EPX-04",
    "truth": "ACTIVE",
-   "pred": "UNKNOWN",
-   "ok": false,
-   "strength": "Insufficient",
+   "pred": "ACTIVE",
+   "ok": true,
+   "strength": "Weak",
    "tags": [],
    "cited": [],
    "irrelevant_citations": []
@@ -542,9 +538,9 @@
   {
    "step": "EPX-08",
    "truth": "ACTIVE",
-   "pred": "UNKNOWN",
-   "ok": false,
-   "strength": "Insufficient",
+   "pred": "ACTIVE",
+   "ok": true,
+   "strength": "Weak",
    "tags": [],
    "cited": [],
    "irrelevant_citations": []
@@ -963,15 +959,14 @@
   {
    "step": "QC-06",
    "truth": "FOSSIL",
-   "pred": "FOSSIL",
-   "ok": true,
-   "strength": "Moderate",
+   "pred": "UNKNOWN",
+   "ok": false,
+   "strength": "Insufficient",
    "tags": [
     "equipment-replaced"
    ],
    "cited": [
-    "ACC-0109",
-    "ACC-0169"
+    "ACC-0109"
    ],
    "irrelevant_citations": []
   },
