@@ -94,7 +94,9 @@ async def ingest_doc(acc: str) -> dict:
 
 
 async def embed_all() -> float:
-    rows = db.q("SELECT c.id, c.text, d.title, d.doc_type, d.date FROM chunks c JOIN documents d ON d.acc=c.acc ORDER BY c.id")
+    """Embed every chunk that has no vector yet (new or re-ingested documents)."""
+    rows = db.q("SELECT c.id, c.text, d.title, d.doc_type, d.date FROM chunks c JOIN documents d ON d.acc=c.acc "
+                "WHERE c.vector IS NULL ORDER BY c.id")
     t0 = time.perf_counter()
     texts = [f"{r['doc_type'] or ''} {r['date'] or ''} {r['title'] or ''}\n{r['text']}" for r in rows]
     vecs = await llm.embed(texts, stage="embed.chunks") if texts else np.zeros((0, 1))

@@ -1,0 +1,28 @@
+# docker compose up --build          -> CROMO on http://localhost:8000 (offline fixture mode unless .env configures AMD)
+# docker compose --profile eval run --rm eval   -> evaluation against the planted ground truth
+services:
+  cromo:
+    build: { context: ., target: app }
+    image: cromo:latest
+    ports: ["8000:8000"]
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - cromo-runtime:/app/data/runtime
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+
+  eval:
+    profiles: ["eval"]
+    build: { context: ., target: eval }
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - cromo-runtime:/app/data/runtime
+      - ./data/recorded:/app/data/recorded
+    security_opt: ["no-new-privileges:true"]
+
+volumes:
+  cromo-runtime: {}

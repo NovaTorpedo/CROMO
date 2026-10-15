@@ -24,7 +24,7 @@ from typing import Awaitable, Callable
 
 from . import archive, costs, db, evidence, index, llm
 from .schemas import ConcludeOut, ReadOut
-from .text import DOC_REF, injection_suspect, overlap, quote_in, tokens
+from .text import DOC_REF, injection_suspect, quote_in, tokens
 
 MAX_HOPS = 9
 PER_HOP = 5

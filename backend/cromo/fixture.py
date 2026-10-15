@@ -5,11 +5,11 @@ offline. It is clearly labelled in the UI and its evaluation numbers are
 reported as a *rule-based heuristic baseline*, never as model results.
 
   * vision      -> recorded transcriptions keyed by the page image's SHA-256
-                   (fixtures/vision/, written by the archive generator)
+                   (fixtures/vision/, recorded when the synthetic archive was built)
   * embeddings  -> feature-hashing vectors (no model)
   * reasoning   -> keyword / cue-word heuristics per task
 
-It never reads eval/ground_truth.json or the generator (tests enforce this).
+It never reads the evaluation answer key or the archive build scripts (tests enforce this).
 """
 
 from __future__ import annotations
