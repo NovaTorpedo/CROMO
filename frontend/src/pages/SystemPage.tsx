@@ -35,13 +35,13 @@ function EvalCard({ e, title }: { e: EvalRes; title: string }) {
     <div className="card card-pad">
       <div className="row wrap">
         <strong>{title}</strong>
-        <span className={`mode-badge ${e.provider === "amd" ? "mode-amd" : "mode-fixture"}`}>{e.provider === "amd" ? "measured on AMD" : "heuristic baseline · no LLM"}</span>
+        <span className={`pill ${e.provider === "amd" ? "amd" : "fixture"}`}>{e.provider === "amd" ? "measured on AMD" : "heuristic baseline · no LLM"}</span>
       </div>
       <div className="tiny muted" style={{ marginTop: 4 }}>{e.label} · {e.hardware} · {new Date(e.evaluated_at * 1000).toLocaleString()}</div>
       <div className="grid-3" style={{ marginTop: 14 }}>
-        <div><div className="eyebrow">FENCE recall</div><div className="money c-FENCE">{pct(e.fence_recall)}</div><div className="tiny muted">missing a fence is the dangerous error</div></div>
-        <div><div className="eyebrow">False-FOSSIL rate</div><div className="money c-FOSSIL">{pct(e.false_fossil_rate)}</div><div className="tiny muted">non-fossils wrongly called waste</div></div>
-        <div><div className="eyebrow">Accuracy (4 classes)</div><div className="money">{pct(e.accuracy)}</div><div className="tiny muted">{e.n_steps} steps</div></div>
+        <div><div className="eyebrow">FENCE recall</div><div className="big-n c-FENCE">{pct(e.fence_recall)}</div><div className="tiny muted">missing a fence is the dangerous error</div></div>
+        <div><div className="eyebrow">False-FOSSIL rate</div><div className="big-n c-FOSSIL">{pct(e.false_fossil_rate)}</div><div className="tiny muted">non-fossils wrongly called waste</div></div>
+        <div><div className="eyebrow">Accuracy (4 classes)</div><div className="big-n">{pct(e.accuracy)}</div><div className="tiny muted">{e.n_steps} steps</div></div>
       </div>
       {e.dangerous_errors.length > 0 && <div className="small" style={{ color: "var(--danger)", marginTop: 6 }}>Fences called fossils: {e.dangerous_errors.join(", ")}</div>}
       <div className="grid-2" style={{ marginTop: 14 }}>
@@ -121,12 +121,12 @@ export default function SystemPage() {
       <Section title="Measured performance" eyebrow={b ? `AMD benchmark · ${new Date((b.finished_at ?? 0) * 1000).toLocaleString()}` : "AMD benchmark"}>
         {b ? (
           <div className="grid-3">
-            <div className="kpi"><span className="ico"><Gauge size={20} /></span><div className="big">{b.ingest?.pages_per_min ?? "–"}</div><div className="label">pages / min ingested (all pages)</div><div className="sub">{b.ingest?.scanned_pages_per_min ?? "–"} scanned pages/min read by the VLM</div></div>
-            <div className="kpi"><span className="ico"><Cpu size={20} /></span><div className="big">{b.investigation?.p50_s ?? "–"}s</div><div className="label">median investigation (multi-hop)</div><div className="sub">p95 {b.investigation?.p95_s ?? "–"}s · {b.investigation?.calls_per_step ?? "–"} model calls/step</div></div>
-            <div className="kpi"><span className="ico"><Database size={20} /></span><div className="big">${b.cost?.per_plant_audit_usd ?? "–"}</div><div className="label">cost per full plant audit</div><div className="sub">{b.cost?.gpu_hours ?? "–"} GPU-h at ${b.cost?.price_per_gpu_hour}/h · {s.config.gpu_price_source}</div></div>
+            <div className="card card-pad"><span className="muted" style={{ float: "right" }}><Gauge size={20} /></span><div className="big-n">{b.ingest?.pages_per_min ?? "–"}</div><div className="small" style={{ marginTop: 8 }}>pages / min ingested (all pages)</div><div className="tiny muted">{b.ingest?.scanned_pages_per_min ?? "–"} scanned pages/min read by the VLM</div></div>
+            <div className="card card-pad"><span className="muted" style={{ float: "right" }}><Cpu size={20} /></span><div className="big-n">{b.investigation?.p50_s ?? "–"}s</div><div className="small" style={{ marginTop: 8 }}>median investigation (multi-hop)</div><div className="tiny muted">p95 {b.investigation?.p95_s ?? "–"}s · {b.investigation?.calls_per_step ?? "–"} model calls/step</div></div>
+            <div className="card card-pad"><span className="muted" style={{ float: "right" }}><Database size={20} /></span><div className="big-n">${b.cost?.per_plant_audit_usd ?? "–"}</div><div className="small" style={{ marginTop: 8 }}>cost per full plant audit</div><div className="tiny muted">{b.cost?.gpu_hours ?? "–"} GPU-h at ${b.cost?.price_per_gpu_hour}/h · {s.config.gpu_price_source}</div></div>
           </div>
         ) : (
-          <div className="banner warn small"><FlaskConical size={18} /><div><strong>Not measured yet.</strong> Run <span className="mono">scripts/benchmark_amd.py</span> once AMD is linked; CROMO never shows invented numbers.</div></div>
+          <div className="note warn small"><FlaskConical size={18} /><div><strong>Not measured yet.</strong> Run <span className="mono">scripts/benchmark_amd.py</span> once AMD is linked; CROMO never shows invented numbers.</div></div>
         )}
         {s.gpu && (
           <div className="card card-pad small" style={{ marginTop: 12 }}>
@@ -153,7 +153,7 @@ export default function SystemPage() {
       <Section title="Evaluation against planted ground truth" eyebrow="49 steps · 12 fossils · 9 fences · 22 active · 6 unknown">
         <div className="col">
           {s.eval.amd ? <EvalCard e={s.eval.amd} title="CROMO on AMD" /> : (
-            <div className="banner warn small"><FlaskConical size={18} /><div><strong>AMD evaluation pending.</strong> Run <span className="mono">python eval/run_eval.py --rerun</span> with the AMD endpoints configured.</div></div>
+            <div className="note warn small"><FlaskConical size={18} /><div><strong>AMD evaluation pending.</strong> Run <span className="mono">python eval/run_eval.py --rerun</span> with the AMD endpoints configured.</div></div>
           )}
           {s.eval.fixture && <EvalCard e={s.eval.fixture} title="Rule-based heuristic baseline (offline fixture provider)" />}
           <div className="small muted">

@@ -333,11 +333,18 @@ def conclude(p: dict) -> dict:
     out["dependencies"] = deps
     if fence_now or (hazard_reason and (holding or not ended)):
         out["verdict"] = "FENCE"
-        out["reason"] = "Introduced after a safety or quality problem; the archive indicates the hazard is still present."
+        what = (hazard_reason or reason)[0]
+        still = [d["name"] for d in holding] or [e.get("doc_type") or "recent records" for e in fence_now[:1]]
+        out["reason"] = (f"Introduced around {origin_year or 'an unknown date'} after a documented problem "
+                         f"({(what.get('doc_type') or 'record')}). The hazard it guards against still applies"
+                         f"{' (' + ', '.join(still[:2]) + ')' if still else ''}.")
         chain += [{"claim": e["claim"], "evidence": [e["id"]]} for e in fence_now[:2]]
     elif ended:
         out["verdict"] = "FOSSIL"
-        out["reason"] = "The documented reason depended on conditions that later documents show have ended."
+        gone = ", ".join(d["name"] for d in ended[:2])
+        out["reason"] = (f"Introduced around {origin_year or 'an unknown date'} because of {gone}. "
+                         f"Later records show {'this is' if len(ended) == 1 else 'these are'} no longer the case, "
+                         "so the step no longer serves its purpose.")
         for d in deps:
             if d["holds"] is True:
                 d["holds"] = None  # entity still in use, but not the cause of the step

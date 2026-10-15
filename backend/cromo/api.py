@@ -98,11 +98,11 @@ def fossil_map():
                 fence_eur += c["annual_eur"]
             if v:
                 providers.add(f"{v['provider']}:{v['model']}")
-            steps.append({"id": s["id"], "seq": i, "instruction": s["instruction"], "verdict": verdict,
+            steps.append({"id": s["id"], "seq": i, "name": s.get("name") or s["id"], "instruction": s["instruction"], "verdict": verdict,
                           "strength": v["strength"]["grade"] if v else None, "origin_year": v.get("origin_year") if v else None,
                           "first_seen": v.get("first_seen") if v else None, "annual_cost_eur": c["annual_eur"],
                           "reason": (v.get("reason") or "")[:240] if v else "", "investigated_at": v["created_at"] if v else None})
-        procs.append({"id": p["id"], "code": p["code"], "name": p["name"], "kind": p["kind"], "revision": p["revision"],
+        procs.append({"id": p["id"], "code": p["code"], "name": p["name"], "short": p.get("short", p["name"]), "kind": p["kind"], "revision": p["revision"],
                       "revision_date": p["revision_date"], "steps": steps})
     return {"plant": archive.mes()["plant"], "processes": procs, "totals": totals, "fossil_annual_eur": fossil_eur,
             "fence_annual_eur": fence_eur, "computed_by": sorted(providers), "mode": llm.mode()}

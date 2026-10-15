@@ -161,6 +161,32 @@ PROCESSES = [
     },
 ]
 
+# Short step names as shown in the MES (operator-facing labels)
+STEP_NAMES = {
+    "ALK-01": "Alkyd resin charge", "ALK-02": "Zinc phosphate pigment", "ALK-03": "Soy lecithin",
+    "ALK-04": "Ammonium chloride", "ALK-05": "Winter bentonite dose", "ALK-06": "Disperse to 6 Hegman",
+    "ALK-07": "Cool below 40 °C", "ALK-08": "White spirit letdown", "ALK-09": "Driers and anti-skin",
+    "ALK-10": "12-hour rest", "ALK-11": "Filter and fill",
+    "EPX-01": "Disperser warm-up", "EPX-02": "Hot-box pre-heat", "EPX-03": "Epoxy resin charge",
+    "EPX-04": "Reactive diluent", "EPX-05": "20-minute wait", "EPX-06": "Sieve quartz flour",
+    "EPX-07": "Fillers under vacuum", "EPX-08": "Silicone defoamer", "EPX-09": "EEW test",
+    "EPX-10": "Nitrogen-flush pails", "EPX-11": "Fill and label", "EPX-12": "Pails upside down",
+    "SOL-01": "Drain residue", "SOL-02": "Bond and earth", "SOL-03": "First acetone rinse",
+    "SOL-04": "Second acetone rinse", "SOL-05": "Xylene wipe", "SOL-06": "Ventilate before entry",
+    "SOL-07": "Lid open overnight", "SOL-08": "60-minute wait", "SOL-09": "Cleaning log",
+    "TNK-01": "Vacuum-dry polyol", "TNK-02": "Molecular sieve", "TNK-03": "Nitrogen blanket",
+    "TNK-04": "Isocyanate addition", "TNK-05": "Tin catalyst", "TNK-06": "45-minute hold",
+    "TNK-07": "Magnetic separator", "TNK-08": "Oven-dry cans", "TNK-09": "Can under nitrogen",
+    "QC-01": "Viscosity", "QC-02": "Fineness of grind", "QC-03": "Chloride test", "QC-04": "XRF lead screening",
+    "QC-05": "Retain samples 5 yrs", "QC-06": "Re-weigh pigments", "QC-07": "Gloss 60°", "QC-08": "Odour check",
+}
+PROCESS_SHORT = {"ALK": "Anti-rust enamel", "EPX": "Epoxy floor coating", "SOL": "Solvent cleaning",
+                 "TNK": "Tank sealant", "QC": "QC release"}
+for _p in PROCESSES:
+    _p["short"] = PROCESS_SHORT[_p["id"]]
+    for _s in _p["steps"]:
+        _s["name"] = STEP_NAMES[_s["id"]]
+
 # ---------------------------------------------------------------------------
 # Recipe revision history (rendered as superseded recipe documents).
 # Each variant: (effective ISO date, text as written at that time)

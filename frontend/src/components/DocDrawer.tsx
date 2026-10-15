@@ -120,7 +120,7 @@ export default function DocDrawer({ target, onClose }: { target: DocTarget; onCl
             </div>
             <div className="col">
               {doc.injection_flag ? (
-                <div className="banner danger small">
+                <div className="note danger small">
                   <ShieldAlert size={18} />
                   <div>
                     <strong>Instruction-like text detected.</strong> This document contains text that tries to instruct an AI system. CROMO treats
@@ -152,7 +152,7 @@ export default function DocDrawer({ target, onClose }: { target: DocTarget; onCl
               {target.quote && (
                 <div className="card card-pad">
                   <div className="eyebrow" style={{ marginBottom: 6 }}>Cited passage</div>
-                  <div className="ev-quote">“{target.quote}”</div>
+                  <div className="quote">“{target.quote}”</div>
                   {!hits.size && <div className="tiny muted" style={{ marginTop: 6 }}>Passage is on another page or spans a page break.</div>}
                 </div>
               )}

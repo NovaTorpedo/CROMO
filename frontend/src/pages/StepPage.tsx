@@ -1,74 +1,85 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  ArrowLeft, BadgeCheck, CircleX, ClipboardCheck, FileSearch, GitCompare, Play, RotateCcw, ShieldAlert, ShieldCheck, TriangleAlert,
-} from "lucide-react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { ArrowLeft, CircleX, ClipboardCheck, GitCompare, Play, RotateCcw, Scale, ShieldAlert, ShieldCheck, TriangleAlert } from "lucide-react";
 import { eur, get, post, streamNdjson } from "../api";
-import {
-  ErrorBox, Skeleton, Spinner, StrengthMeter, VERDICT_HELP, VERDICT_LABEL, VerdictBadge, VerdictIcon, fmtDate, go, timeAgo, useApp,
-} from "../components/common";
-import type { Cost, Evidence, InvEvent, VerdictData } from "../types";
+import { ErrorBox, Skeleton, Spinner, StrengthMeter, VERDICT_LABEL, VerdictIcon, fmtDate, go, timeAgo, useApp } from "../components/common";
+import type { Cost, Evidence, InvEvent, Verdict, VerdictData } from "../types";
 
 interface StepInfo {
-  step: { id: string; instruction: string; process: string; process_name: string; process_code: string; seq: number };
+  step: { id: string; name?: string; instruction: string; process: string; process_name: string; process_code: string; seq: number };
   verdict: VerdictData | null;
   cost: Cost;
   has_recording: boolean;
 }
-
-interface Hop {
-  n: number;
-  kind: string;
-  label: string;
-  query?: string | null;
-  detail?: string;
-  documents?: string[];
-  evidence: Evidence[];
-  ignored?: string[];
-  running: boolean;
-  compare?: { a: string; b: string } | null;
-}
-
+interface Hop { n: number; kind: string; label: string; query?: string | null; detail?: string; documents?: string[]; found: number; running: boolean; compare?: { a: string; b: string } | null }
 type Source = "stored" | "live" | "replay";
 
-function hopsFrom(events: InvEvent[]): { hops: Hop[]; verdict: VerdictData | null; concluding: boolean; warnings: string[]; meta: InvEvent | null } {
+const HEADLINE: Record<Verdict, string> = {
+  FOSSIL: "The reason for this step is gone.",
+  FENCE: "It looks pointless - but it protects you.",
+  UNKNOWN: "Nobody knows why. Ask a person.",
+  ACTIVE: "Still needed, for a documented reason.",
+  PENDING: "Not investigated yet.",
+};
+const TAG: Record<string, [string, string]> = {
+  reason: ["reason", "Why it was introduced"],
+  status: ["status", "Is it still true?"],
+  counter: ["counter", "Warning sign"],
+  context: ["context", "Context"],
+};
+const EXPECTED_HOPS = 9;
+
+function parse(events: InvEvent[]) {
   const hops: Hop[] = [];
+  const evidence: Evidence[] = [];
+  const seen = new Set<string>();
   let verdict: VerdictData | null = null;
   let concluding = false;
   let meta: InvEvent | null = null;
+  const ignored = new Set<string>();
   const warnings: string[] = [];
   for (const ev of events) {
     if (ev.type === "start" || ev.type === "replay") meta = { ...(meta ?? {}), ...ev };
     else if (ev.type === "hop_started") {
-      hops.push({ n: ev.n!, kind: ev.kind!, label: ev.label!, query: ev.query, documents: ev.documents, evidence: [], running: true });
+      hops.push({ n: ev.n!, kind: ev.kind!, label: ev.label!, query: ev.query, documents: ev.documents, found: 0, running: true });
     } else if (ev.type === "hop") {
+      const items = ev.evidence ?? [];
       const h: Hop = {
-        n: ev.n!, kind: ev.kind!, label: ev.label!, query: ev.query, detail: ev.detail, documents: ev.documents, evidence: ev.evidence ?? [],
-        ignored: ev.ignored_injection, running: false, compare: (ev as unknown as { compare?: { a: string; b: string } }).compare ?? null,
+        n: ev.n!, kind: ev.kind!, label: ev.label!, query: ev.query, detail: ev.detail, documents: ev.documents, found: items.length, running: false,
+        compare: (ev as unknown as { compare?: { a: string; b: string } }).compare ?? null,
       };
       const i = hops.findIndex((x) => x.n === ev.n);
       if (i >= 0) hops[i] = h;
       else hops.push(h);
+      (ev.ignored_injection ?? []).forEach((a) => ignored.add(a));
+      for (const e of items) {
+        const key = `${e.acc}|${e.quote.slice(0, 60)}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        if (e.suspicious) ignored.add(e.acc);
+        else if (e.verified) evidence.push(e);
+      }
     } else if (ev.type === "concluding") concluding = true;
     else if (ev.type === "verdict") {
       verdict = ev.verdict ?? null;
       concluding = false;
     } else if (ev.type === "warning" || ev.type === "error") warnings.push(ev.message ?? "");
   }
-  return { hops, verdict, concluding, warnings, meta };
+  evidence.sort((a, b) => (a.date ?? "9999").localeCompare(b.date ?? "9999"));
+  return { hops, evidence, verdict, concluding, meta, ignored: [...ignored], warnings };
 }
 
 export default function StepPage({ stepId, query }: { stepId: string; query: URLSearchParams }) {
-  const { mode, openDoc } = useApp();
+  const { mode } = useApp();
   const [info, setInfo] = useState<StepInfo | null>(null);
   const [err, setErr] = useState<unknown>(null);
   const [events, setEvents] = useState<InvEvent[]>([]);
   const [source, setSource] = useState<Source>("stored");
   const [busy, setBusy] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const queue = useRef<InvEvent[]>([]);
   const timer = useRef<number | null>(null);
   const abort = useRef<AbortController | null>(null);
 
-  // reveal queued events at a readable pace (live events arrive at model speed anyway)
   const pump = useCallback(() => {
     if (timer.current !== null) return;
     const tick = () => {
@@ -78,21 +89,15 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
         return;
       }
       setEvents((e) => [...e, ev]);
-      const delay = ev.type === "hop" ? 420 : ev.type === "hop_started" ? 160 : 60;
-      timer.current = window.setTimeout(tick, delay);
+      timer.current = window.setTimeout(tick, ev.type === "hop" ? 380 : ev.type === "hop_started" ? 140 : 40);
     };
     tick();
   }, []);
-
-  const push = useCallback(
-    (ev: InvEvent) => {
-      if (ev.type === "heartbeat") return;
-      queue.current.push(ev);
-      pump();
-    },
-    [pump],
-  );
-
+  const push = useCallback((ev: InvEvent) => {
+    if (ev.type === "heartbeat") return;
+    queue.current.push(ev);
+    pump();
+  }, [pump]);
   const reset = () => {
     abort.current?.abort();
     if (timer.current) window.clearTimeout(timer.current);
@@ -105,23 +110,7 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
     reset();
     setSource("stored");
     const r = await get<{ events: InvEvent[] }>(`/api/steps/${stepId}/events`);
-    r.events.forEach(push);
-  }, [stepId, push]);
-
-  useEffect(() => {
-    setInfo(null);
-    setErr(null);
-    reset();
-    get<StepInfo>(`/api/steps/${stepId}`)
-      .then((i) => {
-        setInfo(i);
-        if (query.get("live") === "1") run("live");
-        else if (query.get("replay") === "1" && i.has_recording) run("replay");
-        else if (i.verdict) showStored().catch(setErr);
-      })
-      .catch(setErr);
-    return () => reset();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setEvents(r.events.filter((e) => e.type !== "heartbeat")); // stored results appear at once
   }, [stepId]);
 
   async function run(src: Source) {
@@ -142,392 +131,343 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
     }
   }
 
+  useEffect(() => {
+    setInfo(null);
+    setErr(null);
+    reset();
+    get<StepInfo>(`/api/steps/${stepId}`)
+      .then((i) => {
+        setInfo(i);
+        if (query.get("live") === "1") run("live");
+        else if (query.get("replay") === "1" && i.has_recording) run("replay");
+        else if (i.verdict) showStored().catch(setErr);
+      })
+      .catch(setErr);
+    return () => reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stepId]);
+
   if (err && !info) return <ErrorBox error={err} />;
   if (!info)
     return (
-      <div className="col gap-lg">
-        <Skeleton h={30} w="40%" />
-        <Skeleton h={60} />
+      <div className="col" style={{ gap: 18, marginTop: 20 }}>
+        <Skeleton h={40} w="45%" />
+        <Skeleton h={160} />
         <Skeleton h={400} />
       </div>
     );
 
-  const { hops, verdict: streamed, concluding, warnings, meta } = hopsFrom(events);
-  const v = streamed;
+  const { hops, evidence: allEvidence, verdict: v, concluding, meta, ignored, warnings } = parse(events);
+  const cited = v ? new Set(v.strength.cited) : null;
+  const evidence = v && !showAll ? allEvidence.filter((e) => cited!.has(e.id) || e.doc_type === "recipe") : allEvidence;
+  const hidden = allEvidence.length - evidence.length;
   const st = info.step;
-  const running = busy || queue.current.length > 0 || (events.length > 0 && !v && source !== "stored");
-  const evidenceById = v?.evidence ?? {};
-  const cite = (id: string) => {
-    const e = evidenceById[id];
-    if (!e) return null;
-    return (
-      <button key={id} className="cite" title={`${e.acc} · ${e.doc_type ?? ""} · ${fmtDate(e.date)}`}
-        onClick={() => openDoc({ acc: e.acc, page: e.page, quote: e.quote })}>
-        {e.acc.replace("ACC-", "#")}
-      </button>
-    );
-  };
+  const running = busy || (events.length > 0 && !v && source !== "stored");
+  const shown: Verdict = v?.verdict ?? "PENDING";
+  const docsRead = new Set(hops.flatMap((h) => h.documents ?? [])).size;
+  const progress = v ? 100 : Math.min(95, Math.round((hops.length / EXPECTED_HOPS) * 90) + (concluding ? 5 : 0));
+  const current = [...hops].reverse().find((h) => h.running) ?? hops[hops.length - 1];
 
   return (
     <div>
-      <button className="btn ghost sm" onClick={() => go("/")} style={{ marginBottom: 10 }}>
-        <ArrowLeft size={15} /> Fossil Map
-      </button>
-      <div className="eyebrow">
-        {st.process_name} · step {st.seq} · <span className="mono">{st.id}</span>
-      </div>
-      <h1 className="h1" style={{ marginTop: 6, maxWidth: 1050 }}>{st.instruction}</h1>
-      <div className="row wrap" style={{ marginTop: 14, gap: 8 }}>
-        <span className="lead small" style={{ marginRight: 8 }}>Why does this step exist?</span>
-        <button className="btn primary" disabled={running} onClick={() => run("live")}>
-          {running && source === "live" ? <Spinner /> : <Play size={16} />}
-          {mode === "amd" ? "Investigate live on AMD" : "Run investigation (offline fixture)"}
-        </button>
-        {info.has_recording && (
-          <button className="btn" disabled={running} onClick={() => run("replay")}>
-            <RotateCcw size={15} /> Replay recorded AMD run
-          </button>
-        )}
-        {info.verdict && source !== "stored" && !running && (
-          <button className="btn ghost" onClick={() => showStored()}>Show last stored result</button>
-        )}
+      <button className="crumb" onClick={() => go("/")}><ArrowLeft size={15} /> Plant map</button>
+      <div className="eyebrow" style={{ marginTop: 18 }}>{st.process_code} {st.process_name.replace(/^\S+\s/, "")} · step {st.seq}</div>
+      <h1 className="h1" style={{ marginTop: 4 }}>{st.name ?? st.id}</h1>
+      <div className="lead" style={{ marginTop: 6, fontSize: 17 }}>“{st.instruction}”</div>
+
+      {/* ------------------------------------------------ verdict hero */}
+      <div className={`verdict-hero h-${shown} fade-in`} style={{ marginTop: 24 }}>
+        <div className={`vtile t-${shown}`}>
+          {running && !v ? <Spinner size={28} /> : <VerdictIcon v={shown} size={34} />}
+          <span>{running && !v ? "DIGGING" : VERDICT_LABEL[shown].toUpperCase()}</span>
+        </div>
+        <div>
+          {v ? (
+            <>
+              <div className="v-headline">{HEADLINE[v.verdict]}</div>
+              {v.reason && <div className="v-reason">{v.reason}</div>}
+              <div className="v-facts">
+                {v.origin_year && <span>Introduced <strong>{v.origin_year}</strong></span>}
+                <span>Evidence <StrengthMeter grade={v.strength.grade} /> <span className="muted">({v.strength.documents} documents)</span></span>
+                {v.proposed_verdict !== v.verdict && <span className="c-UNKNOWN">Safety rule changed the model's {v.proposed_verdict} to {v.verdict}</span>}
+              </div>
+            </>
+          ) : running ? (
+            <>
+              <div className="v-headline">Digging through the archive…</div>
+              <div className="v-reason">{current ? `${current.label}${current.query ? ": " + current.query.replace(/^Search: /, "") : ""}` : "Opening the recipe history"}</div>
+            </>
+          ) : (
+            <>
+              <div className="v-headline">Why does this step exist?</div>
+              <div className="v-reason">CROMO will search the plant archive, follow the references it finds, and cite every claim.</div>
+            </>
+          )}
+        </div>
+        <div style={{ textAlign: "right" }}>
+          <div className={`money ${shown === "FOSSIL" ? "c-FOSSIL" : ""}`}>{eur((v?.cost ?? info.cost).annual_eur)}</div>
+          <div className="small muted">{shown === "FOSSIL" ? "wasted per year" : shown === "FENCE" ? "cost of protection / yr" : "cost per year"}</div>
+          <div className="row" style={{ justifyContent: "flex-end", marginTop: 14, gap: 8 }}>
+            {v?.verdict === "FOSSIL" && <DraftTrial stepId={st.id} />}
+            {v && <button className="btn sm" onClick={() => go(`/change?p=${encodeURIComponent(`Remove step ${st.id}`)}`)}><Scale size={14} /> Check a change</button>}
+            {!v && !running && <button className="btn brand" onClick={() => run("live")}><Play size={15} /> Investigate</button>}
+          </div>
+        </div>
       </div>
 
-      {source === "replay" && meta && (
-        <div className="banner info small" style={{ marginTop: 14 }}>
-          <RotateCcw size={18} />
-          <div>
-            <strong>Replay of a recorded run on AMD.</strong> Recorded {meta.recorded_at ? new Date(meta.recorded_at * 1000).toLocaleString() : ""}{" "}
-            with <span className="mono">{meta.models?.reasoner}</span> on {meta.hardware}. Events are replayed with their original timing so the
-            demo survives network or GPU failure; nothing is computed now.
-          </div>
-        </div>
-      )}
-      {mode === "fixture" && source !== "replay" && (
-        <div className="banner warn small" style={{ marginTop: 14 }}>
-          <TriangleAlert size={18} />
-          <div>
-            <strong>Offline fixture mode.</strong> No AMD model is connected: this trail was produced by CROMO's deterministic rule-based fixture
-            provider (a heuristic baseline), not by an LLM. Scanned pages use recorded transcriptions. See System for measured AMD results.
-          </div>
-        </div>
-      )}
-      {source === "stored" && v && (
-        <div className="tiny muted" style={{ marginTop: 10 }}>
-          Showing the stored investigation from {timeAgo(v.created_at)} · {v.hops} hops · {v.duration_s}s · {v.provider === "amd" ? v.model : "fixture provider"}
-        </div>
-      )}
+      {/* ------------------------------------------------ mode / provenance line */}
+      <div className="row wrap small muted" style={{ marginTop: 12, gap: 14 }}>
+        {source === "replay" && meta ? (
+          <span className="note info" style={{ padding: "6px 12px" }}>
+            <RotateCcw size={15} /> Replay of a run recorded on AMD {meta.recorded_at ? new Date(meta.recorded_at * 1000).toLocaleDateString() : ""} ·{" "}
+            {meta.models?.reasoner} · {meta.hardware}
+          </span>
+        ) : mode === "fixture" ? (
+          <span>Offline mode: this result comes from CROMO's rule-based fixture provider, not from an AI model.</span>
+        ) : v ? (
+          <span>Computed on AMD by {v.model}</span>
+        ) : null}
+        {v && source === "stored" && <span>· last run {timeAgo(v.created_at)}</span>}
+        <span className="grow" />
+        {!running && v && (
+          <button className="btn ghost sm" onClick={() => run("live")}><Play size={14} /> Investigate again{mode === "fixture" ? " (offline)" : " live"}</button>
+        )}
+        {!running && info.has_recording && <button className="btn ghost sm" onClick={() => run("replay")}><RotateCcw size={14} /> Replay AMD run</button>}
+      </div>
       <ErrorBox error={err} />
 
-      <div className="inv-grid" style={{ marginTop: 18 }}>
-        <div>
-          <div className="row" style={{ marginBottom: 10 }}>
-            <FileSearch size={18} />
-            <h2 className="section-title" style={{ margin: 0 }}>Why-Trail</h2>
-            <span className="small muted">every claim must cite an archive document</span>
+      {/* ------------------------------------------------ live progress */}
+      {running && (
+        <div className="progress fade-in" style={{ marginTop: 20 }}>
+          <Spinner />
+          <div className="grow">
+            <div className="row small"><strong>Step {hops.length || 1} of the dig</strong><span className="muted">· {docsRead} documents read · {evidence.length} pieces of evidence</span></div>
+            <div className="bar" style={{ marginTop: 8 }}><i style={{ width: `${progress}%` }} /></div>
           </div>
-          {!events.length && !running && (
-            <div className="card empty">
-              <p>This step has not been investigated yet.</p>
-              <button className="btn primary" onClick={() => run("live")}><Play size={16} /> Start digging</button>
+        </div>
+      )}
+
+      <div className="inv-grid">
+        {/* ------------------------------------------------ paper trail */}
+        <div>
+          <h2 className="section-title">The paper trail</h2>
+          <div className="small muted">Every claim is tied to a document in the archive. Click any entry to open the page.</div>
+          {evidence.length === 0 && !running && (
+            <div className="card empty" style={{ marginTop: 16 }}>No evidence yet. Press <strong>Investigate</strong> to start digging.</div>
+          )}
+          <div className="timeline">
+            {evidence.map((e) => <TimelineItem key={e.id + e.acc} e={e} />)}
+            {running && <div className="tl-item"><div className="tl-year" /><div className="tl-dot" /><div className="small muted" style={{ paddingTop: 8 }}><Spinner size={13} /> reading…</div></div>}
+          </div>
+          {v && (hidden > 0 || showAll) && (
+            <button className="btn ghost sm" onClick={() => setShowAll(!showAll)}>
+              {showAll ? "Show only the evidence used in the verdict" : `Show ${hidden} more passage${hidden === 1 ? "" : "s"} CROMO read but did not rely on`}
+            </button>
+          )}
+          {ignored.length > 0 && (
+            <div className="note danger" style={{ marginTop: 10 }}>
+              <ShieldAlert size={18} style={{ flexShrink: 0 }} />
+              <div>
+                <strong>Ignored instruction-like text</strong> in {ignored.join(", ")}. Archive content is treated as data, never as instructions.
+              </div>
             </div>
           )}
-          <div className="trail">
-            {hops.map((h) => (
-              <HopCard key={h.n} h={h} />
-            ))}
-            {(concluding || (running && !hops.some((h) => h.running) && events.length > 0 && !v)) && (
-              <div className="hop">
-                <div className="hop-marker"><Spinner size={13} /></div>
-                <div className="hop-card running small">
-                  {concluding ? "Weighing the evidence and checking every citation…" : "Choosing the next lead…"}
-                </div>
-              </div>
-            )}
-            {v && (
-              <div className="hop">
-                <div className="hop-marker" style={{ borderColor: `var(--${v.verdict.toLowerCase()})` }}>
-                  <span className={`c-${v.verdict}`} style={{ display: "inline-flex" }}><VerdictIcon v={v.verdict} size={14} /></span>
-                </div>
-                <div className="hop-card">
-                  <div className="hop-head">
-                    <span className="hop-kind">Verdict</span>
-                    <VerdictBadge v={v.verdict} />
-                    <span className="small muted">{v.reason}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-          {warnings.map((w, i) => (
-            <div key={i} className="banner warn small" style={{ marginTop: 8 }}><TriangleAlert size={16} /> {w}</div>
-          ))}
+          {warnings.map((w, i) => <div key={i} className="note warn" style={{ marginTop: 8 }}><TriangleAlert size={16} /> {w}</div>)}
+          {hops.length > 0 && <DigLog hops={hops} docsRead={docsRead} open={running} />}
         </div>
 
-        <div className="sticky">
-          {v ? (
-            <VerdictCard v={v} cite={cite} />
-          ) : (
-            <div className="verdict-card">
-              <div className="verdict-top">
-                <div className="eyebrow">Verdict</div>
-                <div className="row" style={{ marginTop: 10 }}>
-                  {running ? <Spinner /> : null}
-                  <span className="muted">{running ? "Investigation in progress…" : "No verdict yet."}</span>
-                </div>
-              </div>
-              <div className="vsec">
-                <h4>Cost of this step</h4>
-                <div className="money">{eur(info.cost.annual_eur)}<span className="small muted"> / year</span></div>
-              </div>
-            </div>
-          )}
-        </div>
+        {/* ------------------------------------------------ side panel */}
+        <aside className="side sticky">{v ? <Side v={v} /> : <div className="small muted">Details appear when the investigation is complete.</div>}</aside>
       </div>
     </div>
   );
 }
 
-function HopCard({ h }: { h: Hop }) {
+function sameText(claim: string, quote: string) {
+  const n = (x: string) => x.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  return n(claim).includes(n(quote).slice(0, 40));
+}
+
+function TimelineItem({ e }: { e: Evidence }) {
   const { openDoc } = useApp();
+  const [cls, label] = TAG[e.stance] ?? TAG.context;
+  const open = () => openDoc({ acc: e.acc, page: e.page, quote: e.quote });
+  return (
+    <div className="tl-item fade-in">
+      <div className="tl-year">{e.date ? e.date.slice(0, 4) : "–"}</div>
+      <div className={`tl-dot st-${e.stance}`} />
+      <div className={`tl-card ${e.suspicious ? "suspicious" : ""}`} onClick={open} role="button" tabIndex={0} onKeyDown={(k) => k.key === "Enter" && open()}>
+        <div className="tl-meta">
+          <span className={`tl-tag ${cls}`}>{e.doc_type === "recipe" && e.stance === "context" ? "Recipe" : label}</span>
+          <span style={{ textTransform: "capitalize" }}>{e.doc_type ?? "document"}</span>
+          <span>· {fmtDate(e.date)}</span>
+          <span>· {e.acc}</span>
+        </div>
+        <div className="quote">“{e.quote}”</div>
+        {e.claim && e.stance !== "context" && !sameText(e.claim, e.quote) && <div className="claim">{e.claim}</div>}
+      </div>
+    </div>
+  );
+}
+
+function DigLog({ hops, docsRead, open }: { hops: Hop[]; docsRead: number; open: boolean }) {
   const [cmp, setCmp] = useState<{ loading: boolean; text?: string; err?: string; source?: string } | null>(null);
+  const recipeHop = hops.find((h) => h.compare);
   const loadCompare = async () => {
-    if (!h.compare) return;
+    if (!recipeHop?.compare) return;
     setCmp({ loading: true });
     try {
-      const r = await get<{ source: string; result: { output: string } }>(`/api/compare?a=${h.compare.a}&b=${h.compare.b}`);
+      const r = await get<{ source: string; result: { output: string } }>(`/api/compare?a=${recipeHop.compare.a}&b=${recipeHop.compare.b}`);
       setCmp({ loading: false, text: r.result.output, source: r.source });
     } catch (e) {
       setCmp({ loading: false, err: e instanceof Error ? e.message : String(e) });
     }
   };
   return (
-    <div className="hop">
-      <div className="hop-marker">{h.running ? <Spinner size={13} /> : h.n}</div>
-      <div className={`hop-card ${h.running ? "running" : ""}`}>
-        <div className="hop-head">
-          <span className="hop-kind">{h.label}</span>
-          {h.query && <span className="hop-query">{h.query}</span>}
+    <details className="card card-pad" style={{ marginTop: 22 }} open={open}>
+      <summary>How CROMO dug: {hops.length} steps, {docsRead} documents read</summary>
+      <ol className="diglog">
+        {hops.map((h) => (
+          <li key={h.n}>
+            <span className="k">{h.n}.</span>
+            <span>
+              <strong>{h.label}</strong>
+              {h.query ? <span className="muted"> - {h.query}</span> : h.detail ? <span className="muted"> - {h.detail}</span> : null}
+              <span className="muted"> · {h.running ? "reading…" : `${h.found} found`}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+      {recipeHop?.compare && (
+        <div style={{ marginTop: 12 }}>
+          {!cmp ? (
+            <button className="btn sm" onClick={loadCompare}><GitCompare size={14} /> What changed when this step was added? (Evolus AI Tool)</button>
+          ) : cmp.loading ? (
+            <span className="small muted"><Spinner size={13} /> Asking the Evolus “compare” tool…</span>
+          ) : cmp.err ? (
+            <span className="small muted">Evolus compare unavailable: {cmp.err}</span>
+          ) : (
+            <div className="small" style={{ whiteSpace: "pre-wrap", maxHeight: 300, overflow: "auto", background: "var(--surface-2)", padding: 14, borderRadius: 12 }}>
+              <div className="tiny muted" style={{ marginBottom: 6 }}>{cmp.source}</div>
+              {cmp.text}
+            </div>
+          )}
         </div>
-        {h.detail && <div className="small muted" style={{ marginTop: 4 }}>{h.detail}</div>}
-        {h.documents && h.documents.length > 0 && (
-          <div className="row wrap" style={{ gap: 5, marginTop: 8 }}>
-            <span className="tiny muted">{h.running ? "Reading" : "Read"}</span>
-            {h.documents.map((d) => (
-              <button key={d} className="chip mono" onClick={() => openDoc({ acc: d })}>{d}</button>
-            ))}
-          </div>
-        )}
-        {h.ignored && h.ignored.length > 0 && (
-          <div className="banner danger tiny" style={{ marginTop: 8, padding: "7px 10px" }}>
-            <ShieldAlert size={15} /> Instruction-like text in {h.ignored.join(", ")} was treated as data and ignored.
-          </div>
-        )}
-        {!h.running && h.evidence.length === 0 && h.kind !== "recipe" && (
-          <div className="tiny muted" style={{ marginTop: 6 }}>Nothing relevant in these documents.</div>
-        )}
-        {h.evidence.length > 0 && (
-          <div className="evidence">
-            {h.evidence.map((e) => (
-              <EvidenceItem key={e.id} e={e} />
-            ))}
-          </div>
-        )}
-        {h.compare && (
-          <div style={{ marginTop: 10 }}>
-            {!cmp ? (
-              <button className="btn sm" onClick={loadCompare}><GitCompare size={14} /> What changed in that revision? (Evolus compare)</button>
-            ) : cmp.loading ? (
-              <span className="small muted"><Spinner size={13} /> Asking Evolus AI Tool “compare”…</span>
-            ) : cmp.err ? (
-              <span className="small muted">Evolus compare unavailable: {cmp.err}</span>
-            ) : (
-              <div className="card card-pad small" style={{ whiteSpace: "pre-wrap", maxHeight: 260, overflow: "auto" }}>
-                <div className="eyebrow" style={{ marginBottom: 6 }}>{cmp.source}</div>
-                {cmp.text}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
+      )}
+    </details>
   );
 }
 
-function EvidenceItem({ e }: { e: Evidence }) {
+function Side({ v }: { v: VerdictData }) {
   const { openDoc } = useApp();
-  return (
-    <div className={`ev st-${e.stance} ${e.suspicious ? "suspicious" : ""}`} onClick={() => openDoc({ acc: e.acc, page: e.page, quote: e.quote })}
-      role="button" tabIndex={0} onKeyDown={(k) => k.key === "Enter" && openDoc({ acc: e.acc, page: e.page, quote: e.quote })}>
-      <div className="ev-quote">“{e.quote}”</div>
-      {e.claim && <div className="ev-claim">{e.claim}</div>}
-      <div className="ev-meta">
-        <span className={`stance ${e.stance}`}>{e.stance === "reason" ? "why introduced" : e.stance === "status" ? "still true?" : e.stance}</span>
-        <span className="chip mono">{e.acc}</span>
-        <span className="chip">{e.doc_type ?? "document"}</span>
-        <span className="chip">{fmtDate(e.date)}</span>
-        {e.verified ? (
-          <span className="tiny" style={{ color: "var(--ok)", display: "inline-flex", gap: 4, alignItems: "center" }}><BadgeCheck size={13} /> quote verified</span>
-        ) : (
-          <span className="tiny" style={{ color: "var(--danger)" }}>quote not found in source · not used</span>
-        )}
-        {e.suspicious && <span className="tiny" style={{ color: "var(--danger)" }}>instruction-like text · ignored</span>}
-      </div>
-    </div>
-  );
-}
-
-function VerdictCard({ v, cite }: { v: VerdictData; cite: (id: string) => React.ReactNode }) {
-  const [showFormula, setShowFormula] = useState(false);
-  const [showBreak, setShowBreak] = useState(false);
-  const [drafting, setDrafting] = useState(false);
-  const [err, setErr] = useState<unknown>(null);
-  const draft = async () => {
-    setDrafting(true);
-    setErr(null);
-    try {
-      const t = await post<{ id: string }>("/api/trials", { step_id: v.step_id });
-      go(`/trials?id=${t.id}`);
-    } catch (e) {
-      setErr(e);
-    } finally {
-      setDrafting(false);
-    }
+  const cite = (id: string): ReactNode => {
+    const e = v.evidence[id];
+    if (!e) return null;
+    return <button key={id} className="cite" title={`${e.doc_type ?? ""} · ${fmtDate(e.date)}`} onClick={() => openDoc({ acc: e.acc, page: e.page, quote: e.quote })}>{e.date?.slice(0, 4) ?? e.acc}</button>;
   };
-  const costLabel = v.verdict === "FOSSIL" ? "Waste per year" : v.verdict === "FENCE" ? "Cost of protection per year" : "Cost of this step per year";
   return (
-    <div className="verdict-card">
-      <div className={`verdict-top vt-${v.verdict}`}>
-        <div className="eyebrow">Verdict</div>
-        <div className={`verdict-word c-${v.verdict}`} style={{ marginTop: 8 }}>
-          <VerdictIcon v={v.verdict} size={34} /> {VERDICT_LABEL[v.verdict].toUpperCase()}
-        </div>
-        <div className="small" style={{ marginTop: 8, color: "var(--text-2)" }}>{VERDICT_HELP[v.verdict]}</div>
-        {v.proposed_verdict !== v.verdict && (
-          <div className="banner warn tiny" style={{ marginTop: 10, padding: "7px 10px" }}>
-            <ShieldCheck size={15} /> Model proposed {v.proposed_verdict}; CROMO's guard rules changed it to {v.verdict}.
-          </div>
-        )}
-        <div className="row" style={{ marginTop: 12 }}>
-          <StrengthMeter grade={v.strength.grade} />
-          <span className="tiny muted">{v.strength.score} pts · {v.strength.documents} documents</span>
-          <span className="grow" />
-          <button className="btn ghost sm" onClick={() => setShowBreak(!showBreak)}>{showBreak ? "Hide" : "How graded"}</button>
-        </div>
-        {showBreak && (
-          <div className="small" style={{ marginTop: 8 }}>
-            {v.strength.breakdown.map((b, i) => (
-              <div key={i} className="row" style={{ justifyContent: "space-between" }}>
-                <span>{b.label}</span>
-                <span className="mono" style={{ color: b.points < 0 ? "var(--danger)" : "var(--ok)" }}>{b.points > 0 ? "+" : ""}{b.points}</span>
-              </div>
-            ))}
-            <div className="tiny muted" style={{ marginTop: 4 }}>{v.strength.rule}</div>
-          </div>
-        )}
-      </div>
-      {v.reason && (
-        <div className="vsec">
-          <h4>Recovered reason</h4>
-          <div>{v.reason}</div>
-          {v.origin_year && <div className="small muted" style={{ marginTop: 4 }}>Introduced around {v.origin_year}{v.first_seen ? ` · first in recipes ${v.first_seen.slice(0, 4)}` : ""}</div>}
-        </div>
-      )}
-      {v.chain.length > 0 && (
-        <div className="vsec">
-          <h4>Reasoning chain</h4>
-          <ol className="chain">
-            {v.chain.map((c, i) => (
-              <li key={i}>{c.claim} {c.evidence.map(cite)}</li>
-            ))}
-          </ol>
-        </div>
-      )}
+    <>
       {v.dependencies.length > 0 && (
-        <div className="vsec">
-          <h4>Depends on (tripwires)</h4>
+        <div className="blk">
+          <h4>What the reason depends on</h4>
           {v.dependencies.map((d, i) => (
             <div key={i} className="dep">
-              {d.holds === true ? (
-                <span title="still present" style={{ color: "var(--fence)" }}><ShieldCheck size={16} /></span>
-              ) : d.holds === false ? (
-                <span title="no longer present" style={{ color: "var(--fossil)" }}><CircleX size={16} /></span>
-              ) : (
-                <span title="unknown" className="muted"><TriangleAlert size={16} /></span>
-              )}
-              <div className="grow">
-                <strong>{d.name}</strong>{" "}
-                <span className="muted small">{d.holds === true ? "still present" : d.holds === false ? "no longer present" : "status unknown"}</span>{" "}
-                {d.evidence.map(cite)}
-                {d.note && <div className="tiny muted">{d.note}</div>}
+              {d.holds === true ? <span style={{ color: "var(--fence)" }}><ShieldCheck size={17} /></span>
+                : d.holds === false ? <span style={{ color: "var(--fossil)" }}><CircleX size={17} /></span>
+                : <span className="muted"><TriangleAlert size={17} /></span>}
+              <div>
+                <div><strong>{d.name}</strong></div>
+                <div className="small muted">{d.holds === true ? "still present" : d.holds === false ? "no longer present" : "status unknown"} {d.evidence.map(cite)}</div>
               </div>
             </div>
           ))}
+          <div className="tiny muted" style={{ marginTop: 6 }}>CROMO watches these. If one changes, the Tripwires page raises an alert.</div>
         </div>
       )}
       {v.counter_evidence.length > 0 && (
-        <div className="vsec">
+        <div className="blk">
           <h4>Counter-evidence considered</h4>
           {v.counter_evidence.map((c, i) => (
-            <div key={i} className="small" style={{ marginBottom: 6 }}>
-              <span className={`stance ${c.resolved ? "context" : "counter"}`}>{c.resolved ? "resolved" : "unresolved"}</span> {c.claim} {c.evidence.map(cite)}
+            <div key={i} className="small" style={{ marginBottom: 8 }}>
+              <span className={`tl-tag ${c.resolved ? "context" : "counter"}`}>{c.resolved ? "resolved" : "open"}</span> {c.claim} {c.evidence.map(cite)}
               {c.resolution && <div className="tiny muted">{c.resolution}</div>}
             </div>
           ))}
         </div>
       )}
       {v.open_questions.length > 0 && (
-        <div className="vsec">
-          <h4>Open questions for a human</h4>
-          <ul className="chain">{v.open_questions.map((q, i) => <li key={i}>{q}</li>)}</ul>
+        <div className="blk">
+          <h4>Questions for a person</h4>
+          {v.open_questions.map((q, i) => <div key={i} className="small" style={{ marginBottom: 4 }}>{q}</div>)}
         </div>
       )}
-      <div className="vsec">
-        <h4>{costLabel}</h4>
-        <div className={`money ${v.verdict === "FOSSIL" ? "c-FOSSIL" : ""}`}>{eur(v.cost.annual_eur)}</div>
-        <div className="tiny muted">{v.cost.runs_per_year.toLocaleString()} runs/yr ({v.cost.basis}) × {eur(v.cost.per_run_eur)} per run</div>
-        <button className="btn ghost sm" style={{ marginTop: 6, paddingLeft: 0 }} onClick={() => setShowFormula(!showFormula)}>
-          {showFormula ? "Hide" : "Show"} formula and inputs
-        </button>
-        {showFormula && (
+      <div className="blk">
+        <h4>How sure are we?</h4>
+        <div className="row"><StrengthMeter grade={v.strength.grade} /><span className="small muted">{v.strength.score} points</span></div>
+        <details style={{ marginTop: 8 }}>
+          <summary>Scoring rules</summary>
+          <div className="small" style={{ marginTop: 6 }}>
+            {v.strength.breakdown.map((b, i) => (
+              <div key={i} className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+                <span>{b.label}</span><span style={{ color: b.points < 0 ? "var(--danger)" : "var(--ok)", fontWeight: 600 }}>{b.points > 0 ? "+" : ""}{b.points}</span>
+              </div>
+            ))}
+            <div className="tiny muted" style={{ marginTop: 4 }}>{v.strength.rule}</div>
+          </div>
+        </details>
+      </div>
+      <div className="blk">
+        <h4>Cost</h4>
+        <div className="small">{v.cost.runs_per_year.toLocaleString()} runs a year × {eur(v.cost.per_run_eur)} = <strong>{eur(v.cost.annual_eur)}</strong></div>
+        <details style={{ marginTop: 8 }}>
+          <summary>Inputs</summary>
           <table className="table" style={{ marginTop: 4 }}>
             <tbody>
               {v.cost.lines.map((l, i) => (
-                <tr key={i}>
-                  <td>{l.label}<div className="tiny muted">{l.source}</div></td>
-                  <td className="num mono tiny">{l.qty.toLocaleString(undefined, { maximumFractionDigits: 2 })} {l.unit} × €{l.unit_cost}</td>
-                  <td className="num mono">€{l.amount.toFixed(2)}</td>
-                </tr>
+                <tr key={i}><td>{l.label}<div className="tiny muted">{l.source}</div></td><td className="num small">€{l.amount.toFixed(2)}</td></tr>
               ))}
-              <tr><td colSpan={3} className="tiny muted">{v.cost.formula}</td></tr>
             </tbody>
           </table>
-        )}
+          <div className="tiny muted">{v.cost.formula}</div>
+        </details>
       </div>
       {v.guards.length > 0 && (
-        <div className="vsec">
-          <h4>Safety checks applied</h4>
-          {v.guards.map((g, i) => (
-            <div key={i} className="tiny row" style={{ alignItems: "flex-start", marginBottom: 4 }}><ShieldCheck size={13} style={{ flexShrink: 0, marginTop: 2 }} /> {g}</div>
-          ))}
+        <div className="blk">
+          <h4>Safety checks</h4>
+          <details>
+            <summary>{v.guards.length} rule{v.guards.length === 1 ? "" : "s"} applied</summary>
+            {v.guards.map((g, i) => <div key={i} className="tiny" style={{ marginTop: 6 }}><ShieldCheck size={12} /> {g}</div>)}
+          </details>
         </div>
       )}
-      <div className="vsec">
-        <div className="row wrap">
-          {v.verdict === "FOSSIL" && (
-            <button className="btn primary" onClick={draft} disabled={drafting}>
-              {drafting ? <Spinner /> : <ClipboardCheck size={16} />} Draft a safe trial
-            </button>
-          )}
-          <button className="btn" onClick={() => go(`/change?p=${encodeURIComponent(`Remove step ${v.step_id}`)}`)}>Before you change…</button>
-        </div>
-        <ErrorBox error={err} />
-        <div className="tiny muted" style={{ marginTop: 10 }}>
-          {v.provider === "amd" ? <>Computed on AMD by <span className="mono">{v.model}</span></> : <>Computed by the offline fixture provider (heuristic baseline)</>} ·{" "}
-          {v.hops} hops · {v.duration_s}s
-          {v.stats ? <> · {v.stats.unverified_quotes} quote(s) rejected by the verifier</> : null}
-        </div>
+      <div className="blk tiny muted">
+        {v.provider === "amd" ? `Computed on AMD by ${v.model}` : "Computed offline by the rule-based fixture provider"} · {v.hops} steps · {v.duration_s}s
+        {v.stats ? ` · ${v.stats.unverified_quotes} unverifiable quote(s) rejected` : ""}
       </div>
-    </div>
+    </>
+  );
+}
+
+function DraftTrial({ stepId }: { stepId: string }) {
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<unknown>(null);
+  return (
+    <>
+      <button className="btn brand sm" disabled={busy} onClick={async () => {
+        setBusy(true);
+        setErr(null);
+        try {
+          const t = await post<{ id: string }>("/api/trials", { step_id: stepId });
+          go(`/trials?id=${t.id}`);
+        } catch (e) {
+          setErr(e);
+        } finally {
+          setBusy(false);
+        }
+      }}>
+        {busy ? <Spinner size={14} /> : <ClipboardCheck size={14} />} Plan a safe trial
+      </button>
+      {err ? <ErrorBox error={err} /> : null}
+    </>
   );
 }

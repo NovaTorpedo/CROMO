@@ -1,254 +1,175 @@
-import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Pickaxe } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, Search } from "lucide-react";
 import { eur, get } from "../api";
-import { ErrorBox, Skeleton, StrengthMeter, VERDICT_HELP, VERDICT_LABEL, VerdictBadge, VerdictIcon, go } from "../components/common";
+import { ErrorBox, Skeleton, VERDICT_LABEL, VerdictIcon, go } from "../components/common";
 import type { MapData, MapStep, Verdict } from "../types";
 
-const BANDS = [
-  { id: "2020", label: "2020s", from: 2020, to: 2100 },
-  { id: "2010", label: "2010s", from: 2010, to: 2019 },
-  { id: "2000", label: "2000s", from: 2000, to: 2009 },
-  { id: "1995", label: "1995 – 1999", from: 1995, to: 1999 },
-  { id: "old", label: "≤ 1994", from: 0, to: 1994 },
+const LEGEND: { v: Verdict; text: string }[] = [
+  { v: "FOSSIL", text: "Fossil · reason is gone" },
+  { v: "FENCE", text: "Fence · looks pointless, protects you" },
+  { v: "UNKNOWN", text: "Unknown · ask a person" },
+  { v: "ACTIVE", text: "Active · still needed" },
 ];
-const ROW = 34;
-const PAD = 14;
-const VERDICTS: Verdict[] = ["FOSSIL", "FENCE", "UNKNOWN", "ACTIVE"];
 
-function stepYear(s: MapStep): number | null {
-  if (s.first_seen) return Number(s.first_seen.slice(0, 4));
-  return s.origin_year ?? null;
+function Tile({ s, dim, onHover }: { s: MapStep; dim: boolean; onHover: (s: MapStep | null, r?: DOMRect) => void }) {
+  return (
+    <button
+      className={`tile t-${s.verdict} ${dim ? "dim" : ""}`}
+      onClick={() => go(`/step/${s.id}`)}
+      onMouseEnter={(e) => onHover(s, e.currentTarget.getBoundingClientRect())}
+      onMouseLeave={() => onHover(null)}
+      onFocus={(e) => onHover(s, e.currentTarget.getBoundingClientRect())}
+      onBlur={() => onHover(null)}
+      aria-label={`Step ${s.id}, ${s.name}: ${VERDICT_LABEL[s.verdict]}`}
+    >
+      <span className="top">
+        <span>{s.seq}</span>
+        {s.verdict !== "ACTIVE" && <VerdictIcon v={s.verdict} size={15} />}
+      </span>
+      <span className="nm">{s.name}</span>
+      <span className="bot">
+        {s.verdict === "FOSSIL" ? `${eur(s.annual_cost_eur, true)}/yr` : s.verdict === "FENCE" ? "protects" : ""}
+      </span>
+    </button>
+  );
 }
 
 export default function MapPage() {
   const [data, setData] = useState<MapData | null>(null);
   const [err, setErr] = useState<unknown>(null);
-  const [show, setShow] = useState<Record<string, boolean>>({ FOSSIL: true, FENCE: true, UNKNOWN: true, ACTIVE: true, PENDING: true });
-  const [tip, setTip] = useState<{ s: MapStep; x: number; y: number; proc: string } | null>(null);
+  const [focus, setFocus] = useState<Verdict | null>(null);
+  const [tip, setTip] = useState<{ s: MapStep; r: DOMRect } | null>(null);
+  const [q, setQ] = useState("");
 
   useEffect(() => {
     get<MapData>("/api/map").then(setData, setErr);
   }, []);
 
-  const layout = useMemo(() => {
-    if (!data) return null;
-    const cols = data.processes.map((p) => {
-      const byBand: Record<string, MapStep[]> = {};
-      BANDS.forEach((b) => (byBand[b.id] = []));
-      p.steps.forEach((s) => {
-        const y = stepYear(s);
-        const band = BANDS.find((b) => y !== null && y >= b.from && y <= b.to) ?? BANDS[BANDS.length - 1];
-        byBand[band.id].push(s);
-      });
-      Object.values(byBand).forEach((arr) => arr.sort((a, b) => (stepYear(b) ?? 0) - (stepYear(a) ?? 0) || a.seq - b.seq));
-      return { p, byBand };
-    });
-    let top = 0;
-    const bands = BANDS.map((b) => {
-      const n = Math.max(1, ...cols.map((c) => c.byBand[b.id].length));
-      const h = n * ROW + PAD * 2;
-      const out = { ...b, top, h };
-      top += h;
-      return out;
-    });
-    return { cols, bands, height: top };
-  }, [data]);
-
   if (err) return <ErrorBox error={err} />;
-  if (!data || !layout)
+  if (!data)
     return (
-      <div className="col gap-lg">
-        <Skeleton h={60} w="60%" />
-        <Skeleton h={110} />
-        <Skeleton h={560} />
+      <div className="col" style={{ gap: 18, marginTop: 30 }}>
+        <Skeleton h={56} w="70%" />
+        <Skeleton h={90} />
+        <Skeleton h={480} />
       </div>
     );
 
   const t = data.totals;
-  const nSteps = data.processes.reduce((a, p) => a + p.steps.length, 0);
-  const providers = data.computed_by.join(", ");
+  const steps = data.processes.flatMap((p) => p.steps);
+  const levi = steps.find((s) => s.id === "ALK-04");
+  const examples = [
+    levi && levi.verdict === "FOSSIL" ? levi : steps.find((s) => s.verdict === "FOSSIL"),
+    steps.find((s) => s.verdict === "FENCE"),
+    steps.find((s) => s.verdict === "UNKNOWN"),
+  ].filter(Boolean) as MapStep[];
 
   return (
     <div>
-      <div className="eyebrow">{data.plant.name} · {data.plant.site} · synthetic archive 1994 – 2026</div>
-      <h1 className="h1" style={{ marginTop: 6 }}>Every factory runs on reasons nobody remembers.</h1>
-      <p className="lead" style={{ marginTop: 8 }}>
-        CROMO dug through the plant's own archive to recover why each of the {nSteps} steps in {data.processes.length} recipes and procedures exists.
-        Fossils are waste whose reason is gone; fences look pointless but protect you.
-      </p>
+      <section className="home-hero">
+        <h1 className="hero-title">Every factory runs on reasons nobody remembers.</h1>
+        <p className="lead">
+          CROMO read 30 years of paperwork from {data.plant.name.replace(" S.p.A.", "")}, a fictional paint plant, and worked out why each of its{" "}
+          {steps.length} process steps exists. Some are pure waste. Some look pointless but keep people safe.
+        </p>
+      </section>
 
-      <div className="kpis">
-        <div className="kpi k-FOSSIL">
-          <span className="ico c-FOSSIL"><VerdictIcon v="FOSSIL" size={26} /></span>
-          <div className="big c-FOSSIL">{t.FOSSIL} fossils</div>
-          <div className="label"><strong>{eur(data.fossil_annual_eur)}</strong> per year spent on steps whose reason is gone</div>
-          <div className="sub">Removal only through a controlled trial with rollback</div>
+      <div className="stats">
+        <div className="stat s-FOSSIL">
+          <div className="n">{eur(data.fossil_annual_eur)}</div>
+          <div className="l">spent every year on <strong>{t.FOSSIL} fossil steps</strong> whose original reason is gone</div>
         </div>
-        <div className="kpi k-FENCE">
-          <span className="ico c-FENCE"><VerdictIcon v="FENCE" size={24} /></span>
-          <div className="big c-FENCE">{t.FENCE}</div>
-          <div className="label">fences protected</div>
-          <div className="sub">Look pointless, are load-bearing</div>
+        <div className="stat s-FENCE">
+          <div className="n">{t.FENCE} fences</div>
+          <div className="l">look pointless but guard safety or quality - CROMO blocks their removal</div>
         </div>
-        <div className="kpi k-UNKNOWN">
-          <span className="ico c-UNKNOWN"><VerdictIcon v="UNKNOWN" size={24} /></span>
-          <div className="big c-UNKNOWN">{t.UNKNOWN}</div>
-          <div className="label">unknown → to a human</div>
-          <div className="sub">No reliable reason found; CROMO never guesses</div>
-        </div>
-        <div className="kpi">
-          <span className="ico c-ACTIVE"><VerdictIcon v="ACTIVE" size={24} /></span>
-          <div className="big c-ACTIVE">{t.ACTIVE}</div>
-          <div className="label">active</div>
-          <div className="sub">Reason documented and still valid</div>
+        <div className="stat s-UNKNOWN">
+          <div className="n">{t.UNKNOWN} unknown</div>
+          <div className="l">no reliable reason in the archive - sent to a person, never guessed</div>
         </div>
       </div>
 
-      <div className="filterbar">
-        {VERDICTS.map((v) => (
-          <button key={v} className={`toggle ${show[v] ? "on" : "off"}`} onClick={() => setShow({ ...show, [v]: !show[v] })} title={VERDICT_HELP[v]}>
-            <span className={`c-${v}`}><VerdictIcon v={v} size={14} /></span>
-            {VERDICT_LABEL[v]} <span className="muted mono">{t[v]}</span>
-          </button>
-        ))}
-        <div className="grow" />
-        <span className="tiny muted">
-          Depth = when the step first appears in the archived recipes · verdicts by <span className="mono">{providers || "–"}</span>
-        </span>
-      </div>
+      <form
+        className="askbar"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (q.trim()) go(`/ask?q=${encodeURIComponent(q.trim())}`);
+        }}
+      >
+        <input className="input" value={q} onChange={(e) => setQ(e.target.value)}
+          placeholder="Ask why any step exists - e.g. “why do we add ammonium chloride?”" aria-label="Ask why a step exists" />
+        <button className="btn primary"><Search size={16} /> Ask</button>
+      </form>
 
-      <div className="strata" role="figure" aria-label="Fossil map: process steps placed by the decade they first appeared, colored by verdict">
-        <div className="strata-head" style={{ gridTemplateColumns: `120px repeat(${layout.cols.length}, 1fr)` }}>
-          <div className="eyebrow" style={{ alignSelf: "end" }}>Stratum</div>
-          {layout.cols.map(({ p }) => {
-            const f = p.steps.filter((s) => s.verdict === "FOSSIL");
+      <section className="ptable">
+        <div className="ptable-head">
+          <h2 className="section-title" style={{ margin: 0 }}>The periodic table of the plant</h2>
+          <div className="legend">
+            {LEGEND.map(({ v, text }) => (
+              <button
+                key={v}
+                className="it"
+                style={{ background: "none", border: "none", cursor: "pointer", padding: 0, opacity: focus && focus !== v ? 0.45 : 1 }}
+                onClick={() => setFocus(focus === v ? null : v)}
+                title="Click to highlight"
+              >
+                <span className={`sw tile t-${v}`} style={{ width: 14, height: 14, padding: 0, borderRadius: 4 }} />
+                {text}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="card" style={{ padding: "8px 22px" }}>
+          {data.processes.map((p) => {
+            const fossils = p.steps.filter((s) => s.verdict === "FOSSIL");
             return (
-              <div key={p.id}>
-                <div className="row" style={{ gap: 8 }}>
-                  <strong className="mono">{p.code}</strong>
-                  <span className="tiny muted">{p.revision}</span>
+              <div key={p.id} className="prow">
+                <div className="plabel">
+                  <div className="code">{p.code}</div>
+                  <div className="name">{p.short}</div>
+                  {fossils.length > 0 && <div className="sum c-FOSSIL">{eur(fossils.reduce((a, s) => a + s.annual_cost_eur, 0), true)}/yr waste</div>}
                 </div>
-                <div className="small muted" style={{ lineHeight: 1.3, marginTop: 2 }}>{p.name.replace(/^\S+\s/, "")}</div>
-                <div className="tiny" style={{ marginTop: 4 }}>
-                  <span className="c-FOSSIL">{f.length} fossil{f.length === 1 ? "" : "s"} · {eur(f.reduce((a, s) => a + s.annual_cost_eur, 0), true)}/yr</span>
+                <div className="tiles">
+                  {p.steps.map((s) => (
+                    <Tile key={s.id} s={s} dim={!!focus && s.verdict !== focus} onHover={(st, r) => setTip(st && r ? { s: st, r } : null)} />
+                  ))}
                 </div>
               </div>
             );
           })}
         </div>
-        <div className="strata-body" style={{ gridTemplateColumns: `120px repeat(${layout.cols.length}, 1fr)`, height: layout.height }}>
-          {layout.bands.map((b, i) => (
-            <div
-              key={b.id}
-              style={{
-                position: "absolute", left: 0, right: 0, top: b.top, height: b.h,
-                background: `var(--stratum-${(i % 4) + 1})`, borderTop: i ? "1px dashed var(--border-strong)" : "none",
-              }}
-            >
-              <span className="eyebrow" style={{ position: "absolute", left: 12, top: 12, maxWidth: 100 }}>{b.label}{b.id === "old" && <div className="tiny" style={{ textTransform: "none", letterSpacing: 0 }}>inherited before the archive</div>}</span>
-            </div>
-          ))}
-          <div />
-          {layout.cols.map(({ p, byBand }) => (
-            <div key={p.id} className="core">
-              {layout.bands.flatMap((b) =>
-                byBand[b.id].map((s, k) => {
-                  const y = stepYear(s);
-                  const dim = !show[s.verdict];
-                  return (
-                    <button
-                      key={s.id}
-                      className={`specimen s-${s.verdict} ${dim ? "dim" : ""}`}
-                      style={{ top: b.top + PAD + k * ROW, height: ROW - 6 }}
-                      onClick={() => go(`/step/${s.id}`)}
-                      onMouseEnter={(e) => setTip({ s, x: e.clientX, y: e.clientY, proc: p.code })}
-                      onMouseMove={(e) => setTip((t0) => (t0 ? { ...t0, x: e.clientX, y: e.clientY } : t0))}
-                      onMouseLeave={() => setTip(null)}
-                      onFocus={(e) => {
-                        const r = e.currentTarget.getBoundingClientRect();
-                        setTip({ s, x: r.right, y: r.top, proc: p.code });
-                      }}
-                      onBlur={() => setTip(null)}
-                      aria-label={`${s.id} ${VERDICT_LABEL[s.verdict]}: ${s.instruction}`}
-                    >
-                      <span className={`c-${s.verdict}`} style={{ display: "inline-flex" }}><VerdictIcon v={s.verdict} size={14} /></span>
-                      <span className="sid">{s.id}</span>
-                      <span className="txt">{s.instruction}</span>
-                      {s.verdict === "FOSSIL" ? (
-                        <span className="eur c-FOSSIL">{eur(s.annual_cost_eur, true)}</span>
-                      ) : (
-                        <span className="tiny muted mono">{y ?? ""}</span>
-                      )}
-                    </button>
-                  );
-                }),
-              )}
-            </div>
-          ))}
+        <div className="tiny muted" style={{ marginTop: 10 }}>
+          Each tile is one step of a current recipe or procedure, in order. Click any tile to see the evidence behind it.
         </div>
-      </div>
-      <div className="legend" style={{ marginTop: 12 }}>
-        {VERDICTS.map((v) => (
-          <span key={v} className="it">
-            <span className={`c-${v}`}><VerdictIcon v={v} size={14} /></span> <strong>{VERDICT_LABEL[v]}</strong> <span className="muted">— {VERDICT_HELP[v]}</span>
-          </span>
-        ))}
-      </div>
+      </section>
 
-      {tip && (
-        <div className="tooltip" style={{ left: Math.min(tip.x + 16, window.innerWidth - 380), top: tip.y + 14 }}>
-          <div className="row" style={{ marginBottom: 6 }}>
-            <VerdictBadge v={tip.s.verdict} />
-            <span className="mono small">{tip.s.id}</span>
-            <span className="grow" />
-            <StrengthMeter grade={tip.s.strength} />
+      {examples.length > 0 && (
+        <section style={{ marginTop: 40 }}>
+          <h2 className="section-title">Start here</h2>
+          <div className="try">
+            {examples.map((s) => (
+              <button key={s.id} className="card card-pad" onClick={() => go(`/step/${s.id}`)}>
+                <span className={`badge v-${s.verdict}`}><VerdictIcon v={s.verdict} size={13} /> {VERDICT_LABEL[s.verdict]}</span>
+                <div className="h2" style={{ fontSize: 21, marginTop: 10 }}>{s.name}</div>
+                <div className="small muted" style={{ marginTop: 4 }}>{s.instruction}</div>
+                <div className="row small" style={{ marginTop: 12, fontWeight: 500 }}>See why <ArrowRight size={15} /></div>
+              </button>
+            ))}
           </div>
-          <div style={{ marginBottom: 6 }}>{tip.s.instruction}</div>
-          {tip.s.reason && <div className="small muted">{tip.s.reason}</div>}
-          <div className="small" style={{ marginTop: 6 }}>
-            Annual cost of this step: <strong>{eur(tip.s.annual_cost_eur)}</strong>
-            {tip.s.first_seen && <span className="muted"> · first seen {tip.s.first_seen.slice(0, 4)}</span>}
-          </div>
-          <div className="tiny muted" style={{ marginTop: 6 }}>Click to open the investigation</div>
-        </div>
+        </section>
       )}
 
-      <div style={{ marginTop: 28 }}>
-        <div className="row" style={{ marginBottom: 10 }}>
-          <Pickaxe size={18} />
-          <h2 className="section-title" style={{ margin: 0 }}>Pick any step and watch CROMO dig</h2>
+      {tip && (
+        <div className="tooltip" style={{ left: Math.min(tip.r.left, window.innerWidth - 360), top: tip.r.bottom + 10 }}>
+          <div className="row" style={{ marginBottom: 6 }}>
+            <span className={`badge v-${tip.s.verdict}`}><VerdictIcon v={tip.s.verdict} size={13} /> {VERDICT_LABEL[tip.s.verdict]}</span>
+            <span className="tiny muted">{tip.s.id}</span>
+          </div>
+          <div style={{ fontWeight: 500 }}>{tip.s.instruction}</div>
+          {tip.s.reason && <div className="small muted" style={{ marginTop: 6 }}>{tip.s.reason}</div>}
+          <div className="small" style={{ marginTop: 8 }}>Costs <strong>{eur(tip.s.annual_cost_eur)}</strong> a year</div>
         </div>
-        <div className="card" style={{ overflow: "hidden" }}>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Step</th>
-                <th>Instruction</th>
-                <th>Verdict</th>
-                <th>Evidence</th>
-                <th className="num">Cost / yr</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {data.processes.flatMap((p) =>
-                p.steps
-                  .filter((s) => show[s.verdict])
-                  .map((s) => (
-                    <tr key={s.id} className="clickable" onClick={() => go(`/step/${s.id}`)}>
-                      <td className="mono">{s.id}</td>
-                      <td style={{ maxWidth: 560 }}>{s.instruction}</td>
-                      <td><VerdictBadge v={s.verdict} /></td>
-                      <td><StrengthMeter grade={s.strength} /></td>
-                      <td className={`num mono ${s.verdict === "FOSSIL" ? "c-FOSSIL" : ""}`}>{eur(s.annual_cost_eur)}</td>
-                      <td><ArrowRight size={15} className="muted" /></td>
-                    </tr>
-                  )),
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

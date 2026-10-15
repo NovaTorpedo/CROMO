@@ -10,9 +10,9 @@ import "./styles.css";
 import App from "./App";
 
 try {
-  document.documentElement.dataset.theme = localStorage.getItem("cromo.theme") || "dark";
+  document.documentElement.dataset.theme = localStorage.getItem("cromo.theme") || "light";
 } catch {
-  document.documentElement.dataset.theme = "dark";
+  document.documentElement.dataset.theme = "light";
 }
 
 createRoot(document.getElementById("root")!).render(

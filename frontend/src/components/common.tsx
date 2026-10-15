@@ -88,7 +88,7 @@ export function ErrorBox({ error }: { error: unknown }) {
   if (!error) return null;
   const msg = error instanceof Error ? error.message : String(error);
   return (
-    <div className="banner danger small" role="alert">
+    <div className="note danger small" role="alert">
       <strong>Something went wrong.</strong> <span>{msg}</span>
     </div>
   );

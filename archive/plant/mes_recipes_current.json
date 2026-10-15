@@ -37,7 +37,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Alkyd resin charge"
     },
     {
      "id": "ALK-02",
@@ -54,7 +55,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Zinc phosphate pigment"
     },
     {
      "id": "ALK-03",
@@ -71,7 +73,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Soy lecithin"
     },
     {
      "id": "ALK-04",
@@ -88,7 +91,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Ammonium chloride"
     },
     {
      "id": "ALK-05",
@@ -105,7 +109,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": "winter"
+     "runs_basis": "winter",
+     "name": "Winter bentonite dose"
     },
     {
      "id": "ALK-06",
@@ -117,7 +122,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Disperse to 6 Hegman"
     },
     {
      "id": "ALK-07",
@@ -129,7 +135,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Cool below 40 °C"
     },
     {
      "id": "ALK-08",
@@ -146,7 +153,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "White spirit letdown"
     },
     {
      "id": "ALK-09",
@@ -167,7 +175,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Driers and anti-skin"
     },
     {
      "id": "ALK-10",
@@ -179,7 +188,8 @@
      "holding_h": 12,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "12-hour rest"
     },
     {
      "id": "ALK-11",
@@ -191,9 +201,11 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Filter and fill"
     }
-   ]
+   ],
+   "short": "Anti-rust enamel"
   },
   {
    "id": "EPX",
@@ -220,7 +232,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Disperser warm-up"
     },
     {
      "id": "EPX-02",
@@ -232,7 +245,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Hot-box pre-heat"
     },
     {
      "id": "EPX-03",
@@ -249,7 +263,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Epoxy resin charge"
     },
     {
      "id": "EPX-04",
@@ -266,7 +281,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Reactive diluent"
     },
     {
      "id": "EPX-05",
@@ -278,7 +294,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "20-minute wait"
     },
     {
      "id": "EPX-06",
@@ -290,7 +307,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Sieve quartz flour"
     },
     {
      "id": "EPX-07",
@@ -311,7 +329,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Fillers under vacuum"
     },
     {
      "id": "EPX-08",
@@ -328,7 +347,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Silicone defoamer"
     },
     {
      "id": "EPX-09",
@@ -340,7 +360,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "EEW test"
     },
     {
      "id": "EPX-10",
@@ -352,7 +373,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 2.4,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Nitrogen-flush pails"
     },
     {
      "id": "EPX-11",
@@ -364,7 +386,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Fill and label"
     },
     {
      "id": "EPX-12",
@@ -376,9 +399,11 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Pails upside down"
     }
-   ]
+   ],
+   "short": "Epoxy floor coating"
   },
   {
    "id": "SOL",
@@ -404,7 +429,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Drain residue"
     },
     {
      "id": "SOL-02",
@@ -416,7 +442,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Bond and earth"
     },
     {
      "id": "SOL-03",
@@ -433,7 +460,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 40,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "First acetone rinse"
     },
     {
      "id": "SOL-04",
@@ -450,7 +478,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 20,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Second acetone rinse"
     },
     {
      "id": "SOL-05",
@@ -467,7 +496,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 1,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Xylene wipe"
     },
     {
      "id": "SOL-06",
@@ -479,7 +509,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Ventilate before entry"
     },
     {
      "id": "SOL-07",
@@ -491,7 +522,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Lid open overnight"
     },
     {
      "id": "SOL-08",
@@ -503,7 +535,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "60-minute wait"
     },
     {
      "id": "SOL-09",
@@ -515,9 +548,11 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Cleaning log"
     }
-   ]
+   ],
+   "short": "Solvent cleaning"
   },
   {
    "id": "TNK",
@@ -549,7 +584,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Vacuum-dry polyol"
     },
     {
      "id": "TNK-02",
@@ -566,7 +602,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Molecular sieve"
     },
     {
      "id": "TNK-03",
@@ -578,7 +615,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 4,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Nitrogen blanket"
     },
     {
      "id": "TNK-04",
@@ -595,7 +633,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Isocyanate addition"
     },
     {
      "id": "TNK-05",
@@ -612,7 +651,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Tin catalyst"
     },
     {
      "id": "TNK-06",
@@ -624,7 +664,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "45-minute hold"
     },
     {
      "id": "TNK-07",
@@ -636,7 +677,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Magnetic separator"
     },
     {
      "id": "TNK-08",
@@ -648,7 +690,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Oven-dry cans"
     },
     {
      "id": "TNK-09",
@@ -660,9 +703,11 @@
      "holding_h": 0.0,
      "nitrogen_m3": 1.5,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Can under nitrogen"
     }
-   ]
+   ],
+   "short": "Tank sealant"
   },
   {
    "id": "QC",
@@ -688,7 +733,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Viscosity"
     },
     {
      "id": "QC-02",
@@ -700,7 +746,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Fineness of grind"
     },
     {
      "id": "QC-03",
@@ -712,7 +759,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": "ALK"
+     "runs_basis": "ALK",
+     "name": "Chloride test"
     },
     {
      "id": "QC-04",
@@ -724,7 +772,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": "pigment_lots"
+     "runs_basis": "pigment_lots",
+     "name": "XRF lead screening"
     },
     {
      "id": "QC-05",
@@ -736,7 +785,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Retain samples 5 yrs"
     },
     {
      "id": "QC-06",
@@ -748,7 +798,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": "pigment_additions"
+     "runs_basis": "pigment_additions",
+     "name": "Re-weigh pigments"
     },
     {
      "id": "QC-07",
@@ -760,7 +811,8 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": "ALK"
+     "runs_basis": "ALK",
+     "name": "Gloss 60°"
     },
     {
      "id": "QC-08",
@@ -772,9 +824,11 @@
      "holding_h": 0.0,
      "nitrogen_m3": 0.0,
      "waste_solvent_l": 0.0,
-     "runs_basis": null
+     "runs_basis": null,
+     "name": "Odour check"
     }
-   ]
+   ],
+   "short": "QC release"
   }
  ]
 }

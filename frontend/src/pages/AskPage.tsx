@@ -67,7 +67,7 @@ export default function AskPage({ initial }: { initial: string }) {
         claim tied to a document.
       </p>
       <form
-        className="ask-hero"
+        className="askbar"
         onSubmit={(e) => {
           e.preventDefault();
           ask(q);

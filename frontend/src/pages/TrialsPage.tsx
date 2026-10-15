@@ -79,7 +79,7 @@ export default function TrialsPage({ focus }: { focus: string }) {
         through an Evolus workflow. The status comes back here.
       </p>
       {!wf && (
-        <div className="banner warn small" style={{ marginTop: 12 }}>
+        <div className="note warn small" style={{ marginTop: 12 }}>
           <Workflow size={18} />
           <div>The Evolus approval workflow is not connected in this deployment: submissions are simulated locally and labelled “offline”.</div>
         </div>
@@ -106,12 +106,12 @@ export default function TrialsPage({ focus }: { focus: string }) {
         {t && (
           <div className="card">
             <div className="card-pad" style={{ borderBottom: "1px solid var(--border)" }}>
-              <div className="pipeline">
+              <div className="steps-flow">
                 {STAGES.map(([k, label], i) => {
                   const idx = stageIndex(t.status);
                   const cls = i < idx ? "done" : i === idx ? "now" : "";
                   const lab = k === "decided" && (t.status === "approved" || t.status === "rejected") ? t.status.toUpperCase() : label;
-                  return <span key={k} className={`stage ${cls}`}>{lab}</span>;
+                  return <span key={k} className={`s ${cls}`}>{lab}</span>;
                 })}
               </div>
               <h2 className="h2" style={{ marginTop: 14 }}>{t.plan.title}</h2>

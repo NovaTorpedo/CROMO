@@ -62,7 +62,7 @@ export default function ChangePage({ initial }: { initial: string }) {
         with the fences and evidence involved. Decisions are made by auditable rules over the recovered verdicts; the model only maps your words
         to steps.
       </p>
-      <form className="ask-hero" onSubmit={(e) => { e.preventDefault(); check(p); }}>
+      <form className="askbar" onSubmit={(e) => { e.preventDefault(); check(p); }}>
         <input className="input" value={p} onChange={(e) => setP(e.target.value)} placeholder="e.g. Remove step SOL-02 to save time" aria-label="Proposed change" />
         <button className="btn primary" disabled={busy}>{busy ? <Spinner /> : <Scale size={16} />} Check</button>
       </form>
@@ -94,9 +94,9 @@ export default function ChangePage({ initial }: { initial: string }) {
                 {f.instruction && <div style={{ marginTop: 8 }}>{f.instruction}</div>}
                 <div className="small" style={{ marginTop: 6, color: "var(--text-2)" }}>{f.why}</div>
                 {f.evidence?.map((e) => (
-                  <div key={e.id + e.acc} className={`ev st-${e.stance}`} style={{ marginTop: 8 }} onClick={() => openDoc({ acc: e.acc, page: e.page, quote: e.quote })}>
-                    <div className="ev-quote" style={{ fontSize: 14 }}>“{e.quote}”</div>
-                    <div className="ev-meta"><span className="chip mono">{e.acc}</span><span className="chip">{e.doc_type}</span><span className="chip">{fmtDate(e.date)}</span></div>
+                  <div key={e.id + e.acc} className="tl-card" style={{ marginTop: 8 }} onClick={() => openDoc({ acc: e.acc, page: e.page, quote: e.quote })}>
+                    <div className="quote" style={{ fontSize: 14 }}>“{e.quote}”</div>
+                    <div className="tl-meta"><span className="chip mono">{e.acc}</span><span className="chip">{e.doc_type}</span><span className="chip">{fmtDate(e.date)}</span></div>
                   </div>
                 ))}
                 {f.verdict === "FOSSIL" && f.annual_cost_eur ? <div className="tiny c-FOSSIL" style={{ marginTop: 6 }}>Potential saving {eur(f.annual_cost_eur)}/yr</div> : null}

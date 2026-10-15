@@ -65,10 +65,10 @@ export interface VerdictData {
 }
 
 export interface MapStep {
-  id: string; seq: number; instruction: string; verdict: Verdict; strength: string | null; origin_year: number | null;
+  id: string; seq: number; name: string; instruction: string; verdict: Verdict; strength: string | null; origin_year: number | null;
   first_seen: string | null; annual_cost_eur: number; reason: string;
 }
-export interface MapProcess { id: string; code: string; name: string; kind: string; revision: string; revision_date: string; steps: MapStep[] }
+export interface MapProcess { id: string; code: string; name: string; short: string; kind: string; revision: string; revision_date: string; steps: MapStep[] }
 export interface MapData {
   plant: { name: string; site: string; synthetic: boolean; description: string };
   processes: MapProcess[];

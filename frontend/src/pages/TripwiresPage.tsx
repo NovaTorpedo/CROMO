@@ -107,9 +107,9 @@ export default function TripwiresPage() {
                   </div>
                   <div className="small" style={{ marginTop: 6, color: "var(--text-2)" }}>{a.explanation}</div>
                   {a.evidence.map((e) => (
-                    <div key={e.id} className={`ev st-${e.stance}`} style={{ marginTop: 8 }} onClick={() => openDoc({ acc: e.acc, page: e.page, quote: e.quote })}>
-                      <div className="ev-quote" style={{ fontSize: 14 }}>“{e.quote}”</div>
-                      <div className="ev-meta"><span className="chip mono">{e.acc}</span><span className="chip">{fmtDate(e.date)}</span></div>
+                    <div key={e.id} className="tl-card" style={{ marginTop: 8 }} onClick={() => openDoc({ acc: e.acc, page: e.page, quote: e.quote })}>
+                      <div className="quote" style={{ fontSize: 14 }}>“{e.quote}”</div>
+                      <div className="tl-meta"><span className="chip mono">{e.acc}</span><span className="chip">{fmtDate(e.date)}</span></div>
                     </div>
                   ))}
                   {a.effect === "fossil_reactivated" && <div className="tiny" style={{ marginTop: 6, color: "var(--danger)" }}>Do not remove this step under the new conditions.</div>}
