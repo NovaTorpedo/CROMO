@@ -10,6 +10,7 @@ import TripwiresPage from "./pages/TripwiresPage";
 import ChangePage from "./pages/ChangePage";
 import TrialsPage from "./pages/TrialsPage";
 import SystemPage from "./pages/SystemPage";
+import CoverPage from "./pages/CoverPage";
 
 interface Health { ok: boolean; mode: "amd" | "fixture"; results?: { provider: string; model: string } | null }
 interface SysLite { config: { roles: { reasoner: { model: string | null } } } }
@@ -64,6 +65,7 @@ export default function App() {
 
   const openDoc = useCallback((t: DocTarget) => setDoc(t), []);
   const page = route.path[0] ?? "";
+  if (page === "cover") return <CoverPage />;
 
   let content;
   if (page === "step" && route.path[1]) content = <StepPage stepId={route.path[1].toUpperCase()} query={route.query} />;
