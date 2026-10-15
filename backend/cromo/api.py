@@ -369,9 +369,9 @@ async def trial_refresh(tid: str, request: Request):
 
 
 @app.post("/api/trials/{tid}/decision", dependencies=[Depends(require_write)])
-def trial_decision(tid: str, body: DecisionIn):
+async def trial_decision(tid: str, body: DecisionIn):
     try:
-        return trials.decide(tid, body.approved, body.by, body.note)
+        return await trials.decide(tid, body.approved, body.by, body.note)
     except (KeyError, ValueError) as e:
         raise HTTPException(400, str(e)) from None
 

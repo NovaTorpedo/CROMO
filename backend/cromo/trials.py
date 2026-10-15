@@ -5,8 +5,8 @@ acceptance criteria, rollback) and sends it to an engineer for approval through 
 workflow configured in EVOLUS_TRIAL_WORKFLOW_ID. Status comes back by polling the execution
 (or via the webhook). The approval decision is recorded with who/when/source.
 
-Lifecycle: draft -> submitted (Evolus run queued/running) -> awaiting_decision -> approved | rejected
-           (failed if the workflow run fails; offline: submitted is simulated and labelled as such)
+Lifecycle: draft -> submitted (Evolus run: request) -> awaiting_decision -> decision_sent (Evolus run: decision)
+           -> approved | rejected. Offline (no Evolus) the submission is simulated and labelled as such.
 """
 
 from __future__ import annotations
@@ -110,44 +110,78 @@ async def submit(tid: str) -> dict:
     return t
 
 
-DECISION_RE = re.compile(r"\b(APPROVED|REJECTED|APPROVATO|RESPINTO)\b", re.I)
+STATUS_RE = re.compile(r'\\*"status\\*"\s*:\s*\\*"(AWAITING_APPROVAL|APPROVED|REJECTED)')
+
+
+def _workflow_status(execution: dict) -> str | None:
+    """The approval record's `status` field from a workflow execution (the Output step returns it as JSON)."""
+    m = STATUS_RE.search(json.dumps(execution, ensure_ascii=False))
+    return m.group(1) if m else None
+
+
+def _brief(execution: dict) -> str:
+    m = re.search(r'approver_brief\\*"\s*:\s*\\*"(.{0,1500}?)\\*"\s*,\s*\\*"recorded_at', json.dumps(execution, ensure_ascii=False))
+    txt = m.group(1) if m else ""
+    for _ in range(2):
+        txt = txt.replace("\\\\", "\\").replace("\n", "
+").replace('\\"', '"')
+    return txt[:1200]
 
 
 async def refresh(tid: str) -> dict:
     t = get(tid)
     s = config.settings
-    if t["status"] not in ("submitted", "awaiting_decision") or not t.get("evolus_execution_id"):
+    exe = t.get("evolus_execution_id")
+    if t["status"] not in ("submitted", "awaiting_decision", "decision_sent") or not exe or not s.evolus_trial_workflow_id:
         return t
     try:
-        ex = await evolus.get_execution(s.evolus_trial_workflow_id, t["evolus_execution_id"])
+        ex = await evolus.get_execution(s.evolus_trial_workflow_id, exe)
     except evolus.EvolusError as e:
         _event(t, t["status"], f"Status check failed: {e}", "evolus")
         _save(t)
         return t
-    status = str(ex.get("status", "")).lower()
-    out = json.dumps(ex.get("output") or ex.get("result") or ex, ensure_ascii=False)[:4000]
-    if status == "failed":
-        _event(t, "failed", "Evolus workflow run failed.", "evolus")
-    elif status == "completed":
-        m = DECISION_RE.search(out)
-        if m:
-            approved = m.group(1).upper() in ("APPROVED", "APPROVATO")
-            _event(t, "approved" if approved else "rejected", "Decision returned by the Evolus workflow.", "evolus",
-                   output_excerpt=out[:600])
-        elif t["status"] != "awaiting_decision":
-            _event(t, "awaiting_decision", "Evolus workflow completed: approval request delivered to the engineer.", "evolus",
-                   output_excerpt=out[:600])
+    run_status = str(ex.get("status", "")).lower()
+    if run_status == "failed":
+        _event(t, "failed", "Evolus workflow run failed.", "evolus", execution_id=exe)
+    elif run_status == "completed":
+        st = _workflow_status(ex)
+        if st in ("APPROVED", "REJECTED") and t["status"] == "decision_sent":
+            last = next((h for h in reversed(t["history"]) if h.get("by")), {})
+            _event(t, st.lower(), f"Decision recorded by the Evolus workflow (execution {exe}).", "evolus",
+                   by=last.get("by"), execution_id=exe)
+        elif t["status"] == "submitted":
+            brief = _brief(ex)
+            if brief:
+                t["plan"]["approver_brief"] = brief
+            _event(t, "awaiting_decision", "Evolus workflow completed: the approval request and the engineer's brief are "
+                   "recorded in Evolus.", "evolus", execution_id=exe)
     _save(t)
     return t
 
 
-def decide(tid: str, approved: bool, by: str, note: str = "") -> dict:
+async def decide(tid: str, approved: bool, by: str, note: str = "") -> dict:
+    """The engineer's decision. With Evolus connected it is sent through the same workflow (stage=decision), so the
+    decision is recorded in Evolus next to the request; offline it is recorded locally."""
     t = get(tid)
     if t["status"] not in ("submitted", "awaiting_decision"):
         raise ValueError("Trial is not awaiting a decision.")
-    by = re.sub(r"[^\w .'\-]", "", by or "")[:60] or "engineer"
-    _event(t, "approved" if approved else "rejected", (note or "")[:300] or ("Approved" if approved else "Rejected"),
-           "engineer", by=by)
+    by = re.sub(r"[^\w .'\-()]", "", by or "")[:60] or "engineer"
+    decision = "APPROVED" if approved else "REJECTED"
+    s = config.settings
+    if s.evolus_configured and s.evolus_trial_workflow_id and t.get("evolus_execution_id"):
+        try:
+            res = await evolus.run_workflow(
+                s.evolus_trial_workflow_id,
+                f"Decision on CROMO trial {t['id']} for step {t['step_id']}: {decision} by {by}. {(note or '')[:300]}",
+                parameters={"trial_id": t["id"], "step_id": t["step_id"], "process": t["plan"]["step"]["process_code"],
+                            "stage": "decision", "decision": decision, "approver": by})
+            t["evolus_execution_id"] = res.get("executionId")
+            _event(t, "decision_sent", f"{decision.capitalize()} by {by}; sent to the Evolus workflow.", "engineer", by=by,
+                   execution_id=res.get("executionId"))
+        except evolus.EvolusError as e:
+            _event(t, "approved" if approved else "rejected", f"{decision} by {by} (Evolus unreachable: {e}).", "engineer", by=by)
+    else:
+        _event(t, "approved" if approved else "rejected", (note or "")[:300] or decision.capitalize(), "engineer", by=by)
     _save(t)
     return t
 
@@ -157,12 +191,10 @@ def webhook(execution_id: str, payload: dict) -> dict | None:
     if not r:
         return None
     t = get(r["id"])
-    out = json.dumps(payload, ensure_ascii=False)[:4000]
-    m = DECISION_RE.search(out)
-    if m:
-        approved = m.group(1).upper() in ("APPROVED", "APPROVATO")
-        _event(t, "approved" if approved else "rejected", "Decision delivered by Evolus webhook.", "evolus")
-    else:
-        _event(t, "awaiting_decision", "Evolus webhook: approval request delivered.", "evolus")
+    st = _workflow_status(payload)
+    if st in ("APPROVED", "REJECTED") and t["status"] == "decision_sent":
+        _event(t, st.lower(), "Decision delivered by Evolus webhook.", "evolus")
+    elif st == "AWAITING_APPROVAL" and t["status"] == "submitted":
+        _event(t, "awaiting_decision", "Evolus webhook: approval request recorded.", "evolus")
     _save(t)
     return t

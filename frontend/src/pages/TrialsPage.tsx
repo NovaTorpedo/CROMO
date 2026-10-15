@@ -8,7 +8,7 @@ interface Trial {
   plan: {
     title: string; objective: string; scope: string; duration: string; measurements: string[]; acceptance_criteria: string[];
     rollback: string; risks: string[]; approvals: string[]; step: { id: string; instruction: string; process_code: string };
-    strength: string; annual_saving_eur: number; evidence: { claim: string; sources: string[] }[]; drafted_by: string;
+    strength: string; annual_saving_eur: number; evidence: { claim: string; sources: string[] }[]; drafted_by: string; approver_brief?: string;
   };
   history: { status: string; note: string; source: string; ts: number; by?: string; execution_id?: string }[];
 }
@@ -24,6 +24,7 @@ function stageIndex(s: string) {
   if (s === "draft") return 0;
   if (s === "submitted") return 1;
   if (s === "awaiting_decision") return 2;
+  if (s === "decision_sent") return 3;
   if (s === "approved" || s === "rejected") return 3;
   return 0;
 }
@@ -50,10 +51,10 @@ export default function TrialsPage({ focus }: { focus: string }) {
   const t = list?.find((x) => x.id === sel) ?? null;
 
   useEffect(() => {
-    if (!t || !["submitted", "awaiting_decision"].includes(t.status) || !t.evolus_execution_id) return;
+    if (!t || !["submitted", "awaiting_decision", "decision_sent"].includes(t.status) || !t.evolus_execution_id) return;
     const id = window.setInterval(() => {
       post<Trial>(`/api/trials/${t.id}/refresh`).then((nt) => setList((l) => l?.map((x) => (x.id === nt.id ? nt : x)) ?? null)).catch(() => {});
-    }, 8000);
+    }, 4000);
     return () => window.clearInterval(id);
   }, [t?.id, t?.status, t?.evolus_execution_id]);
 
@@ -110,7 +111,7 @@ export default function TrialsPage({ focus }: { focus: string }) {
                 {STAGES.map(([k, label], i) => {
                   const idx = stageIndex(t.status);
                   const cls = i < idx ? "done" : i === idx ? "now" : "";
-                  const lab = k === "decided" && (t.status === "approved" || t.status === "rejected") ? t.status.toUpperCase() : label;
+                  const lab = k === "decided" && (t.status === "approved" || t.status === "rejected") ? (t.status === "approved" ? "Approved" : "Rejected") : k === "decided" && t.status === "decision_sent" ? "Recording decision…" : label;
                   return <span key={k} className={`s ${cls}`}>{lab}</span>;
                 })}
               </div>
@@ -119,6 +120,12 @@ export default function TrialsPage({ focus }: { focus: string }) {
                 {t.plan.step.process_code} · FOSSIL ({t.plan.strength} evidence) · potential saving <strong className="c-FOSSIL">{eur(t.plan.annual_saving_eur)}/yr</strong> · drafted by <span className="mono">{t.plan.drafted_by}</span>
               </div>
             </div>
+            {t.plan.approver_brief && (
+              <div className="card-pad" style={{ borderBottom: "1px solid var(--border)", background: "var(--surface-2)" }}>
+                <div className="small" style={{ fontWeight: 600, marginBottom: 6 }}><Workflow size={14} /> Brief for the approving engineer, written by the Evolus workflow</div>
+                <div className="small" style={{ whiteSpace: "pre-wrap", color: "var(--text-2)" }}>{t.plan.approver_brief}</div>
+              </div>
+            )}
             <div className="card-pad grid-2" style={{ gap: 18 }}>
               <div className="col small">
                 <div><strong>Objective.</strong> {t.plan.objective}</div>
