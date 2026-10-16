@@ -14,6 +14,32 @@ from .text import injection_suspect, tokens
 
 CHUNK_WORDS = 80
 
+# Pages whose transcription was reused from an earlier reading by the same vision model (see _earlier_reading).
+REUSED: set[tuple[str, int]] = set()
+
+
+def _earlier_reading(acc: str, page: int) -> dict | None:
+    """The configured vision model's own earlier reading of this page, when CROMO_REUSE_READINGS=1.
+
+    scripts/compare_models.py ocr stores every page each model read on the AMD endpoint, with CROMO's production prompt.
+    When the shared endpoint rejects image requests (overload), the benchmark can reuse the same model's reading instead
+    of sending the image again. Only readings by the *same* model are used, and every reuse is counted and reported."""
+    import os
+    import re
+
+    if os.environ.get("CROMO_REUSE_READINGS") != "1" or not config.settings.vision.configured:
+        return None
+    model = config.settings.vision.model
+    p = config.settings.runtime_dir / "ocr_cache" / re.sub(r"[^\w.-]", "_", model) / f"{acc}-p{page}.json"
+    if not p.is_file():
+        return None
+    r = json.loads(p.read_text(encoding="utf-8"))
+    if not r.get("ok") or not r.get("text") or r.get("model") != model:
+        return None
+    text = llm._FENCE.sub(lambda m: m.group(1), llm._THINK.sub("", r["text"]).strip())
+    REUSED.add((acc, page))
+    return {"lines": [{"text": ln.rstrip()} for ln in text.splitlines() if ln.strip()], "source": "vision", "model": model}
+
 
 def _chunk_lines(acc: str, pages: list[dict]) -> list[dict]:
     chunks = []
@@ -61,7 +87,7 @@ async def ingest_doc(acc: str) -> dict:
     else:
         for k in range(1, archive.page_count(acc) + 1):
             data = archive.page_path(acc, k).read_bytes()
-            tr = await llm.transcribe(data)
+            tr = _earlier_reading(acc, k) or await llm.transcribe(data)
             pages.append({"page": k, "width": 1000, "height": 1414, "lines": tr["lines"], "source": tr["source"],
                           "model": tr.get("model")})
         text_source = pages[0]["source"] if pages else "none"

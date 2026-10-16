@@ -208,7 +208,8 @@ async def run(args):
     # 1. ingestion (resumable per document) ------------------------------------
     t_ingest = (out.get("ingest") or {}).get("seconds", 0.0)
     if not args.skip_ingest and not out.get("ingest"):
-        prog = out.setdefault("ingest_progress", {"done": [], "seconds": 0.0, "documents": 0, "pages": 0, "scanned_pages": 0})
+        prog = out.setdefault("ingest_progress", {"done": [], "seconds": 0.0, "documents": 0, "pages": 0, "scanned_pages": 0,
+                                                  "reused_readings": 0})
         prog["seconds"] += prog.pop("seconds_running", 0.0)  # time spent by an interrupted run up to its last save
         all_accs = archive.list_accessions()
         todo_accs = [a for a in all_accs if a not in set(prog["done"])]
@@ -221,6 +222,7 @@ async def run(args):
             prog["documents"] += 1
             prog["pages"] += pages
             prog["scanned_pages"] += 0 if archive.text_layer(acc) else pages
+            prog["reused_readings"] = prog.get("reused_readings", 0) + sum(1 for a, _ in ingest.REUSED if a == acc)
             prog["seconds_running"] = time.perf_counter() - t0
             _save_partial(out, args.tag)  # after every document: an interruption loses at most the ones in flight
             if i % 25 == 0:
@@ -250,6 +252,13 @@ async def run(args):
             "vision_p50_ms_per_page": vis[0]["p50_ms"] if vis else None, "vision_calls": vis_calls,
             "concurrency": s.max_concurrency, "rpm_limit": s.rpm_limit or None,
         }
+        reused = prog.get("reused_readings", 0)
+        if reused:
+            out["ingest"]["reused_readings"] = reused
+            out["ingest"]["reused_note"] = (
+                f"{reused} of {scanned} scanned pages were not re-sent: the endpoint was rejecting image requests (overloaded), so "
+                f"the ingest reused {s.vision.model}'s own readings of those pages, made on the same AMD endpoint with the same "
+                "prompt during the OCR comparison. The ingest time does not include those readings.")
         if s.rpm_limit:
             out["ingest"]["note"] = (f"Throughput is bounded by the endpoint's request limit ({s.rpm_limit} requests/min on our "
                                      "side), not by the GPU: each document costs one model call, each scanned page one more.")
@@ -379,7 +388,14 @@ def main():
     ap.add_argument("--tag", default="", help="secondary A/B run (e.g. qwen): results go to *_<tag>.json; no replays/snapshot")
     ap.add_argument("--resume", action="store_true", help="continue an interrupted run from its saved progress")
     ap.add_argument("--finalize-partial", action="store_true", help="publish an interrupted run's measurements, marked partial")
+    ap.add_argument("--reuse-readings", action="store_true",
+                    help="reuse the vision model's own earlier page readings (compare_models.py ocr cache) instead of re-sending "
+                         "images; for an endpoint that rejects image requests; counted and reported")
     a = ap.parse_args()
+    if a.reuse_readings:
+        import os
+
+        os.environ["CROMO_REUSE_READINGS"] = "1"
     if a.finalize_partial:
         finalize_partial(a)
     else:
