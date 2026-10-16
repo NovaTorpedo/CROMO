@@ -129,3 +129,29 @@ def test_ocr_metrics_are_fair_to_formatting_and_order():
     assert score(md, ref) > 0.2  # strict CER counts reading order
     assert score("APPROVED Ref. CR-1995-009 Add ammonium chloride", ref) == 0.0  # markers are not penalised
     assert word_f1(None, ref) is None and score(None, ref) is None
+
+
+def test_streamed_answer_is_assembled_with_usage(monkeypatch):
+    sse = ('data: {"choices":[{"delta":{"content":"{\\"verdict\\": "}}]}\n\n'
+           'data: {"choices":[{"delta":{"content":"\\"FENCE\\"}"},"finish_reason":"stop"}]}\n\n'
+           'data: {"choices":[],"usage":{"prompt_tokens":11,"completion_tokens":5}}\n\n'
+           'data: [DONE]\n\n')
+    seen = []
+
+    def handler(request: httpx.Request):
+        seen.append(json.loads(request.content))
+        return httpx.Response(200, headers={"content-type": "text/event-stream"}, content=sse.encode())
+
+    monkeypatch.setattr(config, "settings", config.load_settings())
+    object.__setattr__(config.settings, "stream", True)  # frozen dataclass: set for this test only
+    role = config.RoleConfig("reasoner", "http://tf3.test/v1", "rc-x", "Gemma-4-31B-IT")
+    llm._clients[f"{role.role}:{role.base_url}"] = httpx.AsyncClient(base_url=role.base_url, transport=httpx.MockTransport(handler))
+    try:
+        text, meta = asyncio.run(llm._chat(role, [{"role": "user", "content": "hi"}], max_tokens=10, temperature=0,
+                                           schema=None, stage="test.stream"))
+    finally:
+        llm._clients.pop(f"{role.role}:{role.base_url}", None)
+        object.__setattr__(config.settings, "stream", False)
+    assert seen[0]["stream"] is True
+    assert text == '{"verdict": "FENCE"}'
+    assert meta["completion_tokens"] == 5

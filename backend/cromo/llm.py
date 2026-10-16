@@ -133,6 +133,42 @@ def _retry_after(r: httpx.Response, attempt: int) -> float:
     return base + random.uniform(0, 1.5)
 
 
+async def _send(role: config.RoleConfig, body: dict) -> tuple[httpx.Response, dict | None]:
+    """POST /chat/completions. With streaming, the server-sent chunks are assembled into the usual non-streaming shape.
+
+    Streaming matters on a busy shared endpoint: the Token Factory allows 10 minutes for a whole non-streaming request,
+    but only limits the gap between chunks of a streamed one, so long answers in a long queue still complete."""
+    c = _client(role)
+    if not body.get("stream"):
+        r = await c.post("/chat/completions", json=body)
+        return r, (r.json() if r.status_code < 400 else None)
+    async with c.stream("POST", "/chat/completions", json=body) as r:
+        if r.status_code >= 400:
+            await r.aread()
+            return r, None
+        parts: list[str] = []
+        finish, usage = None, {}
+        async for line in r.aiter_lines():
+            if not line.startswith("data:"):
+                continue
+            payload = line[5:].strip()
+            if payload == "[DONE]":
+                break
+            try:
+                j = json.loads(payload)
+            except ValueError:
+                continue
+            if j.get("error"):  # an error reported inside the stream: retry like a dropped connection
+                raise httpx.RemoteProtocolError(str(j["error"])[:200])
+            usage = j.get("usage") or usage
+            for ch in j.get("choices") or []:
+                piece = (ch.get("delta") or {}).get("content")
+                if piece:
+                    parts.append(piece)
+                finish = ch.get("finish_reason") or finish
+    return r, {"choices": [{"message": {"content": "".join(parts)}, "finish_reason": finish}], "usage": usage}
+
+
 def _error_text(r: httpx.Response) -> str:
     """Upstream error message; the Token Factory gateway uses {"error":{...}}, its platform layer {"detail":{"error":{...}}}."""
     try:
@@ -221,6 +257,8 @@ async def _chat(role: config.RoleConfig, messages: list[dict], *, max_tokens: in
         body["response_format"] = {"type": "json_object"}
     if role.role == "reasoner" and config.settings.reasoning_effort:
         body["reasoning_effort"] = config.settings.reasoning_effort
+    if config.settings.stream:
+        body["stream"] = True
     # Latency is the duration of the successful request itself: time queued behind our own concurrency cap, the
     # rate limiter or retries is not model latency (it is reported separately as wait time).
     t_start = time.perf_counter()
@@ -234,7 +272,7 @@ async def _chat(role: config.RoleConfig, messages: list[dict], *, max_tokens: in
                 await limiter.acquire()
             try:
                 t0 = time.perf_counter()
-                r = await _client(role).post("/chat/completions", json=body)
+                r, answer = await _send(role, body)
                 ms = (time.perf_counter() - t0) * 1000
                 if r.status_code in (429, 500, 502, 503, 504):
                     last_err = (f"{role.role} endpoint HTTP {r.status_code}", _error_text(r))
@@ -251,7 +289,7 @@ async def _chat(role: config.RoleConfig, messages: list[dict], *, max_tokens: in
                     continue
                 if r.status_code >= 400:
                     raise ProviderError(f"{role.role} endpoint HTTP {r.status_code}", detail=_error_text(r))
-                data = r.json()
+                data = answer
                 break
             except httpx.HTTPError as e:
                 last_err = (f"{role.role} endpoint unreachable: {type(e).__name__}", "")

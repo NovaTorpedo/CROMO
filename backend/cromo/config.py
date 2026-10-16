@@ -76,6 +76,7 @@ class Settings:
     evolus_application_id: str = field(repr=False)
     rpm_limit: int = 0  # client-side requests/minute per endpoint key (0 = unlimited)
     reasoning_effort: str = ""  # sent to the REASONER when set (Token Factory: none|low|medium|high ...)
+    stream: bool = False  # stream answers (default on the Token Factory: its 10-minute limit is per chunk gap when streaming)
     evolus_extractor_agent_id: str = ""
     evolus_extractor_id: str = ""
     evolus_trial_workflow_id: str = ""
@@ -190,6 +191,7 @@ def load_settings() -> Settings:
         max_concurrency=int(_get("CROMO_MAX_CONCURRENCY") or (TOKEN_FACTORY_CONCURRENCY if tf else 8)),
         rpm_limit=int(_get("CROMO_RPM_LIMIT") or (TOKEN_FACTORY_RPM if tf else 0)),
         reasoning_effort=_get("CROMO_REASONING_EFFORT").lower(),
+        stream=_bool("CROMO_STREAM", tf),
         evolus_api_key=_get("EVOLUS_API_KEY"),
         evolus_application_id=_get("EVOLUS_APPLICATION_ID"),
         evolus_extractor_agent_id=_get("EVOLUS_EXTRACTOR_AGENT_ID"),
