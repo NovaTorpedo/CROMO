@@ -8,7 +8,7 @@ interface Finding {
   step_id: string | null; verdict?: Verdict; strength?: string; decision: string; why: string; instruction?: string;
   evidence?: Evidence[]; annual_cost_eur?: number; effect?: string;
 }
-interface Res { proposal: string; decision: string; findings: Finding[]; parsed: { targets: string[]; action: string; subject: string }; provider: string; duration_s: number; policy: string }
+interface Res { proposal: string; decision: string; findings: Finding[]; parsed: { targets: string[]; action: string; subject: string }; provider: string; duration_s: number; policy: string; cached_at?: number }
 
 const EXAMPLES = [
   "Remove step SOL-02 (bonding and earthing) to save time",
@@ -101,7 +101,8 @@ export default function ChangePage({ initial }: { initial: string }) {
                 {f.verdict === "FOSSIL" && f.annual_cost_eur ? <div className="tiny c-FOSSIL" style={{ marginTop: 6 }}>Potential saving {eur(f.annual_cost_eur)}/yr</div> : null}
               </div>
             ))}
-            <div className="tiny muted">Policy: {res.policy} · mapped to {res.parsed.targets.join(", ") || res.parsed.subject || "nothing"} ({res.parsed.action}) · {res.duration_s}s</div>
+            <div className="tiny muted">Policy: {res.policy} · mapped to {res.parsed.targets.join(", ") || res.parsed.subject || "nothing"} ({res.parsed.action}) · {res.duration_s}s
+              {res.cached_at ? ` · stored answer from ${new Date(res.cached_at * 1000).toLocaleString()}` : ""}</div>
           </>
         )}
       </div>

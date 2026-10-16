@@ -328,10 +328,33 @@ def tripwire_list():
     return {"registry": tripwires.registry(), "presets": tripwires.PRESETS, "recent": recent}
 
 
+def _answer_key(kind: str, payload) -> str:
+    """Cache key for a model-backed answer: the request, the model and the current set of verdicts."""
+    import hashlib
+
+    ver = (db.q1("SELECT MAX(created_at) m FROM investigations") or {"m": 0})["m"] or 0
+    raw = json.dumps({"k": kind, "p": payload, "m": llm.model_name("reasoner"), "v": round(ver)}, sort_keys=True)
+    return f"answer:{kind}:{hashlib.sha256(raw.encode()).hexdigest()[:24]}"
+
+
+async def _stored_or_new(kind: str, payload, compute):
+    """Live mode: an identical what-if question asked again returns the stored AMD answer at once (marked with
+    cached_at), so a demo does not wait minutes on a busy shared endpoint. A re-investigation invalidates it."""
+    if llm.mode() != "amd":
+        return await compute()
+    key = _answer_key(kind, payload)
+    hit = db.kv_get(key)
+    if hit:
+        return {**hit, "cached_at": hit.get("computed_at")}
+    res = await compute()
+    db.kv_set(key, {**res, "computed_at": time.time()})
+    return res
+
+
 @app.post("/api/tripwires/simulate", dependencies=[Depends(require_write)])
 async def tripwire_simulate(body: EventIn):
     ev = {"type": body.type, "process": body.process, "from": body.from_, "to": body.to}
-    return await tripwires.evaluate(ev)
+    return await _stored_or_new("tripwire", ev, lambda: tripwires.evaluate(ev))
 
 
 # ---------------------------------------------------------------------------
@@ -350,7 +373,7 @@ class ChangeIn(BaseModel):
 async def change_check(body: ChangeIn):
     """Ask CROMO before changing a process. Returns blocked | caution | allowed_with_trial | allowed_with_review | allowed,
     with the fences and evidence involved."""
-    return await changecheck.check(body.proposal)
+    return await _stored_or_new("change", " ".join(body.proposal.lower().split()), lambda: changecheck.check(body.proposal))
 
 
 @app.get("/api/change-check/examples")

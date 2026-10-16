@@ -9,7 +9,7 @@ interface Alert {
   step_id: string; verdict: Verdict; instruction: string; process: string; effect: string; explanation: string;
   evidence: Evidence[]; annual_cost_eur: number;
 }
-interface Result { id: string; event: Ev; alerts: Alert[]; provider: string; duration_s: number }
+interface Result { id: string; event: Ev; alerts: Alert[]; provider: string; duration_s: number; cached_at?: number }
 interface Reg { step_id: string; verdict: Verdict; dependency: string; type: string; holds: boolean | null; instruction: string }
 interface Data { registry: Reg[]; presets: { id: string; label: string; event: Ev }[]; recent: { id: string; event: Ev; created_at: number }[] }
 
@@ -101,6 +101,7 @@ export default function TripwiresPage({ preset = "" }: { preset?: string }) {
               <div className="small muted">
                 {res.alerts.length} alert{res.alerts.length === 1 ? "" : "s"} for <strong>{res.event.from}</strong> → <strong>{res.event.to}</strong> · {res.duration_s}s ·{" "}
                 {res.provider === "amd" ? "reviewed by the AMD-hosted model" : "rule-based (offline)"}
+                {res.cached_at ? ` · stored answer from ${new Date(res.cached_at * 1000).toLocaleString()}` : ""}
               </div>
               {res.alerts.length === 0 && <div className="card empty">No recovered reason depends on this item.</div>}
               {res.alerts.map((a) => (

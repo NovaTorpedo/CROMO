@@ -155,3 +155,22 @@ def test_streamed_answer_is_assembled_with_usage(monkeypatch):
     assert seen[0]["stream"] is True
     assert text == '{"verdict": "FENCE"}'
     assert meta["completion_tokens"] == 5
+
+
+def test_what_if_answers_are_stored_in_live_mode(monkeypatch, built):
+    from cromo import api
+
+    calls = []
+
+    async def compute():
+        calls.append(1)
+        return {"decision": "blocked", "provider": "amd"}
+
+    monkeypatch.setattr(llm, "mode", lambda: "amd")
+    first = asyncio.run(api._stored_or_new("change", "remove step sol-02", compute))
+    again = asyncio.run(api._stored_or_new("change", "remove step sol-02", compute))
+    assert len(calls) == 1 and first["decision"] == again["decision"] == "blocked"
+    assert "cached_at" not in first and again["cached_at"] > 0
+    monkeypatch.setattr(llm, "mode", lambda: "fixture")  # offline answers are instant and never stored
+    asyncio.run(api._stored_or_new("change", "remove step sol-02", compute))
+    assert len(calls) == 2

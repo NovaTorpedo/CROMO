@@ -3,6 +3,9 @@
 **Setup before recording**
 - Run the app on your PC against the AMD Token Factory (`LINK_AMD.md` Route A, step 7). Do **not** delete
   `data\runtime\cromo.db`: it holds the AMD run. The header pill must read **Live on AMD Token Factory · Gemma-4-31B-IT**.
+- Run `.venv\Scripts\python scripts\warm_demo.py http://localhost:8000` once after starting the app (it can take
+  10–20 minutes on a busy endpoint). Every What-if example then answers at once with the stored AMD answer, marked
+  "stored answer from …".
 - Turn on **Replay** in the header. Investigations then replay the runs recorded on AMD at speed, with a blue
   "Replay of a run recorded on AMD …" label. A live investigation takes minutes on the shared endpoint, so replay is
   the honest way to show the dig in a 3-minute video. Say "replayed" once (line at 0:32).
