@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowLeft, CircleX, ClipboardCheck, GitCompare, Play, RotateCcw, Scale, ShieldAlert, ShieldCheck, TriangleAlert } from "lucide-react";
+import { ArrowLeft, CircleX, ClipboardCheck, FileSearch, GitCompare, Play, RotateCcw, Scale, ShieldAlert, ShieldCheck, TriangleAlert } from "lucide-react";
 import { eur, get, post, streamNdjson } from "../api";
 import VeteranCard from "../components/VeteranCard";
 import { ErrorBox, Skeleton, Spinner, StrengthMeter, VERDICT_LABEL, VerdictIcon, fmtDate, go, timeAgo, useApp } from "../components/common";
+import { keyEvidence, parseTrail, progress, type Hop } from "../lib/trail";
 import type { Cost, Evidence, InvEvent, Verdict, VerdictData } from "../types";
 
 interface StepInfo {
@@ -11,13 +12,13 @@ interface StepInfo {
   cost: Cost;
   has_recording: boolean;
 }
-interface Hop { n: number; kind: string; label: string; query?: string | null; detail?: string; documents?: string[]; found: number; running: boolean; compare?: { a: string; b: string } | null }
 type Source = "stored" | "live" | "replay";
+type View = "key" | "dig";
 
 const HEADLINE: Record<Verdict, string> = {
   FOSSIL: "The reason for this step is gone.",
-  FENCE: "It looks pointless - but it protects you.",
-  UNKNOWN: "Nobody knows why. Ask a person.",
+  FENCE: "It looks pointless, but it protects you.",
+  UNKNOWN: "Nobody wrote down why. Ask a person.",
   ACTIVE: "Still needed, for a documented reason.",
   PENDING: "Not investigated yet.",
 };
@@ -27,56 +28,15 @@ const TAG: Record<string, [string, string]> = {
   counter: ["counter", "Warning sign"],
   context: ["context", "Context"],
 };
-const EXPECTED_HOPS = 9;
-
-function parse(events: InvEvent[]) {
-  const hops: Hop[] = [];
-  const evidence: Evidence[] = [];
-  const seen = new Set<string>();
-  let verdict: VerdictData | null = null;
-  let concluding = false;
-  let meta: InvEvent | null = null;
-  const ignored = new Set<string>();
-  const warnings: string[] = [];
-  for (const ev of events) {
-    if (ev.type === "start" || ev.type === "replay") meta = { ...(meta ?? {}), ...ev };
-    else if (ev.type === "hop_started") {
-      hops.push({ n: ev.n!, kind: ev.kind!, label: ev.label!, query: ev.query, documents: ev.documents, found: 0, running: true });
-    } else if (ev.type === "hop") {
-      const items = ev.evidence ?? [];
-      const h: Hop = {
-        n: ev.n!, kind: ev.kind!, label: ev.label!, query: ev.query, detail: ev.detail, documents: ev.documents, found: items.length, running: false,
-        compare: (ev as unknown as { compare?: { a: string; b: string } }).compare ?? null,
-      };
-      const i = hops.findIndex((x) => x.n === ev.n);
-      if (i >= 0) hops[i] = h;
-      else hops.push(h);
-      (ev.ignored_injection ?? []).forEach((a) => ignored.add(a));
-      for (const e of items) {
-        const key = `${e.acc}|${e.quote.slice(0, 60)}`;
-        if (seen.has(key)) continue;
-        seen.add(key);
-        if (e.suspicious) ignored.add(e.acc);
-        else if (e.verified) evidence.push(e);
-      }
-    } else if (ev.type === "concluding") concluding = true;
-    else if (ev.type === "verdict") {
-      verdict = ev.verdict ?? null;
-      concluding = false;
-    } else if (ev.type === "warning" || ev.type === "error") warnings.push(ev.message ?? "");
-  }
-  evidence.sort((a, b) => (a.date ?? "9999").localeCompare(b.date ?? "9999"));
-  return { hops, evidence, verdict, concluding, meta, ignored: [...ignored], warnings };
-}
 
 export default function StepPage({ stepId, query }: { stepId: string; query: URLSearchParams }) {
-  const { mode, demo } = useApp();
+  const { mode, demo, amdRoute } = useApp();
   const [info, setInfo] = useState<StepInfo | null>(null);
   const [err, setErr] = useState<unknown>(null);
   const [events, setEvents] = useState<InvEvent[]>([]);
   const [source, setSource] = useState<Source>("stored");
   const [busy, setBusy] = useState(false);
-  const [showAll, setShowAll] = useState(false);
+  const [view, setView] = useState<View>("key");
   const queue = useRef<InvEvent[]>([]);
   const timer = useRef<number | null>(null);
   const abort = useRef<AbortController | null>(null);
@@ -110,6 +70,7 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
   const showStored = useCallback(async () => {
     reset();
     setSource("stored");
+    setView("key");
     const r = await get<{ events: InvEvent[] }>(`/api/steps/${stepId}/events`);
     setEvents(r.events.filter((e) => e.type !== "heartbeat")); // stored results appear at once
   }, [stepId]);
@@ -118,6 +79,7 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
     if (src === "live" && demo && info?.has_recording) src = "replay";
     reset();
     setSource(src);
+    setView("dig");
     setBusy(true);
     setErr(null);
     const ctl = new AbortController();
@@ -157,35 +119,37 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
   if (err && !info) return <ErrorBox error={err} />;
   if (!info)
     return (
-      <div className="col" style={{ gap: 18, marginTop: 20 }}>
+      <div className="col" style={{ gap: 18 }}>
         <Skeleton h={40} w="45%" />
-        <Skeleton h={160} />
+        <Skeleton h={170} />
         <Skeleton h={400} />
       </div>
     );
 
-  const { hops, evidence: allEvidence, verdict: v, concluding, meta, ignored, warnings } = parse(events);
-  const cited = v ? new Set(v.strength.cited) : null;
-  const evidence = v && !showAll ? allEvidence.filter((e) => cited!.has(e.id) || e.doc_type === "recipe") : allEvidence;
-  const hidden = allEvidence.length - evidence.length;
+  const trail = parseTrail(events);
+  const { hops, verdict: v, concluding, meta, ignored, warnings } = trail;
+  const key = keyEvidence(trail);
   const st = info.step;
   const running = busy || (events.length > 0 && !v && source !== "stored");
   const shown: Verdict = v?.verdict ?? "PENDING";
   const docsRead = new Set(hops.flatMap((h) => h.documents ?? [])).size;
-  const progress = v ? 100 : Math.min(95, Math.round((hops.length / EXPECTED_HOPS) * 90) + (concluding ? 5 : 0));
   const current = [...hops].reverse().find((h) => h.running) ?? hops[hops.length - 1];
+  const where = amdRoute === "tokenfactory" ? "the AMD Token Factory" : "AMD";
+  const effView: View = running ? "dig" : view;
 
   return (
     <div>
       <button className="crumb" onClick={() => go("/")}><ArrowLeft size={15} /> Plant map</button>
-      <div className="eyebrow" style={{ marginTop: 18 }}>{st.process_code} {st.process_name.replace(/^\S+\s/, "")} · step {st.seq}</div>
-      <h1 className="h1" style={{ marginTop: 4 }}>{st.name ?? st.id}</h1>
-      <div className="lead" style={{ marginTop: 6, fontSize: 17 }}>“{st.instruction}”</div>
+      <div className="step-head">
+        <div className="eyebrow">{st.process_code} {st.process_name.replace(/^\S+\s/, "")} · step {st.seq} · {st.id}</div>
+        <h1 className="h1" style={{ marginTop: 6 }}>{st.name ?? st.id}</h1>
+        <div className="instr">“{st.instruction}”</div>
+      </div>
 
       {/* ------------------------------------------------ verdict hero */}
-      <div className={`verdict-hero h-${shown} fade-in`} style={{ marginTop: 24 }}>
+      <div className={`verdict-hero panel h-${shown} fade-in`}>
         <div className={`vtile t-${shown}`}>
-          {running && !v ? <Spinner size={28} /> : <VerdictIcon v={shown} size={34} />}
+          {running && !v ? <Spinner size={28} /> : <VerdictIcon v={shown} size={32} />}
           <span>{running && !v ? "DIGGING" : VERDICT_LABEL[shown].toUpperCase()}</span>
         </div>
         <div>
@@ -194,9 +158,9 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
               <div className="v-headline">{HEADLINE[v.verdict]}</div>
               {v.reason && <div className="v-reason">{v.reason}</div>}
               <div className="v-facts">
-                {v.origin_year && <span>Introduced <strong>{v.origin_year}</strong></span>}
-                <span>Evidence <StrengthMeter grade={v.strength.grade} /> <span className="muted">({v.strength.documents} documents)</span></span>
-                {v.proposed_verdict !== v.verdict && <span className="c-UNKNOWN">Safety rule changed the model's {v.proposed_verdict} to {v.verdict}</span>}
+                {v.origin_year && <span className="fact">Introduced <strong>{v.origin_year}</strong></span>}
+                <span className="fact">Evidence <StrengthMeter grade={v.strength.grade} /> <span className="muted">{v.strength.documents} documents</span></span>
+                {v.proposed_verdict !== v.verdict && <span className="fact c-UNKNOWN">A safety rule changed the model's {v.proposed_verdict} to {v.verdict}</span>}
               </div>
             </>
           ) : running ? (
@@ -217,77 +181,93 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
           <div className="row" style={{ justifyContent: "flex-end", marginTop: 14, gap: 8 }}>
             {v?.verdict === "FOSSIL" && <DraftTrial stepId={st.id} />}
             {v && <button className="btn sm" onClick={() => go(`/change?p=${encodeURIComponent(`Remove step ${st.id}`)}`)}><Scale size={14} /> Check a change</button>}
-            {!v && !running && <button className="btn brand" onClick={() => run("live")}><Play size={15} /> Investigate</button>}
+            {!v && !running && <button className="btn accent" onClick={() => run("live")}><Play size={15} /> Investigate</button>}
           </div>
         </div>
       </div>
 
-      {/* ------------------------------------------------ mode / provenance line */}
-      <div className="row wrap small muted" style={{ marginTop: 12, gap: 14 }}>
+      {/* ------------------------------------------------ provenance */}
+      <div className="provenance">
         {source === "replay" && meta ? (
-          <span className="note info" style={{ padding: "6px 12px" }}>
-            <RotateCcw size={15} /> Replay of a run recorded on AMD {meta.recorded_at ? new Date(meta.recorded_at * 1000).toLocaleDateString() : ""} ·{" "}
+          <span className="note info" style={{ padding: "5px 12px" }}>
+            <RotateCcw size={14} /> Replay of a run recorded on AMD {meta.recorded_at ? new Date(meta.recorded_at * 1000).toLocaleDateString() : ""} ·{" "}
             {meta.models?.reasoner} · {meta.hardware}
           </span>
-        ) : mode === "fixture" ? (
+        ) : mode === "fixture" && v?.provider !== "amd" ? (
           <span>Offline mode: this result comes from CROMO's rule-based fixture provider, not from an AI model.</span>
         ) : v ? (
-          <span>Computed on AMD by {v.model}</span>
+          <span>Computed on {v.provider === "amd" ? where : "this machine"} by {v.model} · {v.hops} hops · {v.duration_s}s</span>
         ) : null}
-        {v && source === "stored" && <span>· last run {timeAgo(v.created_at)}</span>}
+        {v && source === "stored" && <span>· {timeAgo(v.created_at)}</span>}
         <span className="grow" />
         {!running && v && (
-          <button className="btn ghost sm" onClick={() => run("live")}><Play size={14} /> Investigate again{mode === "fixture" ? " (offline)" : " live"}</button>
+          <button className="btn ghost sm" onClick={() => run("live")}><Play size={14} /> Investigate again{mode === "fixture" ? " (offline)" : ""}</button>
         )}
         {!running && info.has_recording && <button className="btn ghost sm" onClick={() => run("replay")}><RotateCcw size={14} /> Replay AMD run</button>}
       </div>
       <ErrorBox error={err} />
 
-      {/* ------------------------------------------------ live progress */}
       {running && (
-        <div className="progress fade-in" style={{ marginTop: 20 }}>
+        <div className="progress glass fade-in" style={{ marginTop: 18 }}>
           <Spinner />
           <div className="grow">
-            <div className="row small"><strong>Step {hops.length || 1} of the dig</strong><span className="muted">· {docsRead} documents read · {evidence.length} pieces of evidence</span></div>
-            <div className="bar" style={{ marginTop: 8 }}><i style={{ width: `${progress}%` }} /></div>
+            <div className="row small"><strong>Hop {hops.length || 1}</strong><span className="muted">· {docsRead} documents read · {trail.evidence.length} verified quotes</span></div>
+            <div className="bar" style={{ marginTop: 8 }}><i style={{ width: `${progress(trail)}%` }} /></div>
           </div>
         </div>
       )}
 
       <div className="inv-grid">
-        {/* ------------------------------------------------ paper trail */}
         <div>
-          <h2 className="section-title">The paper trail</h2>
-          <div className="small muted">Every claim is tied to a document in the archive. Click any entry to open the page.</div>
-          {evidence.length === 0 && !running && (
+          <div className="row wrap" style={{ alignItems: "flex-end" }}>
+            <div className="grow">
+              <h2 className="section-title">The Why-Trail</h2>
+              <div className="small muted">Every claim is a quote verified in an archive document. Open any card to see the page.</div>
+            </div>
+            {hops.length > 0 && (
+              <div className="seg" role="tablist" aria-label="Trail view">
+                <button role="tab" aria-selected={effView === "key"} className={effView === "key" ? "on" : ""} disabled={running} onClick={() => setView("key")}>Key evidence</button>
+                <button role="tab" aria-selected={effView === "dig"} className={effView === "dig" ? "on" : ""} onClick={() => setView("dig")}>Full dig · {hops.length} hops</button>
+              </div>
+            )}
+          </div>
+
+          {hops.length === 0 && !running && (
             <div className="card empty" style={{ marginTop: 16 }}>No evidence yet. Press <strong>Investigate</strong> to start digging.</div>
           )}
-          <div className="timeline">
-            {evidence.map((e) => <TimelineItem key={e.id + e.acc} e={e} />)}
-            {running && <div className="tl-item"><div className="tl-year" /><div className="tl-dot" /><div className="small muted" style={{ paddingTop: 8 }}><Spinner size={13} /> reading…</div></div>}
-          </div>
-          {v && (hidden > 0 || showAll) && (
-            <button className="btn ghost sm" onClick={() => setShowAll(!showAll)}>
-              {showAll ? "Show only the evidence used in the verdict" : `Show ${hidden} more passage${hidden === 1 ? "" : "s"} CROMO read but did not rely on`}
-            </button>
+
+          {effView === "key" ? (
+            <div className="timeline">
+              {key.map((e) => <TimelineItem key={e.id + e.acc} e={e} />)}
+              {v && key.length < trail.evidence.length && (
+                <button className="btn ghost sm" style={{ marginLeft: 80 }} onClick={() => setView("dig")}>
+                  <FileSearch size={14} /> {trail.evidence.length - key.length} more quote{trail.evidence.length - key.length === 1 ? "" : "s"} CROMO read but did not rely on
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="trail">
+              {hops.map((h) => <HopItem key={h.n} h={h} />)}
+              {concluding && (
+                <div className="hop running fade-in"><div className="hop-n"><Spinner size={14} /></div>
+                  <div className="hop-body"><div className="hop-title"><strong>Weighing the evidence</strong><span className="q">the model proposes a verdict; the rules decide what may be removed</span></div></div></div>
+              )}
+            </div>
           )}
+
           {ignored.length > 0 && (
             <div className="note danger" style={{ marginTop: 10 }}>
               <ShieldAlert size={18} style={{ flexShrink: 0 }} />
-              <div>
-                <strong>Ignored instruction-like text</strong> in {ignored.join(", ")}. Archive content is treated as data, never as instructions.
-              </div>
+              <div><strong>Ignored instruction-like text</strong> in {ignored.join(", ")}. Archive content is treated as data, never as instructions.</div>
             </div>
           )}
           {warnings.map((w, i) => <div key={i} className="note warn" style={{ marginTop: 8 }}><TriangleAlert size={16} /> {w}</div>)}
           {v && !running && (v.verdict === "UNKNOWN" || v.strength.grade === "Weak") && (
             <VeteranCard stepId={st.id} onRecorded={() => run("live")} />
           )}
-          {hops.length > 0 && <DigLog hops={hops} docsRead={docsRead} open={running} />}
         </div>
 
-        {/* ------------------------------------------------ side panel */}
-        <aside className="side sticky">{v ? <Side v={v} /> : <div className="small muted">Details appear when the investigation is complete.</div>}</aside>
+        <aside className="side panel sticky">{v ? <Side v={v} /> : <div className="small muted" style={{ padding: "14px 0" }}>Details appear when the investigation is complete.</div>}</aside>
       </div>
     </div>
   );
@@ -298,73 +278,76 @@ function sameText(claim: string, quote: string) {
   return n(claim).includes(n(quote).slice(0, 40));
 }
 
-function TimelineItem({ e }: { e: Evidence }) {
+function EvidenceCard({ e, compact = false }: { e: Evidence; compact?: boolean }) {
   const { openDoc } = useApp();
   const [cls, label] = TAG[e.stance] ?? TAG.context;
   const open = () => openDoc({ acc: e.acc, page: e.page, quote: e.quote });
   return (
-    <div className="tl-item fade-in">
-      <div className="tl-year">{e.date ? e.date.slice(0, 4) : "–"}</div>
-      <div className={`tl-dot st-${e.stance}`} />
-      <div className={`tl-card ${e.suspicious ? "suspicious" : ""}`} onClick={open} role="button" tabIndex={0} onKeyDown={(k) => k.key === "Enter" && open()}>
-        <div className="tl-meta">
-          <span className={`tl-tag ${cls}`}>{e.doc_type === "recipe" && e.stance === "context" ? "Recipe" : e.doc_type === "interview record" ? "Testimony" : label}</span>
-          <span style={{ textTransform: "capitalize" }}>{e.doc_type ?? "document"}</span>
-          <span>· {fmtDate(e.date)}</span>
-          <span>· {e.acc}</span>
-        </div>
-        <div className="quote">“{e.quote}”</div>
-        {e.claim && e.stance !== "context" && !sameText(e.claim, e.quote) && <div className="claim">{e.claim}</div>}
+    <div className={`tl-card ${e.suspicious ? "suspicious" : ""}`} onClick={open} role="button" tabIndex={0}
+      onKeyDown={(k) => (k.key === "Enter" || k.key === " ") && open()} aria-label={`Open ${e.acc}`}>
+      <div className="tl-meta">
+        <span className={`tl-tag ${cls}`}>{e.doc_type === "recipe" && e.stance === "context" ? "Recipe" : e.doc_type === "interview record" ? "Testimony" : label}</span>
+        <span style={{ textTransform: "capitalize" }}>{e.doc_type ?? "document"}</span>
+        <span>· {fmtDate(e.date)}</span>
+        <span>· {e.acc}</span>
       </div>
+      <div className="quote" style={compact ? { fontSize: 14.5 } : undefined}>“{e.quote}”</div>
+      {e.claim && e.stance !== "context" && !sameText(e.claim, e.quote) && <div className="claim">{e.claim}</div>}
     </div>
   );
 }
 
-function DigLog({ hops, docsRead, open }: { hops: Hop[]; docsRead: number; open: boolean }) {
+function TimelineItem({ e }: { e: Evidence }) {
+  return (
+    <div className="tl-item fade-in">
+      <div className="tl-year">{e.date ? e.date.slice(0, 4) : "–"}</div>
+      <div className={`tl-dot st-${e.stance}`} />
+      <EvidenceCard e={e} />
+    </div>
+  );
+}
+
+function HopItem({ h }: { h: Hop }) {
   const [cmp, setCmp] = useState<{ loading: boolean; text?: string; err?: string; source?: string } | null>(null);
-  const recipeHop = hops.find((h) => h.compare);
   const loadCompare = async () => {
-    if (!recipeHop?.compare) return;
+    if (!h.compare) return;
     setCmp({ loading: true });
     try {
-      const r = await get<{ source: string; result: { output: string } }>(`/api/compare?a=${recipeHop.compare.a}&b=${recipeHop.compare.b}`);
+      const r = await get<{ source: string; result: { output: string } }>(`/api/compare?a=${h.compare.a}&b=${h.compare.b}`);
       setCmp({ loading: false, text: r.result.output, source: r.source });
     } catch (e) {
       setCmp({ loading: false, err: e instanceof Error ? e.message : String(e) });
     }
   };
+  const what = h.query ? h.query.replace(/^Search: /, "") : h.detail;
   return (
-    <details className="card card-pad" style={{ marginTop: 22 }} open={open}>
-      <summary>How CROMO dug: {hops.length} steps, {docsRead} documents read</summary>
-      <ol className="diglog">
-        {hops.map((h) => (
-          <li key={h.n}>
-            <span className="k">{h.n}.</span>
-            <span>
-              <strong>{h.label}</strong>
-              {h.query ? <span className="muted"> - {h.query}</span> : h.detail ? <span className="muted"> - {h.detail}</span> : null}
-              <span className="muted"> · {h.running ? "reading…" : `${h.found} found`}</span>
-            </span>
-          </li>
-        ))}
-      </ol>
-      {recipeHop?.compare && (
-        <div style={{ marginTop: 12 }}>
-          {!cmp ? (
-            <button className="btn sm" onClick={loadCompare}><GitCompare size={14} /> What changed when this step was added? (Evolus AI Tool)</button>
-          ) : cmp.loading ? (
-            <span className="small muted"><Spinner size={13} /> Asking the Evolus “compare” tool…</span>
-          ) : cmp.err ? (
-            <span className="small muted">Evolus compare unavailable: {cmp.err}</span>
-          ) : (
-            <div className="small" style={{ whiteSpace: "pre-wrap", maxHeight: 300, overflow: "auto", background: "var(--surface-2)", padding: 14, borderRadius: 12 }}>
-              <div className="tiny muted" style={{ marginBottom: 6 }}>{cmp.source}</div>
-              {cmp.text}
-            </div>
-          )}
+    <div className={`hop k-${h.kind} ${h.running ? "running" : ""} fade-in`}>
+      <div className="hop-n">{h.running ? <Spinner size={14} /> : h.n}</div>
+      <div className="hop-body">
+        <div className="hop-title">
+          <strong>{h.label}</strong>
+          {what && <span className="q">{what}</span>}
+          <span className="tiny muted">· {h.running ? "reading…" : `${h.evidence.length} verified of ${h.found}`}</span>
         </div>
-      )}
-    </details>
+        {h.evidence.length > 0 && <div className="hop-ev">{h.evidence.map((e) => <EvidenceCard key={e.id + e.acc} e={e} compact />)}</div>}
+        {h.compare && (
+          <div style={{ marginTop: 10 }}>
+            {!cmp ? (
+              <button className="btn sm" onClick={loadCompare}><GitCompare size={14} /> What changed when this step was added? (Evolus AI Tool)</button>
+            ) : cmp.loading ? (
+              <span className="small muted"><Spinner size={13} /> Asking the Evolus “compare” tool…</span>
+            ) : cmp.err ? (
+              <span className="small muted">Evolus compare unavailable: {cmp.err}</span>
+            ) : (
+              <div className="card small" style={{ whiteSpace: "pre-wrap", maxHeight: 300, overflow: "auto", padding: 14 }}>
+                <div className="tiny muted" style={{ marginBottom: 6 }}>{cmp.source}</div>
+                {cmp.text}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -391,18 +374,35 @@ function Side({ v }: { v: VerdictData }) {
               </div>
             </div>
           ))}
-          <div className="tiny muted" style={{ marginTop: 6 }}>CROMO watches these. If one changes, the Tripwires page raises an alert.</div>
+          <div className="tiny muted" style={{ marginTop: 6 }}>CROMO watches these. If one changes, What if → Change the plant raises an alert.</div>
         </div>
       )}
+      <div className="blk">
+        <h4>How sure are we?</h4>
+        <div className="row"><StrengthMeter grade={v.strength.grade} /><span className="small muted">{v.strength.score} points · {v.strength.documents} documents</span></div>
+        <details style={{ marginTop: 8 }}>
+          <summary>Scoring rules</summary>
+          <div className="small" style={{ marginTop: 6 }}>
+            {v.strength.breakdown.map((b, i) => (
+              <div key={i} className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+                <span>{b.label}</span><span style={{ color: b.points < 0 ? "var(--danger)" : "var(--ok)", fontWeight: 650 }}>{b.points > 0 ? "+" : ""}{b.points}</span>
+              </div>
+            ))}
+            <div className="tiny muted" style={{ marginTop: 4 }}>{v.strength.rule}</div>
+          </div>
+        </details>
+      </div>
       {v.counter_evidence.length > 0 && (
         <div className="blk">
-          <h4>Counter-evidence considered</h4>
-          {v.counter_evidence.map((c, i) => (
-            <div key={i} className="small" style={{ marginBottom: 8 }}>
-              <span className={`tl-tag ${c.resolved ? "context" : "counter"}`}>{c.resolved ? "resolved" : "open"}</span> {c.claim} {c.evidence.map(cite)}
-              {c.resolution && <div className="tiny muted">{c.resolution}</div>}
-            </div>
-          ))}
+          <details>
+            <summary><h4 style={{ margin: 0 }}>Counter-evidence considered ({v.counter_evidence.length})</h4></summary>
+            {v.counter_evidence.map((c, i) => (
+              <div key={i} className="small" style={{ margin: "8px 0" }}>
+                <span className={`tl-tag ${c.resolved ? "context" : "counter"}`}>{c.resolved ? "resolved" : "open"}</span> {c.claim} {c.evidence.map(cite)}
+                {c.resolution && <div className="tiny muted">{c.resolution}</div>}
+              </div>
+            ))}
+          </details>
         </div>
       )}
       {v.open_questions.length > 0 && (
@@ -412,21 +412,6 @@ function Side({ v }: { v: VerdictData }) {
         </div>
       )}
       <div className="blk">
-        <h4>How sure are we?</h4>
-        <div className="row"><StrengthMeter grade={v.strength.grade} /><span className="small muted">{v.strength.score} points</span></div>
-        <details style={{ marginTop: 8 }}>
-          <summary>Scoring rules</summary>
-          <div className="small" style={{ marginTop: 6 }}>
-            {v.strength.breakdown.map((b, i) => (
-              <div key={i} className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-                <span>{b.label}</span><span style={{ color: b.points < 0 ? "var(--danger)" : "var(--ok)", fontWeight: 600 }}>{b.points > 0 ? "+" : ""}{b.points}</span>
-              </div>
-            ))}
-            <div className="tiny muted" style={{ marginTop: 4 }}>{v.strength.rule}</div>
-          </div>
-        </details>
-      </div>
-      <div className="blk">
         <h4>Cost</h4>
         <div className="small">{v.cost.runs_per_year.toLocaleString()} runs a year × {eur(v.cost.per_run_eur)} = <strong>{eur(v.cost.annual_eur)}</strong></div>
         <details style={{ marginTop: 8 }}>
@@ -434,7 +419,7 @@ function Side({ v }: { v: VerdictData }) {
           <table className="table" style={{ marginTop: 4 }}>
             <tbody>
               {v.cost.lines.map((l, i) => (
-                <tr key={i}><td>{l.label}<div className="tiny muted">{l.source}</div></td><td className="num small">€{l.amount.toFixed(2)}</td></tr>
+                <tr key={i}><td style={{ paddingLeft: 0 }}>{l.label}<div className="tiny muted">{l.source}</div></td><td className="num small">€{l.amount.toFixed(2)}</td></tr>
               ))}
             </tbody>
           </table>
@@ -443,15 +428,14 @@ function Side({ v }: { v: VerdictData }) {
       </div>
       {v.guards.length > 0 && (
         <div className="blk">
-          <h4>Safety checks</h4>
           <details>
-            <summary>{v.guards.length} rule{v.guards.length === 1 ? "" : "s"} applied</summary>
+            <summary><h4 style={{ margin: 0 }}>Safety checks · {v.guards.length} rule{v.guards.length === 1 ? "" : "s"} applied</h4></summary>
             {v.guards.map((g, i) => <div key={i} className="tiny" style={{ marginTop: 6 }}><ShieldCheck size={12} /> {g}</div>)}
           </details>
         </div>
       )}
       <div className="blk tiny muted">
-        {v.provider === "amd" ? `Computed on AMD by ${v.model}` : "Computed offline by the rule-based fixture provider"} · {v.hops} steps · {v.duration_s}s
+        {v.provider === "amd" ? `Computed on AMD by ${v.model}` : "Computed offline by the rule-based fixture provider"} · {v.hops} hops · {v.duration_s}s
         {v.stats ? ` · ${v.stats.unverified_quotes} unverifiable quote(s) rejected` : ""}
       </div>
     </>
@@ -463,7 +447,7 @@ function DraftTrial({ stepId }: { stepId: string }) {
   const [err, setErr] = useState<unknown>(null);
   return (
     <>
-      <button className="btn brand sm" disabled={busy} onClick={async () => {
+      <button className="btn accent sm" disabled={busy} onClick={async () => {
         setBusy(true);
         setErr(null);
         try {

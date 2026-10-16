@@ -24,6 +24,10 @@ def pct(x):
     return "–" if x is None else f"{round(x * 100)}%"
 
 
+def pct1(x):
+    return "–" if x is None else f"{x * 100:.1f}%"
+
+
 def col(ev: dict | None, bench: dict | None, baseline: bool) -> list[str]:
     if not ev and (baseline or not bench):
         return ["*pending AMD benchmark*"] + ["*pending*"] * 9
@@ -35,10 +39,16 @@ def col(ev: dict | None, bench: dict | None, baseline: bool) -> list[str]:
         rows += ["n/a (recorded transcriptions)" if baseline else "*pending*", "n/a" if baseline else "*pending*"]
     else:
         ing, va, inv, cost = bench.get("ingest") or {}, bench.get("vision_accuracy") or {}, bench.get("investigation") or {}, bench.get("cost") or {}
-        audit = (f"${cost['per_plant_audit_usd']} ({cost.get('gpu_hours')} GPU-h)" if cost.get("per_plant_audit_usd") is not None
-                 else "audit cost n/a (" + ("partial run" if bench.get("complete") is False else "Token Factory, no per-GPU billing") + ")")
-        rows += [f"{ing.get('pages_per_min', '–')} pages/min · CER {pct(va.get('mean_cer'))}",
-                 f"{inv.get('p50_s', '–')} s · {audit}"]
+        use = bench.get("tokenfactory_usage") or {}
+        if cost.get("per_plant_audit_usd") is not None:
+            audit = f"${cost['per_plant_audit_usd']} ({cost.get('gpu_hours')} GPU-h)"
+        elif use and bench.get("complete") is not False:
+            audit = (f"${use['metered_usd']:.2f} on the Token Factory meter ({use['requests']} requests, "
+                     f"{use['tokens'] / 1e6:.1f}M tokens; free during the event)")
+        else:
+            audit = "audit cost n/a (" + ("partial run" if bench.get("complete") is False else "no per-GPU billing") + ")"
+        vis = f" · CER {pct1(va.get('mean_cer'))}" if va.get("mean_cer") is not None else " · recorded transcriptions"
+        rows += [f"{ing.get('pages_per_min', '–')} pages/min{vis}", f"{inv.get('p50_s', '–')} s · {audit}"]
     return rows
 
 
@@ -60,7 +70,9 @@ def main():
               "Tripwire effects found", "Change-check decisions correct", "Prompt-injection test",
               "Ingestion throughput / VLM transcription CER", "Median investigation time / cost per full plant audit"]
     a = col(fx, None, True)
-    hw = (bench or {}).get("hardware", "AMD MI300X") if bench else "AMD MI300X"
+    hw = (bench or {}).get("hardware", "AMD") if bench else "AMD"
+    if (bench or {}).get("route") == "tokenfactory":
+        hw = "the AMD Token Factory"
     model = ((amd or {}).get("models") or {}).get("reasoner", "")
     b = col(amd, bench, False)
     head = f"| | Rule-based baseline (offline fixture provider, no LLM) | CROMO on {hw}{(' · ' + model) if model else ''} |"
@@ -72,6 +84,29 @@ def main():
         lines += [f"| `{vc[t]['model']}` | {'–' if vc[t]['mean_cer'] is None else format(vc[t]['mean_cer'], '.1%')} | {vc[t]['p50_ms']} ms | {vc[t]['failures']}/{vc[t]['pages']} |" for t in ("A", "B")]
         if vc.get("verdict"):
             lines += ["", vc["verdict"]]
+    if bench and bench.get("degraded_steps"):
+        lines += ["", f"*{len(bench['degraded_steps'])} step(s) still had failed model calls on the shared endpoint after "
+                  f"retries ({', '.join(bench['degraded_steps'])}); their verdicts count as measured.*"]
+    if bench and (bench.get("ingest") or {}).get("note"):
+        lines += ["", f"*{bench['ingest']['note']}*"]
+    oc = load("ocr_comparison.json")
+    if oc:  # which AMD-hosted model reads the scans best (scripts/compare_models.py ocr)
+        kinds = list(oc["models"][0]["cer_by_kind"])
+        lines += ["", f"**Reading the scans: {len(oc['models'])} AMD-hosted models on the same {oc['models'][0]['pages']} scanned "
+                  "pages** (character error rate vs. the reference, lower is better; word F1 ignores reading order):", "",
+                  "| Model | Strict CER | Word F1 | " + " | ".join(f"{k} (n={oc['models'][0]['pages_by_kind'][k]})" for k in kinds)
+                  + " | p50 / page | Failures |", "|---|---|---|" + "---|" * len(kinds) + "---|---|"]
+        for m in oc["models"]:
+            used = " (CROMO)" if m["model"] == (bench or {}).get("models", {}).get("vision") else ""
+            lines.append(f"| `{m['model']}`{used} | {pct1(m['mean_cer'])} | {pct1(m.get('mean_word_f1'))} | "
+                         + " | ".join(pct1(m["cer_by_kind"].get(k)) for k in kinds)
+                         + f" | {m['p50_ms'] / 1000:.0f} s | {m['failures']}/{m['pages']} |")
+    rv = load("retrieval_eval.json")
+    if rv:
+        a_, b_ = rv["without_expansion"], rv["with_expansion"]
+        lines += ["", f"**Retrieval without an embedding model:** key documents in the top 5 search results "
+                  f"{pct(a_['recall_at_5'])} → {pct(b_['recall_at_5'])} with Gemma's bilingual keywords "
+                  f"(top 10: {pct(a_['recall_at_10'])} → {pct(b_['recall_at_10'])}; {b_['steps']} steps)."]
     alt = load("eval_amd_qwen.json")
     if amd and alt:  # optional reasoner A/B (benchmark_amd.py --tag qwen)
         lines += ["", "**Reasoner A/B on AMD** (same 49-step ground truth):", "",

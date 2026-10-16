@@ -9,7 +9,7 @@
 CROMO — every factory runs on reasons nobody remembers
 
 ## Short description (one sentence)
-CROMO reads a plant's own archive with Google's open Gemma 4 on AMD GPUs and recovers why every process step exists: it flags costly "fossil" steps whose reason is gone, protects "fence" steps that look pointless but prevent accidents, and warns when a change breaks either.
+CROMO reads a plant's own archive with Google's open Gemma 4 on AMD GPUs (AMD Token Factory) and recovers why every process step exists: it flags costly "fossil" steps whose reason is gone, protects "fence" steps that look pointless but prevent accidents, and warns when a change breaks either.
 
 ## Long description
 Every factory recipe contains steps nobody can explain anymore. In Primo Levi's "Chromium" (The Periodic Table, 1975),
@@ -81,10 +81,14 @@ offline in a clearly labelled fixture mode, so anyone can try it without a GPU.
   by a cited investigation, and every change gated by a human approval.
 
 ## Track
-Intelligent Industry (main) · Evolus Business Agents on AMD (partner) · Google (Gemma) partner prize
+Intelligent Industry (main) · Google (Gemma) partner prize · Evolus Business Agents on AMD (partner) *only if the Evolus
+agent runs on our own vLLM endpoint on AMD Developer Cloud by the deadline, or the organisers confirm that the Token
+Factory counts (see `LINK_AMD.md`); otherwise leave it out*
 
 ## Technology tags
-AMD Instinct MI300X · AMD ROCm · AMD Developer Cloud · AMD Token Factory · vLLM · Gemma · Gemma 4 · Google DeepMind · Qwen2.5-VL · bge-m3 · Evolus · FastAPI · React · Python · TypeScript · Docker
+<!-- TAGS:START -->
+AMD Token Factory · Gemma 4 · Google DeepMind · Evolus · FastAPI · React · Python · TypeScript · Docker
+<!-- TAGS:END -->
 
 ## App hosting and repository
 - Demo application platform: GitHub Pages (static, read-only demo with recorded AMD runs) + Docker container for the full app

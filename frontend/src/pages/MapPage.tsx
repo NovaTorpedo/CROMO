@@ -5,26 +5,32 @@ import { ErrorBox, Skeleton, VERDICT_LABEL, VerdictIcon, go } from "../component
 import type { MapData, MapStep, Verdict } from "../types";
 
 const LEGEND: { v: Verdict; text: string }[] = [
-  { v: "FOSSIL", text: "Fossil · reason is gone" },
-  { v: "FENCE", text: "Fence · looks pointless, protects you" },
-  { v: "UNKNOWN", text: "Unknown · ask a person" },
-  { v: "ACTIVE", text: "Active · still needed" },
+  { v: "FOSSIL", text: "Fossil" },
+  { v: "FENCE", text: "Fence" },
+  { v: "UNKNOWN", text: "Unknown" },
+  { v: "ACTIVE", text: "Active" },
 ];
+const LEGEND_HELP: Record<string, string> = {
+  FOSSIL: "the reason is gone: waste",
+  FENCE: "looks pointless, protects you",
+  UNKNOWN: "no documented reason: ask a person",
+  ACTIVE: "still needed",
+};
 
-function Tile({ s, dim, onHover }: { s: MapStep; dim: boolean; onHover: (s: MapStep | null, r?: DOMRect) => void }) {
+export function Tile({ s, dim, onHover }: { s: MapStep; dim: boolean; onHover?: (s: MapStep | null, r?: DOMRect) => void }) {
   return (
     <button
       className={`tile t-${s.verdict} ${dim ? "dim" : ""}`}
       onClick={() => go(`/step/${s.id}`)}
-      onMouseEnter={(e) => onHover(s, e.currentTarget.getBoundingClientRect())}
-      onMouseLeave={() => onHover(null)}
-      onFocus={(e) => onHover(s, e.currentTarget.getBoundingClientRect())}
-      onBlur={() => onHover(null)}
+      onMouseEnter={(e) => onHover?.(s, e.currentTarget.getBoundingClientRect())}
+      onMouseLeave={() => onHover?.(null)}
+      onFocus={(e) => onHover?.(s, e.currentTarget.getBoundingClientRect())}
+      onBlur={() => onHover?.(null)}
       aria-label={`Step ${s.id}, ${s.name}: ${VERDICT_LABEL[s.verdict]}`}
     >
       <span className="top">
         <span>{s.seq}</span>
-        {s.verdict !== "ACTIVE" && <VerdictIcon v={s.verdict} size={15} />}
+        {s.verdict !== "ACTIVE" && <VerdictIcon v={s.verdict} size={14} />}
       </span>
       <span className="nm">{s.name}</span>
       <span className="bot">
@@ -34,12 +40,11 @@ function Tile({ s, dim, onHover }: { s: MapStep; dim: boolean; onHover: (s: MapS
   );
 }
 
-export default function MapPage() {
+export default function MapPage({ onAsk }: { onAsk: () => void }) {
   const [data, setData] = useState<MapData | null>(null);
   const [err, setErr] = useState<unknown>(null);
   const [focus, setFocus] = useState<Verdict | null>(null);
   const [tip, setTip] = useState<{ s: MapStep; r: DOMRect } | null>(null);
-  const [q, setQ] = useState("");
 
   useEffect(() => {
     get<MapData>("/api/map").then(setData, setErr);
@@ -48,10 +53,10 @@ export default function MapPage() {
   if (err) return <ErrorBox error={err} />;
   if (!data)
     return (
-      <div className="col" style={{ gap: 18, marginTop: 30 }}>
-        <Skeleton h={56} w="70%" />
-        <Skeleton h={90} />
-        <Skeleton h={480} />
+      <div className="col" style={{ gap: 18 }}>
+        <Skeleton h={56} w="60%" />
+        <Skeleton h={60} w="50%" />
+        <Skeleton h={560} />
       </div>
     );
 
@@ -66,93 +71,84 @@ export default function MapPage() {
 
   return (
     <div>
-      <section className="home-hero">
-        <h1 className="hero-title">Every factory runs on reasons nobody remembers.</h1>
-        <p className="lead">
-          CROMO read 30 years of paperwork from {data.plant.name.replace(" S.p.A.", "")}, a fictional paint plant, and worked out why each of its{" "}
-          {steps.length} process steps exists. Some are pure waste. Some look pointless but keep people safe.
-        </p>
+      <section className="home-hero fade-in">
+        <div>
+          <div className="eyebrow">{data.plant.name.replace(" S.p.A.", "")} · a fictional paint plant · 30 years of paperwork</div>
+          <h1 className="hero-title" style={{ marginTop: 10 }}>Every factory runs on reasons nobody remembers.</h1>
+          <p className="lead">
+            CROMO read the plant's archive and worked out why each of its {steps.length} process steps exists. Some are pure waste.
+            Some look pointless but keep people safe.
+          </p>
+        </div>
+        <div className="metrics" style={{ flexDirection: "column" }}>
+          <div className="metric card m-FOSSIL">
+            <span className="ic"><VerdictIcon v="FOSSIL" size={17} /></span>
+            <span><div className="n">{eur(data.fossil_annual_eur)}<span style={{ fontSize: 14, fontWeight: 600 }}> /yr</span></div>
+              <div className="l">spent on {t.FOSSIL} fossil steps whose reason is gone</div></span>
+          </div>
+          <div className="metric card m-FENCE">
+            <span className="ic"><VerdictIcon v="FENCE" size={17} /></span>
+            <span><div className="n">{t.FENCE} fences</div><div className="l">look pointless, guard safety or quality: blocked from removal</div></span>
+          </div>
+          <div className="metric card m-UNKNOWN">
+            <span className="ic"><VerdictIcon v="UNKNOWN" size={17} /></span>
+            <span><div className="n">{t.UNKNOWN} unknown</div><div className="l">no reliable reason on file: sent to a person, never guessed</div></span>
+          </div>
+        </div>
       </section>
 
-      <div className="stats">
-        <div className="stat s-FOSSIL">
-          <div className="n">{eur(data.fossil_annual_eur)}</div>
-          <div className="l">spent every year on <strong>{t.FOSSIL} fossil steps</strong> whose original reason is gone</div>
-        </div>
-        <div className="stat s-FENCE">
-          <div className="n">{t.FENCE} fences</div>
-          <div className="l">look pointless but guard safety or quality - CROMO blocks their removal</div>
-        </div>
-        <div className="stat s-UNKNOWN">
-          <div className="n">{t.UNKNOWN} unknown</div>
-          <div className="l">no reliable reason in the archive - sent to a person, never guessed</div>
-        </div>
-      </div>
+      <button className="askbar glass" onClick={onAsk} style={{ width: "100%", cursor: "text", textAlign: "left", border: "1px solid var(--glass-border)" }}
+        aria-label="Ask why about any step">
+        <Search size={19} />
+        <span className="grow muted" style={{ fontSize: 16.5, padding: "9px 4px" }}>Ask why about any step… e.g. “why do we add ammonium chloride?”</span>
+        <span className="btn primary sm">Ask why</span>
+      </button>
 
-      <form
-        className="askbar"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (q.trim()) go(`/ask?q=${encodeURIComponent(q.trim())}`);
-        }}
-      >
-        <input className="input" value={q} onChange={(e) => setQ(e.target.value)}
-          placeholder="Ask why any step exists - e.g. “why do we add ammonium chloride?”" aria-label="Ask why a step exists" />
-        <button className="btn primary"><Search size={16} /> Ask</button>
-      </form>
-
-      <section className="ptable">
-        <div className="ptable-head">
+      <section className="panel map-panel">
+        <div className="map-head">
           <h2 className="section-title" style={{ margin: 0 }}>The periodic table of the plant</h2>
-          <div className="legend">
+          <span className="grow" />
+          <div className="legend" role="group" aria-label="Highlight a verdict">
             {LEGEND.map(({ v, text }) => (
-              <button
-                key={v}
-                className="it"
-                style={{ background: "none", border: "none", cursor: "pointer", padding: 0, opacity: focus && focus !== v ? 0.45 : 1 }}
-                onClick={() => setFocus(focus === v ? null : v)}
-                title="Click to highlight"
-              >
-                <span className={`sw tile t-${v}`} style={{ width: 14, height: 14, padding: 0, borderRadius: 4 }} />
-                {text}
+              <button key={v} className={focus === v ? "on" : focus ? "off" : ""} onClick={() => setFocus(focus === v ? null : v)}
+                title={`${text}: ${LEGEND_HELP[v]}. Click to highlight.`} aria-pressed={focus === v}>
+                <span className={`sw t-${v}`} /> {text} <span className="muted num-tab">{t[v]}</span>
               </button>
             ))}
           </div>
         </div>
-        <div className="card" style={{ padding: "8px 22px" }}>
-          {data.processes.map((p) => {
-            const fossils = p.steps.filter((s) => s.verdict === "FOSSIL");
-            return (
-              <div key={p.id} className="prow">
-                <div className="plabel">
-                  <div className="code">{p.code}</div>
-                  <div className="name">{p.short}</div>
-                  {fossils.length > 0 && <div className="sum c-FOSSIL">{eur(fossils.reduce((a, s) => a + s.annual_cost_eur, 0), true)}/yr waste</div>}
-                </div>
-                <div className="tiles">
-                  {p.steps.map((s) => (
-                    <Tile key={s.id} s={s} dim={!!focus && s.verdict !== focus} onHover={(st, r) => setTip(st && r ? { s: st, r } : null)} />
-                  ))}
-                </div>
+        {data.processes.map((p) => {
+          const fossils = p.steps.filter((s) => s.verdict === "FOSSIL");
+          return (
+            <div key={p.id} className="prow">
+              <div className="plabel">
+                <div className="code">{p.code}</div>
+                <div className="name">{p.short}</div>
+                {fossils.length > 0 && <div className="sum c-FOSSIL">{eur(fossils.reduce((a, s) => a + s.annual_cost_eur, 0), true)}/yr waste</div>}
               </div>
-            );
-          })}
-        </div>
-        <div className="tiny muted" style={{ marginTop: 10 }}>
-          Each tile is one step of a current recipe or procedure, in order. Click any tile to see the evidence behind it.
+              <div className="tiles">
+                {p.steps.map((s) => (
+                  <Tile key={s.id} s={s} dim={!!focus && s.verdict !== focus} onHover={(st, r) => setTip(st && r ? { s: st, r } : null)} />
+                ))}
+              </div>
+            </div>
+          );
+        })}
+        <div className="tiny muted" style={{ padding: "8px 0 10px" }}>
+          Each tile is one step of a current recipe or procedure, in order. Open any tile to see the paper trail behind its verdict.
         </div>
       </section>
 
       {examples.length > 0 && (
-        <section style={{ marginTop: 40 }}>
-          <h2 className="section-title">Start here</h2>
+        <section style={{ marginTop: 34 }}>
+          <div className="eyebrow">Start here</div>
           <div className="try">
             {examples.map((s) => (
               <button key={s.id} className="card card-pad" onClick={() => go(`/step/${s.id}`)}>
                 <span className={`badge v-${s.verdict}`}><VerdictIcon v={s.verdict} size={13} /> {VERDICT_LABEL[s.verdict]}</span>
-                <div className="h2" style={{ fontSize: 21, marginTop: 10 }}>{s.name}</div>
+                <div className="h2" style={{ fontSize: 19, marginTop: 10 }}>{s.name}</div>
                 <div className="small muted" style={{ marginTop: 4 }}>{s.instruction}</div>
-                <div className="row small" style={{ marginTop: 12, fontWeight: 500 }}>See why <ArrowRight size={15} /></div>
+                <div className="row small" style={{ marginTop: 12, fontWeight: 600, color: "var(--accent)" }}>See why <ArrowRight size={15} /></div>
               </button>
             ))}
           </div>
@@ -160,12 +156,12 @@ export default function MapPage() {
       )}
 
       {tip && (
-        <div className="tooltip" style={{ left: Math.min(tip.r.left, window.innerWidth - 360), top: tip.r.bottom + 10 }}>
+        <div className="tooltip glass" style={{ left: Math.min(tip.r.left, window.innerWidth - 360), top: tip.r.bottom + 10 }}>
           <div className="row" style={{ marginBottom: 6 }}>
             <span className={`badge v-${tip.s.verdict}`}><VerdictIcon v={tip.s.verdict} size={13} /> {VERDICT_LABEL[tip.s.verdict]}</span>
             <span className="tiny muted">{tip.s.id}</span>
           </div>
-          <div style={{ fontWeight: 500 }}>{tip.s.instruction}</div>
+          <div style={{ fontWeight: 560 }}>{tip.s.instruction}</div>
           {tip.s.reason && <div className="small muted" style={{ marginTop: 6 }}>{tip.s.reason}</div>}
           <div className="small" style={{ marginTop: 8 }}>Costs <strong>{eur(tip.s.annual_cost_eur)}</strong> a year</div>
         </div>

@@ -16,6 +16,6 @@ const cspMeta = (): Plugin => ({
 export default defineConfig({
   base: process.env.CROMO_BASE || "/",
   plugins: [react(), cspMeta()],
-  server: { port: 5173, proxy: { "/api": "http://localhost:8765" } },
+  server: { port: 5173, proxy: { "/api": process.env.CROMO_API || "http://localhost:8765" } },
   build: { outDir: process.env.CROMO_OUT || "dist", emptyOutDir: !process.env.CROMO_OUT, sourcemap: false, chunkSizeWarningLimit: 900 },
 });

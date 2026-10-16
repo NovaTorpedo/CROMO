@@ -113,6 +113,7 @@ class Dig:
         self.hops = 0
         self.suspicious: set[str] = set()
         self.unverified = 0
+        self.provider_errors = 0
         terms = list(dict.fromkeys(_terms(step["instruction"])))
         self.key_terms = sorted(terms, key=lambda t: -index.idf(t))[:5]
         self.own_codes = {step["process_code"].split()[0].lower(), step["process"].lower()}
@@ -242,6 +243,7 @@ async def investigate(step_id: str, emit: Emit | None = None, *, store: bool = T
         try:
             read = await llm.run_task("investigate.read", payload, ReadOut)
         except llm.ProviderError as e:
+            dig.provider_errors += 1
             await dig.emit({"type": "warning", "message": f"Reading failed for this hop: {e}"})
             continue
         dig.suspicious |= set(read.suspicious_passages)
@@ -283,6 +285,7 @@ async def investigate(step_id: str, emit: Emit | None = None, *, store: bool = T
     try:
         out = await llm.run_task("investigate.conclude", payload, ConcludeOut)
     except llm.ProviderError as e:
+        dig.provider_errors += 1
         out = ConcludeOut(verdict="UNKNOWN", reason=f"Model failed to conclude: {e}")
     v, notes, removed = evidence.validate(out, dig.evidence)
     if dig.unverified:
@@ -300,7 +303,8 @@ async def investigate(step_id: str, emit: Emit | None = None, *, store: bool = T
         "hops": dig.hops, "duration_s": round(time.perf_counter() - t0, 2), "created_at": time.time(),
         "ignored_injection_docs": ignored,
         "stats": {"evidence_total": len(dig.evidence), "unverified_quotes": dig.unverified,
-                  "suspicious": sum(1 for e in dig.evidence.values() if e["suspicious"]), "uncited_removed": removed},
+                  "suspicious": sum(1 for e in dig.evidence.values() if e["suspicious"]), "uncited_removed": removed,
+                  "provider_errors": dig.provider_errors},
     }
     await dig.emit({"type": "verdict", "verdict": verdict})
     if store:

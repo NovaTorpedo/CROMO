@@ -80,7 +80,8 @@ async def ingest_doc(acc: str) -> dict:
             (acc, len(pages), int(bool(layer)), text, meta.title, meta.doc_type, meta.date, meta.language,
              json.dumps({"own": meta.reference_numbers, "cited": meta.referenced_documents}),
              json.dumps({"organizations": meta.organizations, "materials": meta.materials, "equipment": meta.equipment,
-                         "products": meta.products, "regulations": meta.regulations, "people": meta.people}),
+                         "products": meta.products, "regulations": meta.regulations, "people": meta.people,
+                         "keywords": meta.keywords}),
              meta.summary, meta_source, text_source, int(inj), time.time()))
         for pg in pages:
             c.execute("INSERT INTO pages(acc,page,width,height,lines_json,source,model) VALUES(?,?,?,?,?,?,?)",
@@ -95,10 +96,18 @@ async def ingest_doc(acc: str) -> dict:
 
 async def embed_all() -> float:
     """Embed every chunk that has no vector yet (new or re-ingested documents)."""
-    rows = db.q("SELECT c.id, c.text, d.title, d.doc_type, d.date FROM chunks c JOIN documents d ON d.acc=c.acc "
-                "WHERE c.vector IS NULL ORDER BY c.id")
+    from .index import expansion_enabled
+
+    rows = db.q("SELECT c.id, c.text, d.title, d.doc_type, d.date, d.entities_json, d.meta_source FROM chunks c "
+                "JOIN documents d ON d.acc=c.acc WHERE c.vector IS NULL ORDER BY c.id")
     t0 = time.perf_counter()
-    texts = [f"{r['doc_type'] or ''} {r['date'] or ''} {r['title'] or ''}\n{r['text']}" for r in rows]
+
+    def keywords(r) -> str:
+        if not expansion_enabled(r["meta_source"]):
+            return ""
+        return " ".join(json.loads(r["entities_json"] or "{}").get("keywords") or [])
+
+    texts = [f"{r['doc_type'] or ''} {r['date'] or ''} {r['title'] or ''} {keywords(r)}\n{r['text']}" for r in rows]
     vecs = await llm.embed(texts, stage="embed.chunks") if texts else np.zeros((0, 1))
     with db.tx() as c:
         for r, v in zip(rows, vecs):
@@ -106,26 +115,36 @@ async def embed_all() -> float:
     return time.perf_counter() - t0
 
 
-async def ingest_all(*, force: bool = False, limit: int | None = None, progress=None) -> dict:
-    accs = archive.list_accessions()
+async def ingest_all(*, force: bool = False, limit: int | None = None, progress=None,
+                     accs: list[str] | None = None, tolerate_failures: bool = False) -> dict:
+    """Ingest documents. With tolerate_failures, a document whose model call keeps failing is skipped and listed in
+    stats["failed"] (a resumable run retries it later); otherwise the first failure is raised after the batch."""
+    accs = archive.list_accessions() if accs is None else accs
     if limit:
         accs = accs[:limit]
     done = {r["acc"] for r in db.q("SELECT acc FROM documents")} if not force else set()
     todo = [a for a in accs if a not in done]
     sem = asyncio.Semaphore(config.settings.max_concurrency)
     results: list[dict] = []
+    failed: dict[str, Exception] = {}
     t0 = time.perf_counter()
 
     async def one(acc):
         async with sem:
-            r = await ingest_doc(acc)
+            try:
+                r = await ingest_doc(acc)
+            except llm.ProviderError as e:
+                failed[acc] = e
+                return
             results.append(r)
             if progress:
                 progress(len(results), len(todo), acc)
 
     await asyncio.gather(*(one(a) for a in todo))
+    if failed and not tolerate_failures:
+        raise next(iter(failed.values()))
     t_ingest = time.perf_counter() - t0
-    t_embed = await embed_all() if todo else 0.0
+    t_embed = await embed_all()  # only chunks without a vector (also after a resumed ingest)
     from . import index
 
     index.invalidate()
@@ -137,7 +156,7 @@ async def ingest_all(*, force: bool = False, limit: int | None = None, progress=
         "pages_per_min": round(pages / total * 60, 1) if total > 0 else None,
         "scanned_pages_per_min": round(scanned / max(1e-6, sum(r["t_text"] for r in results if r["scanned"])) * 60 *
                                        config.settings.max_concurrency, 1) if scanned else None,
-        "embed_seconds": round(t_embed, 2), "provider": llm.mode(), "finished_at": time.time(),
+        "embed_seconds": round(t_embed, 2), "provider": llm.mode(), "finished_at": time.time(), "failed": sorted(failed),
         "models": {"vision": llm.model_name("vision"), "reasoner": llm.model_name("reasoner"),
                    "embeddings": llm.model_name("embeddings")},
     }

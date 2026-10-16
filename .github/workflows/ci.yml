@@ -46,6 +46,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: "22" }
       - run: cd frontend && npm ci --no-audit --no-fund && npm run build
+      - run: cd frontend && npm test
       - run: cd frontend && npm audit --omit=dev --audit-level=high
       - name: production bundle has no source maps and no secrets
         run: |

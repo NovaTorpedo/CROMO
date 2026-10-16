@@ -1,0 +1,2862 @@
+{
+ "task": "transcribe scanned / faxed / handwritten archive pages",
+ "measured_at": 1792150206.4772096,
+ "route": "tokenfactory",
+ "hardware": "AMD Token Factory (shared endpoints on AMD GPUs)",
+ "models": [
+  {
+   "model": "Gemma-4-31B-IT",
+   "interface": "/v1/chat/completions",
+   "pages": 68,
+   "failures": 0,
+   "mean_cer": 0.0218,
+   "median_cer": 0.0208,
+   "mean_word_f1": 0.9794,
+   "cer_by_kind": {
+    "fax": 0.0772,
+    "handwritten logbook": 0.0073,
+    "typed + handwritten note": 0.016,
+    "typed / scanned": 0.0194
+   },
+   "word_f1_by_kind": {
+    "fax": 0.9113,
+    "handwritten logbook": 0.9873,
+    "typed + handwritten note": 0.9912,
+    "typed / scanned": 0.9832
+   },
+   "pages_by_kind": {
+    "fax": 4,
+    "handwritten logbook": 5,
+    "typed + handwritten note": 1,
+    "typed / scanned": 58
+   },
+   "p50_ms": 16175,
+   "p95_ms": 58083
+  },
+  {
+   "model": "MinerU2.5-Pro",
+   "interface": "/v1/ocr (Markdown)",
+   "pages": 68,
+   "failures": 0,
+   "mean_cer": 0.3018,
+   "median_cer": 0.2751,
+   "mean_word_f1": 0.976,
+   "cer_by_kind": {
+    "fax": 0.2093,
+    "handwritten logbook": 0.0752,
+    "typed + handwritten note": 0.2434,
+    "typed / scanned": 0.3287
+   },
+   "word_f1_by_kind": {
+    "fax": 0.8523,
+    "handwritten logbook": 0.9786,
+    "typed + handwritten note": 0.9865,
+    "typed / scanned": 0.9842
+   },
+   "pages_by_kind": {
+    "fax": 4,
+    "handwritten logbook": 5,
+    "typed + handwritten note": 1,
+    "typed / scanned": 58
+   },
+   "p50_ms": 17524,
+   "p95_ms": 85839
+  },
+  {
+   "model": "DeepSeek-V4-Flash-Vision-Exp",
+   "interface": "/v1/chat/completions",
+   "pages": 68,
+   "failures": 0,
+   "mean_cer": 0.15,
+   "median_cer": 0.142,
+   "mean_word_f1": 0.9419,
+   "cer_by_kind": {
+    "fax": 0.1426,
+    "handwritten logbook": 0.1727,
+    "typed + handwritten note": 0.2779,
+    "typed / scanned": 0.1463
+   },
+   "word_f1_by_kind": {
+    "fax": 0.8472,
+    "handwritten logbook": 0.9746,
+    "typed + handwritten note": 0.9604,
+    "typed / scanned": 0.9453
+   },
+   "pages_by_kind": {
+    "fax": 4,
+    "handwritten logbook": 5,
+    "typed + handwritten note": 1,
+    "typed / scanned": 58
+   },
+   "p50_ms": 11044,
+   "p95_ms": 25230
+  },
+  {
+   "model": "MiniCPM-V-4.7-35B-A3B",
+   "interface": "/v1/chat/completions",
+   "pages": 68,
+   "failures": 0,
+   "mean_cer": 0.0207,
+   "median_cer": 0.0194,
+   "mean_word_f1": 0.9732,
+   "cer_by_kind": {
+    "fax": 0.0515,
+    "handwritten logbook": 0.0083,
+    "typed + handwritten note": 0.0532,
+    "typed / scanned": 0.0191
+   },
+   "word_f1_by_kind": {
+    "fax": 0.882,
+    "handwritten logbook": 0.9758,
+    "typed + handwritten note": 0.9823,
+    "typed / scanned": 0.9791
+   },
+   "pages_by_kind": {
+    "fax": 4,
+    "handwritten logbook": 5,
+    "typed + handwritten note": 1,
+    "typed / scanned": 58
+   },
+   "p50_ms": 18604,
+   "p95_ms": 74281
+  }
+ ],
+ "ranking": [
+  "MiniCPM-V-4.7-35B-A3B",
+  "Gemma-4-31B-IT",
+  "DeepSeek-V4-Flash-Vision-Exp",
+  "MinerU2.5-Pro"
+ ],
+ "retried_failed_pages": 2,
+ "note": "CER = character error rate vs. the generator's reference transcription (lower is better), after removing Markdown syntax and the [stamp]/[handwritten note]/[illegible] markers; it counts reading order. Word F1 = order-insensitive share of words read correctly (higher is better). Same page images for every model; chat models get CROMO's production transcription prompt. Latency is per page on the shared Token Factory (it includes queueing on AMD's side). Small samples per page type: see pages_by_kind.",
+ "pages": {
+  "Gemma-4-31B-IT": [
+   {
+    "acc": "ACC-0008",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 27926,
+    "cer": 0.0355,
+    "word_f1": 0.9655,
+    "error": null
+   },
+   {
+    "acc": "ACC-0012",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 26429,
+    "cer": 0.0024,
+    "word_f1": 0.9855,
+    "error": null
+   },
+   {
+    "acc": "ACC-0014",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16301,
+    "cer": 0.0399,
+    "word_f1": 0.9804,
+    "error": null
+   },
+   {
+    "acc": "ACC-0022",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 19972,
+    "cer": 0.0131,
+    "word_f1": 0.9932,
+    "error": null
+   },
+   {
+    "acc": "ACC-0027",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 23089,
+    "cer": 0.0124,
+    "word_f1": 0.994,
+    "error": null
+   },
+   {
+    "acc": "ACC-0033",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 35784,
+    "cer": 0.0034,
+    "word_f1": 0.9778,
+    "error": null
+   },
+   {
+    "acc": "ACC-0034",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 25901,
+    "cer": 0.0137,
+    "word_f1": 0.9932,
+    "error": null
+   },
+   {
+    "acc": "ACC-0035",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10295,
+    "cer": 0.0144,
+    "word_f1": 0.9823,
+    "error": null
+   },
+   {
+    "acc": "ACC-0037",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 5058,
+    "cer": 0.0323,
+    "word_f1": 0.9818,
+    "error": null
+   },
+   {
+    "acc": "ACC-0039",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 3535,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0041",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 5959,
+    "cer": 0.0359,
+    "word_f1": 0.9818,
+    "error": null
+   },
+   {
+    "acc": "ACC-0044",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 8213,
+    "cer": 0.0662,
+    "word_f1": 0.9655,
+    "error": null
+   },
+   {
+    "acc": "ACC-0047",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 29003,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0049",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 6962,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0050",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 58083,
+    "cer": 0.0143,
+    "word_f1": 0.9825,
+    "error": null
+   },
+   {
+    "acc": "ACC-0054",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 76279,
+    "cer": 0.0371,
+    "word_f1": 0.9701,
+    "error": null
+   },
+   {
+    "acc": "ACC-0055",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14784,
+    "cer": 0.0214,
+    "word_f1": 0.9839,
+    "error": null
+   },
+   {
+    "acc": "ACC-0056",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 8521,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0065",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10034,
+    "cer": 0.0259,
+    "word_f1": 0.9802,
+    "error": null
+   },
+   {
+    "acc": "ACC-0066",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 15543,
+    "cer": 0.006,
+    "word_f1": 0.9859,
+    "error": null
+   },
+   {
+    "acc": "ACC-0069",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13394,
+    "cer": 0.0223,
+    "word_f1": 0.9767,
+    "error": null
+   },
+   {
+    "acc": "ACC-0070",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13115,
+    "cer": 0.0224,
+    "word_f1": 0.9717,
+    "error": null
+   },
+   {
+    "acc": "ACC-0071",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10301,
+    "cer": 0.0026,
+    "word_f1": 0.9821,
+    "error": null
+   },
+   {
+    "acc": "ACC-0074",
+    "page": 1,
+    "kind": "typed + handwritten note",
+    "ok": true,
+    "ms": 10694,
+    "cer": 0.016,
+    "word_f1": 0.9912,
+    "error": null
+   },
+   {
+    "acc": "ACC-0075",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 79152,
+    "cer": 0.0363,
+    "word_f1": 0.9677,
+    "error": null
+   },
+   {
+    "acc": "ACC-0076",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 70649,
+    "cer": 0.0076,
+    "word_f1": 0.9878,
+    "error": null
+   },
+   {
+    "acc": "ACC-0077",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 49916,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0078",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 35536,
+    "cer": 0.0622,
+    "word_f1": 0.8571,
+    "error": null
+   },
+   {
+    "acc": "ACC-0080",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 26174,
+    "cer": 0.0186,
+    "word_f1": 0.9806,
+    "error": null
+   },
+   {
+    "acc": "ACC-0084",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 8248,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0085",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 17329,
+    "cer": 0.0268,
+    "word_f1": 0.9861,
+    "error": null
+   },
+   {
+    "acc": "ACC-0087",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 20150,
+    "cer": 0.0149,
+    "word_f1": 0.9921,
+    "error": null
+   },
+   {
+    "acc": "ACC-0088",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 9750,
+    "cer": 0.0078,
+    "word_f1": 0.9872,
+    "error": null
+   },
+   {
+    "acc": "ACC-0092",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16809,
+    "cer": 0.0327,
+    "word_f1": 0.9565,
+    "error": null
+   },
+   {
+    "acc": "ACC-0094",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 33961,
+    "cer": 0.0165,
+    "word_f1": 0.9919,
+    "error": null
+   },
+   {
+    "acc": "ACC-0101",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 11585,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0103",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14979,
+    "cer": 0.0436,
+    "word_f1": 0.9643,
+    "error": null
+   },
+   {
+    "acc": "ACC-0104",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 57958,
+    "cer": 0.0316,
+    "word_f1": 0.9744,
+    "error": null
+   },
+   {
+    "acc": "ACC-0105",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 39008,
+    "cer": 0.0202,
+    "word_f1": 0.9857,
+    "error": null
+   },
+   {
+    "acc": "ACC-0107",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13145,
+    "cer": 0.0225,
+    "word_f1": 0.9882,
+    "error": null
+   },
+   {
+    "acc": "ACC-0108",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 37646,
+    "cer": 0.0239,
+    "word_f1": 0.977,
+    "error": null
+   },
+   {
+    "acc": "ACC-0109",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 18096,
+    "cer": 0.0376,
+    "word_f1": 0.9808,
+    "error": null
+   },
+   {
+    "acc": "ACC-0111",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16049,
+    "cer": 0.0125,
+    "word_f1": 0.9846,
+    "error": null
+   },
+   {
+    "acc": "ACC-0113",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 29181,
+    "cer": 0.0751,
+    "word_f1": 0.9153,
+    "error": null
+   },
+   {
+    "acc": "ACC-0114",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 19404,
+    "cer": 0.0195,
+    "word_f1": 0.9682,
+    "error": null
+   },
+   {
+    "acc": "ACC-0115",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 25167,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0117",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 19177,
+    "cer": 0.0267,
+    "word_f1": 0.9683,
+    "error": null
+   },
+   {
+    "acc": "ACC-0121",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 12149,
+    "cer": 0.0264,
+    "word_f1": 0.9634,
+    "error": null
+   },
+   {
+    "acc": "ACC-0125",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14045,
+    "cer": 0.0288,
+    "word_f1": 0.9841,
+    "error": null
+   },
+   {
+    "acc": "ACC-0127",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 8828,
+    "cer": 0.0359,
+    "word_f1": 0.9677,
+    "error": null
+   },
+   {
+    "acc": "ACC-0128",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13140,
+    "cer": 0.0259,
+    "word_f1": 0.987,
+    "error": null
+   },
+   {
+    "acc": "ACC-0129",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 11844,
+    "cer": 0.0295,
+    "word_f1": 0.9851,
+    "error": null
+   },
+   {
+    "acc": "ACC-0133",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14442,
+    "cer": 0.0366,
+    "word_f1": 0.963,
+    "error": null
+   },
+   {
+    "acc": "ACC-0135",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13417,
+    "cer": 0.0358,
+    "word_f1": 0.9818,
+    "error": null
+   },
+   {
+    "acc": "ACC-0136",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 50134,
+    "cer": 0.0219,
+    "word_f1": 0.9901,
+    "error": null
+   },
+   {
+    "acc": "ACC-0138",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 26211,
+    "cer": 0.1053,
+    "word_f1": 0.9074,
+    "error": null
+   },
+   {
+    "acc": "ACC-0141",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 20625,
+    "cer": 0.0141,
+    "word_f1": 0.9935,
+    "error": null
+   },
+   {
+    "acc": "ACC-0145",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 11945,
+    "cer": 0.0315,
+    "word_f1": 0.9836,
+    "error": null
+   },
+   {
+    "acc": "ACC-0149",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 11762,
+    "cer": 0.003,
+    "word_f1": 0.9804,
+    "error": null
+   },
+   {
+    "acc": "ACC-0155",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 9787,
+    "cer": 0.0286,
+    "word_f1": 0.9667,
+    "error": null
+   },
+   {
+    "acc": "ACC-0158",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 24681,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0159",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14144,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0160",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 25073,
+    "cer": 0.0172,
+    "word_f1": 0.9921,
+    "error": null
+   },
+   {
+    "acc": "ACC-0164",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 18691,
+    "cer": 0.0149,
+    "word_f1": 0.9909,
+    "error": null
+   },
+   {
+    "acc": "ACC-0165",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 5780,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0166",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10231,
+    "cer": 0.03,
+    "word_f1": 0.96,
+    "error": null
+   },
+   {
+    "acc": "ACC-0171",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 19563,
+    "cer": 0.026,
+    "word_f1": 0.9652,
+    "error": null
+   },
+   {
+    "acc": "ACC-0176",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14899,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   }
+  ],
+  "MinerU2.5-Pro": [
+   {
+    "acc": "ACC-0008",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 81379,
+    "cer": 0.0246,
+    "word_f1": 0.9831,
+    "error": null
+   },
+   {
+    "acc": "ACC-0012",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 73177,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0014",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 65841,
+    "cer": 0.5675,
+    "word_f1": 0.9804,
+    "error": null
+   },
+   {
+    "acc": "ACC-0022",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 50704,
+    "cer": 0.2009,
+    "word_f1": 0.9795,
+    "error": null
+   },
+   {
+    "acc": "ACC-0027",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 38335,
+    "cer": 0.1765,
+    "word_f1": 0.994,
+    "error": null
+   },
+   {
+    "acc": "ACC-0033",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 101023,
+    "cer": 0.589,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0034",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 21336,
+    "cer": 0.1943,
+    "word_f1": 0.9932,
+    "error": null
+   },
+   {
+    "acc": "ACC-0035",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 21227,
+    "cer": 0.2044,
+    "word_f1": 0.993,
+    "error": null
+   },
+   {
+    "acc": "ACC-0037",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 20743,
+    "cer": 0.4946,
+    "word_f1": 0.9818,
+    "error": null
+   },
+   {
+    "acc": "ACC-0039",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 18096,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0041",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 30971,
+    "cer": 0.5509,
+    "word_f1": 0.9818,
+    "error": null
+   },
+   {
+    "acc": "ACC-0044",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 28553,
+    "cer": 0.1413,
+    "word_f1": 0.918,
+    "error": null
+   },
+   {
+    "acc": "ACC-0047",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 7294,
+    "cer": 0.0034,
+    "word_f1": 0.9792,
+    "error": null
+   },
+   {
+    "acc": "ACC-0049",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 8340,
+    "cer": 0.2789,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0050",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 85136,
+    "cer": 0.1894,
+    "word_f1": 0.9883,
+    "error": null
+   },
+   {
+    "acc": "ACC-0054",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16468,
+    "cer": 0.4269,
+    "word_f1": 0.9853,
+    "error": null
+   },
+   {
+    "acc": "ACC-0055",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 11585,
+    "cer": 0.4333,
+    "word_f1": 0.9677,
+    "error": null
+   },
+   {
+    "acc": "ACC-0056",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10413,
+    "cer": 0.2717,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0065",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13285,
+    "cer": 0.282,
+    "word_f1": 0.9902,
+    "error": null
+   },
+   {
+    "acc": "ACC-0066",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 19293,
+    "cer": 0.2093,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0069",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13793,
+    "cer": 0.2764,
+    "word_f1": 0.9674,
+    "error": null
+   },
+   {
+    "acc": "ACC-0070",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16442,
+    "cer": 0.2923,
+    "word_f1": 0.9668,
+    "error": null
+   },
+   {
+    "acc": "ACC-0071",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 8801,
+    "cer": 0.4399,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0074",
+    "page": 1,
+    "kind": "typed + handwritten note",
+    "ok": true,
+    "ms": 12606,
+    "cer": 0.2434,
+    "word_f1": 0.9865,
+    "error": null
+   },
+   {
+    "acc": "ACC-0075",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 12068,
+    "cer": 0.4172,
+    "word_f1": 0.9841,
+    "error": null
+   },
+   {
+    "acc": "ACC-0076",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 10763,
+    "cer": 0.0076,
+    "word_f1": 0.9506,
+    "error": null
+   },
+   {
+    "acc": "ACC-0077",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 25305,
+    "cer": 0.6719,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0078",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 16384,
+    "cer": 0.227,
+    "word_f1": 0.8235,
+    "error": null
+   },
+   {
+    "acc": "ACC-0080",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 71885,
+    "cer": 0.1836,
+    "word_f1": 0.9636,
+    "error": null
+   },
+   {
+    "acc": "ACC-0084",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13161,
+    "cer": 0.2738,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0085",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 11066,
+    "cer": 0.4107,
+    "word_f1": 0.9861,
+    "error": null
+   },
+   {
+    "acc": "ACC-0087",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 15322,
+    "cer": 0.2291,
+    "word_f1": 0.9921,
+    "error": null
+   },
+   {
+    "acc": "ACC-0088",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 11309,
+    "cer": 0.3333,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0092",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13438,
+    "cer": 0.4252,
+    "word_f1": 0.9559,
+    "error": null
+   },
+   {
+    "acc": "ACC-0094",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 60661,
+    "cer": 0.2548,
+    "word_f1": 0.9837,
+    "error": null
+   },
+   {
+    "acc": "ACC-0101",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 6840,
+    "cer": 0.2568,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0103",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10365,
+    "cer": 0.4641,
+    "word_f1": 0.9369,
+    "error": null
+   },
+   {
+    "acc": "ACC-0104",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 24395,
+    "cer": 0.0242,
+    "word_f1": 0.9873,
+    "error": null
+   },
+   {
+    "acc": "ACC-0105",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 46207,
+    "cer": 0.2326,
+    "word_f1": 0.9929,
+    "error": null
+   },
+   {
+    "acc": "ACC-0107",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 85839,
+    "cer": 0.3452,
+    "word_f1": 0.9882,
+    "error": null
+   },
+   {
+    "acc": "ACC-0108",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 94251,
+    "cer": 0.3389,
+    "word_f1": 0.9885,
+    "error": null
+   },
+   {
+    "acc": "ACC-0109",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 45553,
+    "cer": 0.5405,
+    "word_f1": 0.9615,
+    "error": null
+   },
+   {
+    "acc": "ACC-0111",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 116351,
+    "cer": 0.1656,
+    "word_f1": 0.9897,
+    "error": null
+   },
+   {
+    "acc": "ACC-0113",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 23726,
+    "cer": 0.2306,
+    "word_f1": 0.8644,
+    "error": null
+   },
+   {
+    "acc": "ACC-0114",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 82321,
+    "cer": 0.0171,
+    "word_f1": 0.9753,
+    "error": null
+   },
+   {
+    "acc": "ACC-0115",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 11693,
+    "cer": 0.3173,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0117",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13548,
+    "cer": 0.2729,
+    "word_f1": 0.9882,
+    "error": null
+   },
+   {
+    "acc": "ACC-0121",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 9876,
+    "cer": 0.3651,
+    "word_f1": 0.963,
+    "error": null
+   },
+   {
+    "acc": "ACC-0125",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 58338,
+    "cer": 0.4412,
+    "word_f1": 0.9841,
+    "error": null
+   },
+   {
+    "acc": "ACC-0127",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 43646,
+    "cer": 0.4846,
+    "word_f1": 0.9508,
+    "error": null
+   },
+   {
+    "acc": "ACC-0128",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 64923,
+    "cer": 0.3966,
+    "word_f1": 0.987,
+    "error": null
+   },
+   {
+    "acc": "ACC-0129",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14169,
+    "cer": 0.4205,
+    "word_f1": 0.9851,
+    "error": null
+   },
+   {
+    "acc": "ACC-0133",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 12468,
+    "cer": 0.5183,
+    "word_f1": 0.9815,
+    "error": null
+   },
+   {
+    "acc": "ACC-0135",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 7030,
+    "cer": 0.5096,
+    "word_f1": 0.9818,
+    "error": null
+   },
+   {
+    "acc": "ACC-0136",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 57097,
+    "cer": 0.312,
+    "word_f1": 0.9901,
+    "error": null
+   },
+   {
+    "acc": "ACC-0138",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 26715,
+    "cer": 0.2382,
+    "word_f1": 0.8034,
+    "error": null
+   },
+   {
+    "acc": "ACC-0141",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 20673,
+    "cer": 0.2272,
+    "word_f1": 0.9902,
+    "error": null
+   },
+   {
+    "acc": "ACC-0145",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 37411,
+    "cer": 0.4829,
+    "word_f1": 0.9836,
+    "error": null
+   },
+   {
+    "acc": "ACC-0149",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 32008,
+    "cer": 0.5181,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0155",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16953,
+    "cer": 0.3511,
+    "word_f1": 0.9551,
+    "error": null
+   },
+   {
+    "acc": "ACC-0158",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 9486,
+    "cer": 0.184,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0159",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 59166,
+    "cer": 0.212,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0160",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 15848,
+    "cer": 0.2467,
+    "word_f1": 0.9843,
+    "error": null
+   },
+   {
+    "acc": "ACC-0164",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16303,
+    "cer": 0.193,
+    "word_f1": 0.9848,
+    "error": null
+   },
+   {
+    "acc": "ACC-0165",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 7349,
+    "cer": 0.0043,
+    "word_f1": 0.96,
+    "error": null
+   },
+   {
+    "acc": "ACC-0166",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 15423,
+    "cer": 0.37,
+    "word_f1": 0.9867,
+    "error": null
+   },
+   {
+    "acc": "ACC-0171",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16924,
+    "cer": 0.2612,
+    "word_f1": 0.9739,
+    "error": null
+   },
+   {
+    "acc": "ACC-0176",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 9631,
+    "cer": 0.6565,
+    "word_f1": 0.9767,
+    "error": null
+   }
+  ],
+  "DeepSeek-V4-Flash-Vision-Exp": [
+   {
+    "acc": "ACC-0008",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16044,
+    "cer": 0.2814,
+    "word_f1": 0.9402,
+    "error": null
+   },
+   {
+    "acc": "ACC-0012",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 18497,
+    "cer": 0.3388,
+    "word_f1": 0.9714,
+    "error": null
+   },
+   {
+    "acc": "ACC-0014",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14682,
+    "cer": 0.2239,
+    "word_f1": 0.9412,
+    "error": null
+   },
+   {
+    "acc": "ACC-0022",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14638,
+    "cer": 0.1092,
+    "word_f1": 0.9568,
+    "error": null
+   },
+   {
+    "acc": "ACC-0027",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 18512,
+    "cer": 0.0878,
+    "word_f1": 0.9194,
+    "error": null
+   },
+   {
+    "acc": "ACC-0033",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 7886,
+    "cer": 0.1815,
+    "word_f1": 0.8444,
+    "error": null
+   },
+   {
+    "acc": "ACC-0034",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16267,
+    "cer": 0.312,
+    "word_f1": 0.9225,
+    "error": null
+   },
+   {
+    "acc": "ACC-0035",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 11708,
+    "cer": 0.1422,
+    "word_f1": 0.9132,
+    "error": null
+   },
+   {
+    "acc": "ACC-0037",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 7422,
+    "cer": 0.0323,
+    "word_f1": 0.9818,
+    "error": null
+   },
+   {
+    "acc": "ACC-0039",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 8151,
+    "cer": 0.4107,
+    "word_f1": 0.9508,
+    "error": null
+   },
+   {
+    "acc": "ACC-0041",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 8168,
+    "cer": 0.2335,
+    "word_f1": 0.9558,
+    "error": null
+   },
+   {
+    "acc": "ACC-0044",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 9139,
+    "cer": 0.1413,
+    "word_f1": 0.8706,
+    "error": null
+   },
+   {
+    "acc": "ACC-0047",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 5230,
+    "cer": 0.0759,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0049",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 8315,
+    "cer": 0.184,
+    "word_f1": 0.9231,
+    "error": null
+   },
+   {
+    "acc": "ACC-0050",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13773,
+    "cer": 0.2129,
+    "word_f1": 0.9068,
+    "error": null
+   },
+   {
+    "acc": "ACC-0054",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 7190,
+    "cer": 0.1206,
+    "word_f1": 0.9559,
+    "error": null
+   },
+   {
+    "acc": "ACC-0055",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 8201,
+    "cer": 0.0881,
+    "word_f1": 0.9421,
+    "error": null
+   },
+   {
+    "acc": "ACC-0056",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 7763,
+    "cer": 0.1576,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0065",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10842,
+    "cer": 0.1174,
+    "word_f1": 0.9552,
+    "error": null
+   },
+   {
+    "acc": "ACC-0066",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 7650,
+    "cer": 0.1107,
+    "word_f1": 0.9559,
+    "error": null
+   },
+   {
+    "acc": "ACC-0069",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 12933,
+    "cer": 0.156,
+    "word_f1": 0.9118,
+    "error": null
+   },
+   {
+    "acc": "ACC-0070",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 17418,
+    "cer": 0.1997,
+    "word_f1": 0.8844,
+    "error": null
+   },
+   {
+    "acc": "ACC-0071",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 8337,
+    "cer": 0.2532,
+    "word_f1": 0.955,
+    "error": null
+   },
+   {
+    "acc": "ACC-0074",
+    "page": 1,
+    "kind": "typed + handwritten note",
+    "ok": true,
+    "ms": 26479,
+    "cer": 0.2779,
+    "word_f1": 0.9604,
+    "error": null
+   },
+   {
+    "acc": "ACC-0075",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 7288,
+    "cer": 0.0544,
+    "word_f1": 0.9134,
+    "error": null
+   },
+   {
+    "acc": "ACC-0076",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 12001,
+    "cer": 0.0076,
+    "word_f1": 0.9878,
+    "error": null
+   },
+   {
+    "acc": "ACC-0077",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10758,
+    "cer": 0.2578,
+    "word_f1": 0.975,
+    "error": null
+   },
+   {
+    "acc": "ACC-0078",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 9298,
+    "cer": 0.1541,
+    "word_f1": 0.8468,
+    "error": null
+   },
+   {
+    "acc": "ACC-0080",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 30983,
+    "cer": 0.167,
+    "word_f1": 0.9805,
+    "error": null
+   },
+   {
+    "acc": "ACC-0084",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10496,
+    "cer": 0.1726,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0085",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10264,
+    "cer": 0.1116,
+    "word_f1": 0.9861,
+    "error": null
+   },
+   {
+    "acc": "ACC-0087",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13996,
+    "cer": 0.0897,
+    "word_f1": 0.9597,
+    "error": null
+   },
+   {
+    "acc": "ACC-0088",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 25230,
+    "cer": 0.1202,
+    "word_f1": 0.9193,
+    "error": null
+   },
+   {
+    "acc": "ACC-0092",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 9824,
+    "cer": 0.1098,
+    "word_f1": 0.9173,
+    "error": null
+   },
+   {
+    "acc": "ACC-0094",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14347,
+    "cer": 0.3003,
+    "word_f1": 0.8426,
+    "error": null
+   },
+   {
+    "acc": "ACC-0101",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13050,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0103",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 12061,
+    "cer": 0.1103,
+    "word_f1": 0.9643,
+    "error": null
+   },
+   {
+    "acc": "ACC-0104",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 15434,
+    "cer": 0.0669,
+    "word_f1": 0.9434,
+    "error": null
+   },
+   {
+    "acc": "ACC-0105",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 12157,
+    "cer": 0.2073,
+    "word_f1": 0.8986,
+    "error": null
+   },
+   {
+    "acc": "ACC-0107",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10383,
+    "cer": 0.03,
+    "word_f1": 0.988,
+    "error": null
+   },
+   {
+    "acc": "ACC-0108",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 125837,
+    "cer": 0.1031,
+    "word_f1": 0.9467,
+    "error": null
+   },
+   {
+    "acc": "ACC-0109",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 7709,
+    "cer": 0.104,
+    "word_f1": 0.9709,
+    "error": null
+   },
+   {
+    "acc": "ACC-0111",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 18196,
+    "cer": 0.1835,
+    "word_f1": 0.916,
+    "error": null
+   },
+   {
+    "acc": "ACC-0113",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 8623,
+    "cer": 0.1114,
+    "word_f1": 0.8033,
+    "error": null
+   },
+   {
+    "acc": "ACC-0114",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 12216,
+    "cer": 0.173,
+    "word_f1": 0.9348,
+    "error": null
+   },
+   {
+    "acc": "ACC-0115",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 7659,
+    "cer": 0.0652,
+    "word_f1": 0.9831,
+    "error": null
+   },
+   {
+    "acc": "ACC-0117",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13721,
+    "cer": 0.1097,
+    "word_f1": 0.9469,
+    "error": null
+   },
+   {
+    "acc": "ACC-0121",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 10736,
+    "cer": 0.0304,
+    "word_f1": 0.963,
+    "error": null
+   },
+   {
+    "acc": "ACC-0125",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 12724,
+    "cer": 0.1727,
+    "word_f1": 0.9677,
+    "error": null
+   },
+   {
+    "acc": "ACC-0127",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 17943,
+    "cer": 0.2282,
+    "word_f1": 0.9365,
+    "error": null
+   },
+   {
+    "acc": "ACC-0128",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10027,
+    "cer": 0.0841,
+    "word_f1": 0.961,
+    "error": null
+   },
+   {
+    "acc": "ACC-0129",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 11246,
+    "cer": 0.0977,
+    "word_f1": 0.9851,
+    "error": null
+   },
+   {
+    "acc": "ACC-0133",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10144,
+    "cer": 0.0845,
+    "word_f1": 0.9245,
+    "error": null
+   },
+   {
+    "acc": "ACC-0135",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 6956,
+    "cer": 0.1212,
+    "word_f1": 0.9636,
+    "error": null
+   },
+   {
+    "acc": "ACC-0136",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 12535,
+    "cer": 0.2226,
+    "word_f1": 0.9436,
+    "error": null
+   },
+   {
+    "acc": "ACC-0138",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 7543,
+    "cer": 0.1634,
+    "word_f1": 0.8679,
+    "error": null
+   },
+   {
+    "acc": "ACC-0141",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 20409,
+    "cer": 0.2073,
+    "word_f1": 0.8961,
+    "error": null
+   },
+   {
+    "acc": "ACC-0145",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 7473,
+    "cer": 0.2677,
+    "word_f1": 0.9008,
+    "error": null
+   },
+   {
+    "acc": "ACC-0149",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 6855,
+    "cer": 0.0301,
+    "word_f1": 0.9608,
+    "error": null
+   },
+   {
+    "acc": "ACC-0155",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 11249,
+    "cer": 0.1069,
+    "word_f1": 0.9605,
+    "error": null
+   },
+   {
+    "acc": "ACC-0158",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 6844,
+    "cer": 0.1779,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0159",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14710,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0160",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16069,
+    "cer": 0.1609,
+    "word_f1": 0.9512,
+    "error": null
+   },
+   {
+    "acc": "ACC-0164",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 15736,
+    "cer": 0.1418,
+    "word_f1": 0.9441,
+    "error": null
+   },
+   {
+    "acc": "ACC-0165",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10558,
+    "cer": 0.29,
+    "word_f1": 0.9459,
+    "error": null
+   },
+   {
+    "acc": "ACC-0166",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 7786,
+    "cer": 0.146,
+    "word_f1": 0.96,
+    "error": null
+   },
+   {
+    "acc": "ACC-0171",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14828,
+    "cer": 0.1919,
+    "word_f1": 0.9,
+    "error": null
+   },
+   {
+    "acc": "ACC-0176",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 8399,
+    "cer": 0.0153,
+    "word_f1": 0.9762,
+    "error": null
+   }
+  ],
+  "MiniCPM-V-4.7-35B-A3B": [
+   {
+    "acc": "ACC-0008",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 15862,
+    "cer": 0.0301,
+    "word_f1": 0.9492,
+    "error": null
+   },
+   {
+    "acc": "ACC-0012",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 14858,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0014",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 26806,
+    "cer": 0.046,
+    "word_f1": 0.9412,
+    "error": null
+   },
+   {
+    "acc": "ACC-0022",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 32181,
+    "cer": 0.0131,
+    "word_f1": 0.9932,
+    "error": null
+   },
+   {
+    "acc": "ACC-0027",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 41791,
+    "cer": 0.0191,
+    "word_f1": 0.9731,
+    "error": null
+   },
+   {
+    "acc": "ACC-0033",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10090,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0034",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 25952,
+    "cer": 0.0137,
+    "word_f1": 0.9932,
+    "error": null
+   },
+   {
+    "acc": "ACC-0035",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 26053,
+    "cer": 0.0133,
+    "word_f1": 0.993,
+    "error": null
+   },
+   {
+    "acc": "ACC-0037",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 12149,
+    "cer": 0.0323,
+    "word_f1": 0.9818,
+    "error": null
+   },
+   {
+    "acc": "ACC-0039",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 11951,
+    "cer": 0.006,
+    "word_f1": 0.9667,
+    "error": null
+   },
+   {
+    "acc": "ACC-0041",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 53795,
+    "cer": 0.0359,
+    "word_f1": 0.9818,
+    "error": null
+   },
+   {
+    "acc": "ACC-0044",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 17380,
+    "cer": 0.0197,
+    "word_f1": 0.9341,
+    "error": null
+   },
+   {
+    "acc": "ACC-0047",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 9961,
+    "cer": 0.0034,
+    "word_f1": 0.9792,
+    "error": null
+   },
+   {
+    "acc": "ACC-0049",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 19317,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0050",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 27159,
+    "cer": 0.0174,
+    "word_f1": 0.9765,
+    "error": null
+   },
+   {
+    "acc": "ACC-0054",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 13126,
+    "cer": 0.0325,
+    "word_f1": 0.9559,
+    "error": null
+   },
+   {
+    "acc": "ACC-0055",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16372,
+    "cer": 0.0262,
+    "word_f1": 0.9593,
+    "error": null
+   },
+   {
+    "acc": "ACC-0056",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14650,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0065",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16844,
+    "cer": 0.0259,
+    "word_f1": 0.951,
+    "error": null
+   },
+   {
+    "acc": "ACC-0066",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10041,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0069",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 29369,
+    "cer": 0.0208,
+    "word_f1": 0.9722,
+    "error": null
+   },
+   {
+    "acc": "ACC-0070",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 27815,
+    "cer": 0.0256,
+    "word_f1": 0.9619,
+    "error": null
+   },
+   {
+    "acc": "ACC-0071",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 17220,
+    "cer": 0.0026,
+    "word_f1": 0.9821,
+    "error": null
+   },
+   {
+    "acc": "ACC-0074",
+    "page": 1,
+    "kind": "typed + handwritten note",
+    "ok": true,
+    "ms": 24463,
+    "cer": 0.0532,
+    "word_f1": 0.9823,
+    "error": null
+   },
+   {
+    "acc": "ACC-0075",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 15232,
+    "cer": 0.0363,
+    "word_f1": 0.9365,
+    "error": null
+   },
+   {
+    "acc": "ACC-0076",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 16550,
+    "cer": 0.0038,
+    "word_f1": 0.9759,
+    "error": null
+   },
+   {
+    "acc": "ACC-0077",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 23815,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0078",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 19475,
+    "cer": 0.0514,
+    "word_f1": 0.8667,
+    "error": null
+   },
+   {
+    "acc": "ACC-0080",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 27532,
+    "cer": 0.0117,
+    "word_f1": 0.9944,
+    "error": null
+   },
+   {
+    "acc": "ACC-0084",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 74281,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0085",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 12721,
+    "cer": 0.0268,
+    "word_f1": 0.9861,
+    "error": null
+   },
+   {
+    "acc": "ACC-0087",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 23676,
+    "cer": 0.0149,
+    "word_f1": 0.9921,
+    "error": null
+   },
+   {
+    "acc": "ACC-0088",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 64243,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0092",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 12169,
+    "cer": 0.0327,
+    "word_f1": 0.9565,
+    "error": null
+   },
+   {
+    "acc": "ACC-0094",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 22223,
+    "cer": 0.0165,
+    "word_f1": 0.9919,
+    "error": null
+   },
+   {
+    "acc": "ACC-0101",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 10251,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0103",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 38976,
+    "cer": 0.0385,
+    "word_f1": 0.9649,
+    "error": null
+   },
+   {
+    "acc": "ACC-0104",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 40800,
+    "cer": 0.0335,
+    "word_f1": 0.9299,
+    "error": null
+   },
+   {
+    "acc": "ACC-0105",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 30121,
+    "cer": 0.0152,
+    "word_f1": 0.9929,
+    "error": null
+   },
+   {
+    "acc": "ACC-0107",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 28012,
+    "cer": 0.0225,
+    "word_f1": 0.9882,
+    "error": null
+   },
+   {
+    "acc": "ACC-0108",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16086,
+    "cer": 0.0258,
+    "word_f1": 0.9655,
+    "error": null
+   },
+   {
+    "acc": "ACC-0109",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 17438,
+    "cer": 0.0376,
+    "word_f1": 0.9808,
+    "error": null
+   },
+   {
+    "acc": "ACC-0111",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 29050,
+    "cer": 0.0125,
+    "word_f1": 0.9846,
+    "error": null
+   },
+   {
+    "acc": "ACC-0113",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 13192,
+    "cer": 0.0959,
+    "word_f1": 0.85,
+    "error": null
+   },
+   {
+    "acc": "ACC-0114",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 27968,
+    "cer": 0.0183,
+    "word_f1": 0.9718,
+    "error": null
+   },
+   {
+    "acc": "ACC-0115",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 37939,
+    "cer": 0.0028,
+    "word_f1": 0.9744,
+    "error": null
+   },
+   {
+    "acc": "ACC-0117",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 21125,
+    "cer": 0.0169,
+    "word_f1": 0.9921,
+    "error": null
+   },
+   {
+    "acc": "ACC-0121",
+    "page": 1,
+    "kind": "handwritten logbook",
+    "ok": true,
+    "ms": 17706,
+    "cer": 0.0284,
+    "word_f1": 0.9571,
+    "error": null
+   },
+   {
+    "acc": "ACC-0125",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 17620,
+    "cer": 0.0288,
+    "word_f1": 0.9841,
+    "error": null
+   },
+   {
+    "acc": "ACC-0127",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16430,
+    "cer": 0.0333,
+    "word_f1": 0.9839,
+    "error": null
+   },
+   {
+    "acc": "ACC-0128",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 15769,
+    "cer": 0.0302,
+    "word_f1": 0.961,
+    "error": null
+   },
+   {
+    "acc": "ACC-0129",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 17064,
+    "cer": 0.0295,
+    "word_f1": 0.9851,
+    "error": null
+   },
+   {
+    "acc": "ACC-0133",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 28562,
+    "cer": 0.0338,
+    "word_f1": 0.9815,
+    "error": null
+   },
+   {
+    "acc": "ACC-0135",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 16892,
+    "cer": 0.0413,
+    "word_f1": 0.9455,
+    "error": null
+   },
+   {
+    "acc": "ACC-0136",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 29308,
+    "cer": 0.0219,
+    "word_f1": 0.9901,
+    "error": null
+   },
+   {
+    "acc": "ACC-0138",
+    "page": 1,
+    "kind": "fax",
+    "ok": true,
+    "ms": 12771,
+    "cer": 0.0388,
+    "word_f1": 0.8772,
+    "error": null
+   },
+   {
+    "acc": "ACC-0141",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 23942,
+    "cer": 0.0141,
+    "word_f1": 0.9935,
+    "error": null
+   },
+   {
+    "acc": "ACC-0145",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 17890,
+    "cer": 0.0315,
+    "word_f1": 0.9836,
+    "error": null
+   },
+   {
+    "acc": "ACC-0149",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 17133,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0155",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 15129,
+    "cer": 0.0248,
+    "word_f1": 0.9889,
+    "error": null
+   },
+   {
+    "acc": "ACC-0158",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 22079,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0159",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 14026,
+    "cer": 0.0,
+    "word_f1": 1.0,
+    "error": null
+   },
+   {
+    "acc": "ACC-0160",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 32192,
+    "cer": 0.0172,
+    "word_f1": 0.9921,
+    "error": null
+   },
+   {
+    "acc": "ACC-0164",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 193205,
+    "cer": 0.0149,
+    "word_f1": 0.9818,
+    "error": null
+   },
+   {
+    "acc": "ACC-0165",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 8601,
+    "cer": 0.0087,
+    "word_f1": 0.9474,
+    "error": null
+   },
+   {
+    "acc": "ACC-0166",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 176322,
+    "cer": 0.026,
+    "word_f1": 0.9867,
+    "error": null
+   },
+   {
+    "acc": "ACC-0171",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 168737,
+    "cer": 0.0202,
+    "word_f1": 0.9828,
+    "error": null
+   },
+   {
+    "acc": "ACC-0176",
+    "page": 1,
+    "kind": "typed / scanned",
+    "ok": true,
+    "ms": 7341,
+    "cer": 0.0153,
+    "word_f1": 0.9302,
+    "error": null
+   }
+  ]
+ }
+}

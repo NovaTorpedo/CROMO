@@ -102,8 +102,10 @@ export interface Ctx {
   openDoc: (t: DocTarget) => void;
   /** demo mode: investigations replay the recorded AMD run instead of calling the models */
   demo: boolean;
+  /** "tokenfactory" | "vllm": where the AMD models are served */
+  amdRoute?: string;
 }
-export const AppCtx = createContext<Ctx>({ mode: "fixture", modelLabel: "", openDoc: () => {}, demo: false });
+export const AppCtx = createContext<Ctx>({ mode: "fixture", modelLabel: "", openDoc: () => {}, demo: false, amdRoute: "" });
 export const useApp = () => useContext(AppCtx);
 
 export function Section({ title, eyebrow, children, right }: { title: string; eyebrow?: string; children: ReactNode; right?: ReactNode }) {

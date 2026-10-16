@@ -69,6 +69,9 @@ def summary() -> dict:
         "latency": latency_stats(),
         "benchmark": _load("benchmark_amd.json"),
         "vision_comparison": {k: v for k, v in (_load("vision_comparison.json") or {}).items() if k != "pages"} or None,
+        # multi-model OCR comparison on the Token Factory (scripts/compare_models.py ocr) and the retrieval check
+        "ocr_comparison": {k: v for k, v in (_load("ocr_comparison.json") or {}).items() if k != "pages"} or None,
+        "retrieval_eval": _load("retrieval_eval.json"),
         "reasoner_comparison": {"primary": _brief_eval(_load("eval_amd.json")), "alternative": _brief_eval(_load("eval_amd_qwen.json"))}
         if _load("eval_amd_qwen.json") else None,
         "eval": {"amd": _load("eval_amd.json"), "fixture": _load("eval_fixture.json")},

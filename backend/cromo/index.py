@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import threading
 from collections import Counter
 from dataclasses import dataclass
@@ -35,15 +36,37 @@ def invalidate() -> None:
         _idx = None
 
 
+def expansion_enabled(meta_source: str | None) -> bool:
+    """Document expansion is on for metadata written by a model (AMD reasoner or Evolus extractor), never for the
+    offline fixture heuristic, so the rule-based baseline stays a pure lexical baseline. CROMO_DOC_EXPANSION=on|off
+    overrides it (the retrieval evaluation uses this to measure the effect)."""
+    mode = os.environ.get("CROMO_DOC_EXPANSION", "auto").strip().lower()
+    if mode in ("on", "off"):
+        return mode == "on"
+    return (meta_source or "") not in ("", "fixture")
+
+
+def _expansion_terms(d: dict) -> Counter:
+    """Search-only terms for every chunk of a document: the model's bilingual keywords and English summary.
+
+    They change which chunks a search finds, never the passage text shown to the model or cited, so quote
+    verification is unaffected."""
+    ent = d.get("entities") or {}
+    text = " ".join([*(ent.get("keywords") or []), d.get("summary") or ""])
+    return Counter(set(tokens(text)))  # each term once: expansion nudges ranking, it doesn't dominate it
+
+
 def _build() -> _Index:
     docs = {}
-    for r in db.q("SELECT acc, title, doc_type, date, refs_json, entities_json, injection_flag, pages, text_source FROM documents"):
+    for r in db.q("SELECT acc, title, doc_type, date, refs_json, entities_json, injection_flag, pages, text_source, summary, "
+                  "meta_source FROM documents"):
         d = dict(r)
         d["refs"] = json.loads(d.pop("refs_json") or "{}")
         d["entities"] = json.loads(d.pop("entities_json") or "{}")
         docs[d["acc"]] = d
     rows = [dict(r) for r in db.q("SELECT id, acc, page, line_start, line_end, text, vector FROM chunks ORDER BY id")]
-    toks = [Counter(tokens(r["text"])) for r in rows]
+    expand = {acc: _expansion_terms(d) for acc, d in docs.items() if expansion_enabled(d.get("meta_source"))}
+    toks = [Counter(tokens(r["text"])) + expand.get(r["acc"], Counter()) for r in rows]
     df = Counter()
     for t in toks:
         df.update(t.keys())

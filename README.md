@@ -10,13 +10,13 @@ scans, faxes, handwritten logbooks, change requests, incident reports, emails. T
 - the moment a change makes a step useless, or makes a safeguard dangerous to remove (**tripwires**).
 
 It investigates rather than chats. Every claim is tied to a quote verified in a source document, the evidence strength
-is graded by transparent rules, and a human approves every change through an Evolus workflow. The models run on **AMD
-Instinct MI300X** with ROCm + vLLM.
+is graded by transparent rules, and a human approves every change through an Evolus workflow. **Google DeepMind's open
+Gemma 4 reads every page and does all the reasoning on AMD GPUs**, through the AMD Token Factory.
 
-> Built for the **AMD Developer Hackathon: ACT III** — track *Intelligent Industry* and partner track *Evolus Business Agents on AMD*.
+> Built for the **AMD Developer Hackathon: ACT III**, track *Intelligent Industry*.
 > **All plant data is synthetic** (a fictional paint company, see [below](#the-synthetic-archive)).
 
-**Public demo (read-only, recorded results):** https://novatorpedo.github.io/CROMO/ · **Run it yourself:** `docker compose up` ([quickstart](#quickstart))
+**Public demo (read-only, recorded AMD results):** https://novatorpedo.github.io/CROMO/ · **Run it yourself:** `docker compose up` ([quickstart](#quickstart))
 
 ---
 
@@ -40,21 +40,19 @@ CROMO tells you which is which, with evidence. We recreated Levi's case in our s
 
 | | |
 |---|---|
-| <img src="docs/img/investigation.png" width="430"> | **The investigation (Why-Trail).** Pick any step. CROMO digs, hop by hop, and streams each hop: recipe history, the change request that introduced the step, the references it cites, whether each condition still holds, counter-evidence. The verdict comes with the reasoning chain, the dependencies and their status, and the counter-evidence considered. |
+| <img src="docs/img/investigation.png" width="430"> | **The Why-Trail.** Ask why about any step (Ctrl K anywhere). CROMO digs, hop by hop, and streams each hop: recipe history, the change request that introduced the step, the references it cites, whether each condition still holds, counter-evidence. The verdict and the key evidence come first, by year; the full dig is one click away. |
 | <img src="docs/img/fence.png" width="430"> | **Fossil / Fence / Active / Unknown.** Only quotes verified verbatim in the source can be cited; uncited claims are dropped. A FOSSIL needs evidence that its reason ended and no unresolved safety evidence, otherwise it goes to a person. **Evidence strength** (Strong / Moderate / Weak) is a transparent points score. |
-| <img src="docs/img/tripwires.png" width="430"> | **Tripwires.** Every recovered reason records what it depends on (supplier, material, equipment, regulation). Simulate a change, and CROMO says which steps just became fossils, which fences are affected, and which old fossils come back to life. Example: buying a cheaper, crystallising epoxy resin again reactivates the hot-box step. |
-| <img src="docs/img/change-check.png" width="430"> | **Before you change.** "Remove step 12", "shorten the hold from 30 to 5 minutes", "switch resin supplier": CROMO answers **blocked / caution / allowed with trial**, with the fences and evidence involved. It's also a REST endpoint (`POST /api/v1/change-check`): *the tool that tells AI optimizers which fences not to tear down.* |
+| <img src="docs/img/tripwires.png" width="430"> | **What if… the plant changes? (tripwires)** Every recovered reason records what it depends on (supplier, material, equipment, regulation). Simulate a change, and CROMO says which steps just became fossils, which fences are affected, and which old fossils come back to life. Example: buying a cheaper, crystallising epoxy resin again reactivates the hot-box step. |
+| <img src="docs/img/change-check.png" width="430"> | **What if… we change a step?** "Remove step 12", "shorten the hold from 30 to 5 minutes", "switch resin supplier": CROMO answers **blocked / caution / allowed with trial**, with the fences and evidence involved. It's also a REST endpoint (`POST /api/v1/change-check`): *the tool that tells AI optimizers which fences not to tear down.* |
 | <img src="docs/img/trials.png" width="430"> | **Safe trials via Evolus.** CROMO never deletes a step. For a fossil it drafts a controlled trial (scope, measurements, acceptance criteria, rollback) and sends it through an **Evolus workflow**. The workflow writes the brief for the approving engineer and records the request and the decision. The status comes back to CROMO. |
-| <img src="docs/img/system.png" width="430"> | **Cost and system.** Annual cost of each step from explicit inputs (MES quantities, ERP prices, labour, energy, occupancy, disposal), with the formula shown. The System page shows the models, AMD hardware, measured latency per stage, throughput, GPU memory, cost per plant audit and the evaluation. |
+| <img src="docs/img/system.png" width="430"> | **System: where it runs, measured.** Which model runs each role and where, the measured latency, throughput and Token Factory usage, the comparison of four AMD-hosted vision models on the archive's scans, the retrieval check and the evaluation. |
 
 Also in the app:
 - **Ask a veteran.** For UNKNOWN or weakly evidenced steps, CROMO prepares interview questions for experienced staff. It
-  records the answer as dated testimony, typed or as a voice recording transcribed by a speech model on AMD, and
-  re-investigates. Testimony is an informal source, so it can never make the evidence "Strong" on its own.
-- **Ask why.** Free-text questions about the plant, answered from the archive with every claim tied to a document;
-  optionally also by the Evolus plant agent.
-- **Demo mode.** Investigations replay recorded AMD runs with their original timing, labelled as replays, so a live
-  pitch survives a GPU or network failure.
+  records the answer as dated testimony and re-investigates. Testimony is an informal source, so it can never make the
+  evidence "Strong" on its own.
+- **Ask the archive.** Free-text questions about the plant, answered from the archive with every claim tied to a document.
+- **Replay.** Investigations replay recorded AMD runs, labelled as replays, so a live pitch survives an endpoint outage.
 
 ## Results
 
@@ -64,7 +62,7 @@ The product never reads this file (enforced by tests).
 **Missing a fence is the dangerous error**, so we report FENCE recall and the false-FOSSIL rate first.
 
 <!-- RESULTS:START -->
-| | Rule-based baseline (offline fixture provider, no LLM) | CROMO on AMD MI300X |
+| | Rule-based baseline (offline fixture provider, no LLM) | CROMO on AMD |
 |---|---|---|
 | FENCE recall | 56% | *pending AMD benchmark* |
 | False-FOSSIL rate | 11% | *pending* |
@@ -79,59 +77,56 @@ The product never reads this file (enforced by tests).
 <!-- RESULTS:END -->
 
 The baseline column comes from CROMO's deterministic fixture provider, a keyword heuristic that never sees the
-answers. The AMD column is filled in by `scripts/benchmark_amd.py` + `scripts/update_readme.py` from measured runs.
-We never type benchmark numbers by hand.
+answers. The AMD columns and tables are filled in by `scripts/benchmark_amd.py`, `scripts/compare_models.py ocr`,
+`eval/retrieval_eval.py` and `scripts/update_readme.py` from measured runs. We never type benchmark numbers by hand.
 
 ## How it works
 
 ```
-archive (scans, faxes, logbooks, PDFs, emails) ─► ingestion ─► hybrid index ─► investigation ─► verdict + guards ─► map / tripwires / change-check / trials
-                    VISION + REASONER (Gemma 4 26B-A4B, Google DeepMind) │ EMBEDDINGS (bge-m3)     all on one AMD MI300X (ROCm + vLLM)
+archive (scans, faxes, logbooks, PDFs, emails) ─► ingestion ─► hybrid index ─► investigation ─► verdict + guards ─► map / what-if / trials
+              VISION + REASONER: Gemma 4 (Google DeepMind) on the AMD Token Factory      rules, quotes, costs: CROMO server
 ```
 
 1. **Ingestion.** Born-digital pages are read from their text layer. Scans, faxes and handwritten Italian logbooks go to
-   the vision model. Metadata comes from the reasoner (or the Evolus extractor). Then chunks and embeddings.
+   Gemma. Gemma also writes each document's metadata and **bilingual (English + Italian) search keywords**.
 2. **Investigation.** A bounded, visible multi-hop dig: recipe history, origin, follow references, dependency status,
-   counter-evidence. The reasoner reads passages and proposes leads; a deterministic scheduler bounds the dig.
+   counter-evidence. Gemma reads passages and proposes leads; a deterministic scheduler bounds the dig.
 3. **Verdict and guards.** The model proposes; rules decide what may be removed. Quotes are verified against the source,
    uncited claims are dropped, and the safety guards can only downgrade a verdict to UNKNOWN.
 4. **Actions.** Tripwire alerts, the change-check API, and trial plans approved through Evolus.
 
-Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Details, including what runs where: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ### AMD stack
-| Role | Model (license) | Serving |
+| Role | Model (license) | Where |
 |---|---|---|
-| Reasoner | **`google/gemma-4-26B-A4B-it`** (Gemma 4, Google DeepMind, Apache-2.0) | vLLM on ROCm, `--enable-auto-tool-choice --tool-call-parser gemma4 --reasoning-parser gemma4`, 0.70 of HBM |
-| Vision | **the same Gemma 4 server** (native image input, OCR and handwriting) | `--limit-mm-per-prompt '{"image": 2}'`, `--mm-processor-kwargs '{"max_soft_tokens": 1120}'` (high-resolution pages) |
-| Embeddings | `BAAI/bge-m3` (MIT) | vLLM pooling runner, 0.08 of HBM |
+| Reasoner | **Gemma-4-31B-IT** (Gemma 4, Google DeepMind, open weights) | AMD Token Factory (OpenAI-compatible, AMD GPUs) |
+| Vision | **the same Gemma 4 model**: OCR of typed, faxed and handwritten Italian pages | AMD Token Factory |
+| Retrieval | BM25 + local n-gram vectors + **Gemma's bilingual keywords** (no embedding model is served on the Token Factory) | CROMO server (CPU) |
 
-**Gemma 4 is CROMO's brain and eyes.** One open-weights Gemma 4 model (a mixture-of-experts with ~4B active parameters,
-256K context) reads every scanned, faxed and handwritten Italian page, reads the passages, proposes leads and verdicts,
-parses change proposals, and powers the Evolus agent through native function calling. It runs on ROCm with vLLM's
-Triton attention backend (`VLLM_ATTENTION_BACKEND=TRITON_ATTN`).
+**Gemma 4 is CROMO's brain and eyes.** One open model reads every scanned page, reads the passages, proposes leads and
+verdicts, parses change proposals and writes the search keywords.
 
-**Measured, not assumed.** `PROFILE=compare` also starts `Qwen/Qwen2.5-VL-7B-Instruct` next to Gemma, and
-[`scripts/compare_models.py`](scripts/compare_models.py) scores both on the archive's scanned pages (character error rate
-by page type, latency, failures). The reasoner can be A/B tested on the ground-truth eval with `PROFILE=qwen` +
-`benchmark_amd.py --tag qwen`. The System page shows both comparisons; if Gemma loses a role, the numbers say so.
+**Chosen by measurement.** `scripts/compare_models.py ocr` sent the archive's 68 scanned pages to four AMD-hosted
+models (Gemma-4-31B-IT, MiniCPM-V-4.7-35B-A3B, MinerU2.5-Pro, DeepSeek-V4-Flash-Vision-Exp) and scored them against
+the reference text. Gemma and MiniCPM-V are within 0.1 points of each other; Gemma reads the handwritten logbooks best
+and keeps one model for reading and reasoning. The table is in [Results](#results) and on the System page.
 
-Everything runs on **one AMD Instinct MI300X (192 GB)**: [`deploy/amd/serve_vllm.sh`](deploy/amd/serve_vllm.sh) (official
-`vllm/vllm-openai-rocm` image, API-key protected) plus [`firewall.sh`](deploy/amd/firewall.sh).
-The AMD Token Factory works too: every role is configured by environment variables ([`LINK_AMD.md`](LINK_AMD.md)).
-Interrupted runs resume from saved progress, and a partial run is published only with a PARTIAL label
-([`deploy/amd/README.md`](deploy/amd/README.md)).
-[`scripts/check_amd.py`](scripts/check_amd.py) verifies auth, model, chat, structured output, tool calling, vision on a
-real scan, and embeddings. [`scripts/benchmark_amd.py`](scripts/benchmark_amd.py) measures everything and records every
-investigation for replay.
+**Built for a shared endpoint.** The Token Factory allows 20 requests/minute and 8 concurrent requests per team key.
+CROMO paces every role through one limiter, honours `Retry-After`, retries overloaded-server errors with backoff, reads
+the usage meter before big runs, and makes every long run resumable ([LINK_AMD.md](LINK_AMD.md)).
+
+**Own GPU, same code.** With AMD Developer Cloud credits, [`deploy/amd/session.sh`](deploy/amd/session.sh) serves
+`google/gemma-4-26B-A4B-it` and `BAAI/bge-m3` with vLLM on one AMD Instinct MI300X (ROCm), API-key protected, and
+re-runs the whole benchmark there. Switching is configuration only.
 
 ### Evolus building blocks (driven through the REST API)
 | Block | Use in CROMO |
 |---|---|
 | **Workflow** "CROMO · Trial approval" | Fossil → trial plan → AI Tool brief for the engineer → approval record → decision recorded → status back in CROMO (live, created via `POST /workflows`) |
 | **AI Tool `compare`** | "What changed when this step was added?" between recipe revisions (17 cached results) |
-| **Document extractor** | Archive documents, including scans, → structured records used by ingestion |
-| **Knowledge library + agent** | The plant archive for an Evolus agent running on our AMD vLLM model (Ask why page) |
+| **Knowledge library** | The 178-document plant archive for an Evolus plant agent |
+| **Document extractor + agent** | Ready (`scripts/evolus_setup.py`); they run on our own vLLM model once a Developer Cloud droplet is up |
 
 Setup and status: [docs/EVOLUS_SETUP.md](docs/EVOLUS_SETUP.md).
 
@@ -140,15 +135,16 @@ Setup and status: [docs/EVOLUS_SETUP.md](docs/EVOLUS_SETUP.md).
 git clone https://github.com/NovaTorpedo/CROMO.git && cd CROMO
 docker compose up --build        # http://localhost:8000
 ```
-With no configuration it runs in **offline fixture mode**: no GPU, no keys, clearly labelled in the UI. To connect AMD
-and Evolus, copy `.env.example` to `.env` and follow [LINK_AMD.md](LINK_AMD.md).
+With no configuration it runs in **offline fixture mode**: no GPU, no keys, clearly labelled in the UI. With the
+recorded snapshot it shows the AMD results. To connect AMD and Evolus, copy `.env.example` to `.env` and follow
+[LINK_AMD.md](LINK_AMD.md) (Token Factory: one key and two model names).
 
 Without Docker (Python 3.12, Node 22):
 ```bash
 python -m venv .venv && .venv/bin/pip install -r backend/requirements-dev.txt   # Windows: .venv\Scripts\...
-cd frontend && npm ci && npm run build && cd ..
+cd frontend && npm ci && npm run build && npm test && cd ..
 .venv/bin/python -m uvicorn cromo.api:app --app-dir backend --port 8000
-.venv/bin/python -m pytest backend/tests                 # incl. a mock-vLLM test of the live path and security tests
+.venv/bin/python -m pytest backend/tests                 # incl. mock-endpoint tests of the live path and security tests
 .venv/bin/python eval/run_eval.py --rerun                # evaluation against the planted ground truth
 ```
 
@@ -160,14 +156,14 @@ git config core.hooksPath .githooks
 
 ## Configuration
 All settings are environment variables. See [`.env.example`](.env.example) (names and comments only):
-- `CROMO_PROVIDER`
-- `CROMO_{REASONER,VISION,EMBEDDINGS}_{BASE_URL,API_KEY,MODEL}`
-- `CROMO_GPU_PRICE_PER_HOUR`: $1.99/h list price of one MI300X on AMD Developer Cloud ([source](https://docs.digitalocean.com/products/amd/details/pricing/))
+- `CROMO_PROVIDER`, `CROMO_AMD_ROUTE` (`tokenfactory` or `vllm`)
+- `AMD_TOKEN_FACTORY` (team key) and `AMD_TOKEN_FACTORY_BASE_URL`
+- `CROMO_{REASONER,VISION,EMBEDDINGS}_{BASE_URL,API_KEY,MODEL}` (on the Token Factory route only the model names)
+- `CROMO_RPM_LIMIT`, `CROMO_MAX_CONCURRENCY`, `CROMO_REQUEST_TIMEOUT_S` (route defaults when empty)
 - `EVOLUS_*`
 - `CROMO_ACCESS_TOKEN`: required for writes and model/Evolus calls from anywhere except this machine or a private
   network. **Set it on any internet-facing deployment.**
-- `CROMO_ALLOWED_ORIGINS`
-- `CROMO_API_DOCS`: `true` enables the interactive API docs (development only)
+- `CROMO_ALLOWED_ORIGINS`, `CROMO_API_DOCS` (development only)
 
 ## The synthetic archive
 There is no public 30-year plant archive, so we built one. **Valdorso Coatings S.p.A.** is a **fictional** paint plant;
@@ -192,17 +188,29 @@ The ground truth plants deliberate difficulties:
 It is reproducible (`python generator/build_archive.py`, seeded). The truth lives in `eval/ground_truth.json`, which the
 product never reads.
 
+## Design
+The interface takes inspiration from layered-glass design languages without copying any: translucent glass only on
+floating chrome (top bar, "Ask why" spotlight, document drawer, popovers), near-opaque content surfaces so text contrast
+never depends on what is behind it, one blue accent for interaction, and four verdict colours reserved for verdicts
+(the Unknown tiles are also dashed, so the map reads without colour). Light and dark themes; `prefers-reduced-motion`,
+`prefers-reduced-transparency` and `prefers-contrast` are honoured. Fonts: Inter and IBM Plex Mono (SIL OFL); icons:
+Lucide (ISC).
+
 ## Security
 - Keys live server-side only; `.env` is git-ignored. A pre-commit hook and CI run gitleaks and a scanner that blocks any value from the local `.env`.
 - Archive text is untrusted data: delimited in prompts, quotes verified, instruction-like text flagged and excluded (tested).
-- Strict input validation, path-traversal-safe file access, CSP and security headers, rate limits, and an access token for endpoints that spend GPU time or credits.
+- Strict input validation, path-traversal-safe file access, CSP and security headers, rate limits, and an access token for endpoints that spend model calls or credits.
 - Non-root container with a health check; pinned dependencies (`pip-audit` / `npm audit` in CI).
+- Only synthetic data is sent to the Token Factory.
 
 See [SECURITY.md](SECURITY.md).
 
 ## Limitations (honest)
 - The archive is synthetic. Results on it do not guarantee results on a real plant's messier archive.
 - The verdict depends on what the archive contains. CROMO can only say UNKNOWN when a reason was never written down; it routes those to people.
+- The Token Factory is a shared, rate-limited service: a live investigation takes minutes, and its latency depends on
+  the load from other teams. The measured throughput reflects the account's request limit, not the GPU.
+- Retrieval is lexical (plus Gemma's bilingual keywords) because the Token Factory serves no embedding model.
 - The offline fixture provider is a heuristic baseline used to run the product without a GPU. It is not the AI system,
   and the UI labels it everywhere.
 - Costs use synthetic plant parameters; the formula and every input are shown, so a plant can substitute its own.
@@ -210,8 +218,9 @@ See [SECURITY.md](SECURITY.md).
 
 ## Licenses
 - Code: MIT ([LICENSE](LICENSE)).
-- Models: Apache-2.0 (Gemma 4, Google DeepMind; Qwen for the A/B comparison), MIT (bge-m3).
-- Fonts: IBM Plex, Fraunces, Courier Prime, Libre Baskerville, Caveat, Reenie Beanie (SIL OFL 1.1); Special Elite and
-  Homemade Apple (Apache-2.0); license files in `generator/fonts/`.
+- Models: Gemma 4 (Google DeepMind, Gemma terms of use / open weights); the compared models under their own licences.
+- UI fonts: Inter and IBM Plex Mono (SIL OFL 1.1). Archive rendering fonts: IBM Plex, Fraunces, Courier Prime,
+  Libre Baskerville, Caveat, Reenie Beanie (SIL OFL 1.1); Special Elite and Homemade Apple (Apache-2.0); license files in
+  `generator/fonts/`.
 - Icons: Lucide (ISC). Frontend: React (MIT), Vite (MIT).
 - Backend: FastAPI, Starlette, Pydantic, httpx, uvicorn, numpy, Pillow (MIT/BSD/HPND).

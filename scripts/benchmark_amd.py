@@ -23,6 +23,7 @@ import argparse
 import asyncio
 import hashlib
 import json
+import re
 import shutil
 import statistics
 import subprocess
@@ -34,7 +35,23 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 sys.path.insert(0, str(ROOT / "eval"))
 
-from cromo import archive, config, db, ingest, investigate, llm, system  # noqa: E402
+from cromo import archive, config, db, ingest, investigate, llm, system, tokenfactory  # noqa: E402
+
+
+_MARKERS = re.compile(r"\[(?:stamp|handwritten note|illegible)\]", re.I)
+_MD = [(re.compile(r"<[^>]{1,40}>"), " "), (re.compile(r"!\[[^\]]*\]\([^)]*\)"), " "),
+       (re.compile(r"^\s{0,3}#{1,6}\s*", re.M), ""), (re.compile(r"^\s*[-*+]\s+", re.M), ""),
+       (re.compile(r"^\s*\|?\s*:?-{3,}.*$", re.M), ""), (re.compile(r"\*\*|__|`"), ""), (re.compile(r"\|"), " ")]
+
+
+def normalize(text: str, markdown: bool = True) -> str:
+    """Text used for CER: CROMO's [stamp]/[handwritten note]/[illegible] markers removed, and (for model output)
+    Markdown syntax stripped, so a model is scored on what it read rather than on formatting."""
+    text = _MARKERS.sub(" ", text or "")
+    if markdown:
+        for rx, rep in _MD:
+            text = rx.sub(rep, text)
+    return " ".join(text.split())
 
 
 def cer(hyp: str, ref: str) -> float:
@@ -61,12 +78,13 @@ def vision_accuracy() -> dict:
             continue
         ref = " ".join(x["text"] for x in json.loads(ref_p.read_text(encoding="utf-8"))["lines"])
         hyp = " ".join(x["text"] for x in json.loads(r["lines_json"]))
-        scores.append({"acc": r["acc"], "page": r["page"], "cer": round(cer(hyp, ref), 4)})
+        scores.append({"acc": r["acc"], "page": r["page"], "cer": round(cer(normalize(hyp), normalize(ref, False)), 4)})
     vals = [s["cer"] for s in scores]
     return {"pages": len(vals), "mean_cer": round(statistics.mean(vals), 4) if vals else None,
             "median_cer": round(statistics.median(vals), 4) if vals else None,
             "worst": sorted(scores, key=lambda s: -s["cer"])[:5],
-            "note": "CER vs. the generator's reference transcription of each scanned page (lower is better)."}
+            "note": "CER vs. the generator's reference transcription of each scanned page (lower is better), "
+                    "after removing Markdown and the [stamp]/[handwritten note] markers."}
 
 
 def gpu_info(path: str | None) -> dict | None:
@@ -89,6 +107,18 @@ def _save_partial(out: dict, tag: str) -> None:
     p.write_text(json.dumps(out, indent=1), encoding="utf-8")
 
 
+def _usage(out: dict) -> None:
+    """Token Factory route: what the run consumed according to the platform's own meter (GET /v1/usage)."""
+    before = out.pop("usage_before", None)
+    after = tokenfactory.usage()
+    d = tokenfactory.delta(before, after)
+    if d:
+        out["tokenfactory_usage"] = {**d, "daily_limit_usd": after.get("daily_cost_limit_usd"),
+                                     "basis": "AMD Token Factory meter (GET /v1/usage), all-time counters before and after the "
+                                              "run; free during the event (points with no monetary value). Includes any other "
+                                              "use of the team key during the run."}
+
+
 def _cost(s, seconds: float, complete: bool) -> dict:
     if s.amd_route == "tokenfactory":  # shared serving: our GPU time is not observable, so no audit cost is claimed
         return {"gpu_hours": None, "price_per_gpu_hour": None, "per_plant_audit_usd": None,
@@ -99,6 +129,23 @@ def _cost(s, seconds: float, complete: bool) -> dict:
             "basis": "wall-clock time of full ingestion + all investigations on one GPU, times the list price"
             if complete else "partial run: GPU time of the measured part only; no full-audit cost is claimed",
             "price_source": s.gpu_price_source}
+
+
+def _estimate(s, args, out: dict) -> None:
+    """Print the expected number of model calls and the minimum time at the endpoint's request limit."""
+    n_docs = 0 if args.skip_ingest or out.get("ingest") else len(archive.list_accessions())
+    scanned = sum(archive.page_count(a) for a in archive.list_accessions() if not archive.text_layer(a)) if n_docs else 0
+    steps = len(args.steps or archive.steps()) - len(out.get("durations", {}))
+    calls = n_docs + (scanned if s.vision.configured else 0) + steps * 9 + (0 if args.steps else 25)
+    msg = f"[bench] estimate: ~{calls} model calls ({n_docs} documents, {scanned} scanned pages, {steps} steps x ~9 hops"
+    msg += ", evaluation ~25)" if not args.steps else ")"
+    if s.rpm_limit:
+        msg += f" -> at least {calls / s.rpm_limit:.0f} min at {s.rpm_limit} requests/min"
+    u = tokenfactory.usage()
+    if u:
+        msg += (f"; Token Factory today: {u['today']['requests']} requests, ${u['daily_cost_used_usd']:.3f} of "
+                f"${u['daily_cost_limit_usd']} used (resets {u['daily_reset_at']})")
+    print(msg, flush=True)
 
 
 def finalize_partial(args) -> None:
@@ -121,6 +168,7 @@ def finalize_partial(args) -> None:
     out["gpu"] = gpu_info(args.rocm_smi)
     out["finished_at"] = time.time()
     out["tag"] = args.tag or "primary"
+    _usage(out)
     out["note"] = f"PARTIAL run: {len(d)} of {n_all} steps investigated on AMD; no evaluation score is reported for a partial run."
     for k in ("durations", "inv_wall_s"):
         out.pop(k, None)
@@ -150,26 +198,60 @@ async def run(args):
     if out is None:
         db.ex("DELETE FROM metrics")
         out = {"started_at": time.time(), "provider": "amd", "route": s.amd_route, "hardware": s.hardware_label,
-               "models": models, "durations": {}, "inv_wall_s": 0.0}
+               "models": models, "durations": {}, "inv_wall_s": 0.0, "usage_before": tokenfactory.usage()}
         _save_partial(out, args.tag)
+    _estimate(s, args, out)
 
-    # 1. ingestion -----------------------------------------------------------
+    # 1. ingestion (resumable per document) ------------------------------------
     t_ingest = (out.get("ingest") or {}).get("seconds", 0.0)
     if not args.skip_ingest and not out.get("ingest"):
-        print("[bench] ingesting the archive on AMD ...", flush=True)
+        prog = out.setdefault("ingest_progress", {"done": [], "seconds": 0.0, "documents": 0, "pages": 0, "scanned_pages": 0})
+        prog["seconds"] += prog.pop("seconds_running", 0.0)  # time spent by an interrupted run up to its last save
+        all_accs = archive.list_accessions()
+        todo_accs = [a for a in all_accs if a not in set(prog["done"])]
+        print(f"[bench] ingesting {len(todo_accs)} of {len(all_accs)} documents on AMD ...", flush=True)
         t0 = time.perf_counter()
-        st = await ingest.ingest_all(force=True, progress=lambda i, n, a: print(f"  {i}/{n}", flush=True) if i % 25 == 0 else None)
-        t_ingest = time.perf_counter() - t0
+
+        def progress(i, n, acc):
+            prog["done"].append(acc)
+            pages = archive.page_count(acc)
+            prog["documents"] += 1
+            prog["pages"] += pages
+            prog["scanned_pages"] += 0 if archive.text_layer(acc) else pages
+            if i % 10 == 0 or i == n:
+                prog["seconds_running"] = time.perf_counter() - t0
+                _save_partial(out, args.tag)
+            if i % 25 == 0:
+                print(f"  {i}/{n}", flush=True)
+
+        st = await ingest.ingest_all(force=True, accs=todo_accs, progress=progress, tolerate_failures=True)
+        for attempt in range(3):  # the shared endpoint can be overloaded for a while: pause, then retry what failed
+            if not st["failed"]:
+                break
+            print(f"[bench] {len(st['failed'])} document(s) failed ({', '.join(st['failed'][:5])}); retrying in 90 s", flush=True)
+            await asyncio.sleep(90)
+            st = await ingest.ingest_all(force=True, accs=st["failed"], progress=progress, tolerate_failures=True)
+        prog["seconds"] += time.perf_counter() - t0
+        prog.pop("seconds_running", None)
+        if st["failed"]:
+            _save_partial(out, args.tag)
+            sys.exit(f"[bench] {len(st['failed'])} document(s) still fail on the endpoint: {st['failed']}. "
+                     "Progress is saved; rerun with --resume when the endpoint recovers.")
+        t_ingest = prog["seconds"]
         vis = [m for m in system.latency_stats("amd") if m["stage"] == "vision.transcribe"]
-        scanned = st["scanned_pages"]
+        scanned = prog["scanned_pages"]
         vis_calls = sum(m["calls"] for m in vis)
         out["ingest"] = {
-            "documents": st["documents"], "pages": st["pages"], "scanned_pages": scanned, "seconds": round(t_ingest, 1),
-            "pages_per_min": round(st["pages"] / t_ingest * 60, 1),
+            "documents": prog["documents"], "pages": prog["pages"], "scanned_pages": scanned, "seconds": round(t_ingest, 1),
+            "pages_per_min": round(prog["pages"] / t_ingest * 60, 1),
             "scanned_pages_per_min": round(scanned / t_ingest * 60, 1) if scanned else None,
             "vision_p50_ms_per_page": vis[0]["p50_ms"] if vis else None, "vision_calls": vis_calls,
-            "concurrency": s.max_concurrency,
+            "concurrency": s.max_concurrency, "rpm_limit": s.rpm_limit or None,
         }
+        if s.rpm_limit:
+            out["ingest"]["note"] = (f"Throughput is bounded by the endpoint's request limit ({s.rpm_limit} requests/min on our "
+                                     "side), not by the GPU: each document costs one model call, each scanned page one more.")
+        out.pop("ingest_progress", None)
         if s.vision.configured:
             out["vision_accuracy"] = vision_accuracy()
         else:  # recorded transcriptions were used: their "accuracy" would be meaningless, so none is reported
@@ -190,14 +272,25 @@ async def run(args):
     sem = asyncio.Semaphore(args.concurrency)
     t0 = time.perf_counter()
 
+    degraded: dict[str, int] = {}
+
     async def one(sid):
         async with sem:
-            events = []
+            for attempt in range(3):
+                events = []
 
-            async def emit(ev):
-                events.append(ev)
+                async def emit(ev):
+                    events.append(ev)
 
-            v = await investigate.investigate(sid, emit)
+                v = await investigate.investigate(sid, emit)
+                errs = (v.get("stats") or {}).get("provider_errors", 0)
+                if not errs:
+                    degraded.pop(sid, None)
+                    break
+                # a model call failed on the endpoint (not a model judgement): repeat the whole investigation later
+                degraded[sid] = errs
+                print(f"  {sid}: {errs} failed model call(s) on the endpoint; retrying in 60 s", flush=True)
+                await asyncio.sleep(60)
             done[sid] = v["duration_s"]
             (runs_dir / f"{sid}.json").write_text(json.dumps({
                 "step_id": sid, "recorded_at": time.time(), "provider": "amd", "hardware": s.hardware_label,
@@ -208,6 +301,11 @@ async def run(args):
 
     print(f"[bench] investigating {len(todo)} of {len(steps)} steps (concurrency {args.concurrency}) ...", flush=True)
     await asyncio.gather(*(one(x) for x in todo))
+    if degraded:
+        out["degraded_steps"] = degraded
+        _save_partial(out, args.tag)
+        print(f"[bench] WARNING: {len(degraded)} step(s) still had failed model calls after retries: {degraded}. "
+              "They are reported in benchmark_amd.json (degraded_steps).", flush=True)
     t_inv = prior_wall + (time.perf_counter() - t0)
     calls = db.q1("SELECT COUNT(*) n FROM metrics WHERE role='reasoner'")["n"] - calls_before
     durations = sorted(done[x] for x in steps if x in done)
@@ -245,6 +343,7 @@ async def run(args):
     out["gpu"] = gpu_info(args.rocm_smi)
     out["finished_at"] = time.time()
     out["tag"] = args.tag or "primary"
+    _usage(out)
     p = s.recorded_dir / f"benchmark_amd{'_' + args.tag if args.tag else ''}.json"
     p.write_text(json.dumps(out, indent=1), encoding="utf-8")
     _partial_path(args.tag).unlink(missing_ok=True)

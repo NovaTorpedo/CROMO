@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BellRing, Radar } from "lucide-react";
 import { eur, get, post } from "../api";
-import { ErrorBox, Section, Skeleton, Spinner, VerdictBadge, fmtDate, go, useApp } from "../components/common";
+import { ErrorBox, Skeleton, Spinner, VerdictBadge, fmtDate, go, useApp } from "../components/common";
 import type { Evidence, Verdict } from "../types";
 
 interface Ev { type: string; process?: string | null; from: string; to: string }
@@ -59,11 +59,9 @@ export default function TripwiresPage({ preset = "" }: { preset?: string }) {
   const watched = data?.registry ?? [];
   return (
     <div>
-      <div className="eyebrow">Tripwires · forward-looking</div>
-      <h1 className="h1" style={{ marginTop: 6 }}>When the plant changes, which reasons break?</h1>
-      <p className="lead">
-        Every recovered reason records what it depends on: suppliers, materials, equipment, regulations. Simulate a change and CROMO tells you which
-        steps just became fossils, which fences are affected - and which old fossils come back to life.
+      <p className="lead" style={{ marginTop: 0 }}>
+        Every recovered reason records what it depends on: suppliers, materials, equipment, regulations. These are <strong>tripwires</strong>.
+        Simulate a change and CROMO says which steps just became fossils, which fences are affected, and which old fossils come back to life.
       </p>
       <div className="grid-2" style={{ marginTop: 18, alignItems: "start" }}>
         <div className="card card-pad col">
@@ -131,9 +129,10 @@ export default function TripwiresPage({ preset = "" }: { preset?: string }) {
         </div>
       </div>
 
-      <div style={{ marginTop: 30 }}>
-        <Section title={`Watched dependencies (${watched.length})`} eyebrow="Tripwire registry">
-          <div className="card" style={{ maxHeight: 420, overflow: "auto" }}>
+      <details className="card acc-section" style={{ marginTop: 26 }}>
+        <summary>Watched dependencies · {watched.length} tripwires</summary>
+        <div className="acc-body">
+          <div style={{ maxHeight: 420, overflow: "auto" }}>
             <table className="table">
               <thead><tr><th>Step</th><th>Verdict</th><th>Depends on</th><th>Type</th><th>Still present?</th></tr></thead>
               <tbody>
@@ -149,8 +148,8 @@ export default function TripwiresPage({ preset = "" }: { preset?: string }) {
               </tbody>
             </table>
           </div>
-        </Section>
-      </div>
+        </div>
+      </details>
     </div>
   );
 }

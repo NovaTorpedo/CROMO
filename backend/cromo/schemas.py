@@ -58,12 +58,19 @@ class MetadataOut(_Base):
     regulations: list[str] = Field(default_factory=list)
     people: list[str] = Field(default_factory=list)
     summary: str = ""
+    # bilingual search terms (English + Italian) for retrieval; see docs/ARCHITECTURE.md "Retrieval without an embedding model"
+    keywords: list[str] = Field(default_factory=list)
     suspicious_instructions: bool = False
 
     @field_validator("summary")
     @classmethod
     def _s(cls, v):
         return _clip(v, 400)
+
+    @field_validator("keywords")
+    @classmethod
+    def _k(cls, v):
+        return [_clip(str(x), 60) for x in v if str(x).strip()][:24]
 
 
 # --- investigation --------------------------------------------------------------

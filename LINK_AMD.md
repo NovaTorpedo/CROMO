@@ -1,109 +1,105 @@
-# LINK_AMD — switch CROMO from offline fixture mode to AMD
+# LINK_AMD — connect CROMO to AMD
 
-Everything AMD-dependent is already built and tested against a mock vLLM server. These are the only remaining
-steps. Commands on your PC run from the repo folder with the project virtualenv (`.venv\Scripts\python` on Windows).
+CROMO talks to AMD through one OpenAI-compatible client, so both routes are configuration only. Commands on your PC
+run from the repo folder with the project virtualenv (`.venv\Scripts\python` on Windows).
 
-> **Credits:** an AMD Developer Cloud GPU droplet bills **every hour it exists, even when powered off**.
-> Create it → run the session (≈ 45 min) → connect Evolus and record the video → **destroy it**.
-> One MI300X is $1.99/h list price, so one full session costs about $3–5 of credits.
+| | Route A — AMD Token Factory (**in use**) | Route B — own vLLM on AMD Developer Cloud (ready) |
+|---|---|---|
+| What | Shared event endpoints on AMD GPUs, free, one team key | Your own GPU droplet: 1× AMD Instinct MI300X, ROCm + vLLM |
+| Models | `Gemma-4-31B-IT` for reasoning **and** reading scans | `google/gemma-4-26B-A4B-it` (reasoner + vision) + `BAAI/bge-m3` (embeddings) |
+| Retrieval | BM25 + local n-grams + Gemma's bilingual keywords (no embedding model on the Token Factory) | same, with real bge-m3 embeddings |
+| Limits | 20 requests/min, 8 concurrent, daily allowance per key | none but the GPU; ≈ $1.99/h while the droplet exists |
+| Evolus partner track | **Not compliant on its own** (the track asks for *your own* vLLM endpoint on AMD Developer Cloud) | Compliant |
 
-> **Short on time, or a run that failed partway?** See "Short on time or after a failure" in
-> [deploy/amd/README.md](deploy/amd/README.md). Run `session.sh` inside `tmux new -s cromo` so a dropped SSH connection
-> doesn't stop it; `RESUME=1 ./deploy/amd/session.sh` continues an interrupted run.
+## Route A — AMD Token Factory (what the submission measured)
 
-## Route B — own vLLM on AMD Developer Cloud (needed for the Evolus track; gives the measured MI300X numbers)
-
-1. **Create the droplet.** In AMD Developer Cloud, click **GPU Droplets → Create GPU Droplet**:
-   - GPU: **1× MI300X**
-   - Image: **vLLM** (Quick Start)
-   - Add your SSH key, then **Create**.
-   - Wait until it's **Active** and copy its public IP.
-2. **Run the one-command session on the droplet.** It handles the firewall, starts Gemma 4 (reasoner + vision, :8000),
-   bge-m3 (:8002) and, for the A/B test, Qwen2.5-VL (:8001); checks every endpoint, compares the two vision models on the
-   scanned pages, runs the full benchmark and evaluation on the GPU with Gemma, and records all investigations for replay:
-   ```bash
-   ssh root@<IP>
-   git clone https://github.com/NovaTorpedo/CROMO.git && cd CROMO
-   export VLLM_API_KEY=$(openssl rand -hex 24); echo "$VLLM_API_KEY"    # write this value down: Evolus needs it
-   ./deploy/amd/session.sh
-   ```
-   At the end it prints an `scp` command.
-3. **Copy the results to your PC.** In a terminal in the CROMO folder, run the printed command:
-   ```
-   scp -r root@<IP>:/root/CROMO/data/recorded ./data/
-   ```
-4. **Connect Evolus to the AMD model and create the agent.** Steps 4–6 of `docs/EVOLUS_SETUP.md`:
-   - Your models → Add model:
-     - URL: `http://<IP>:8000/v1`
-     - Model: `google/gemma-4-26B-A4B-it`
-     - Key: the `VLLM_API_KEY`
-   - Then:
-   ```
-   set EVOLUS_MODEL_KEY=own/<alias shown by Evolus>
-   .venv\Scripts\python scripts\evolus_setup.py library
-   .venv\Scripts\python scripts\evolus_setup.py extractor
-   .venv\Scripts\python scripts\evolus_setup.py agent
-   .venv\Scripts\python scripts\evolus_precompute.py library --limit 178
-   .venv\Scripts\python scripts\evolus_precompute.py extract --limit 20
-   ```
-   Paste the printed ids into `.env`.
-5. **Record the demo video** while the droplet is up, following `submission/VIDEO_SCRIPT.md`. Run CROMO on your PC
-   against the droplet. In `.env`, set (same key for all three):
-   ```
-   CROMO_PROVIDER=amd
-   CROMO_REASONER_BASE_URL=http://<IP>:8000/v1
-   CROMO_VISION_BASE_URL=http://<IP>:8000/v1
-   CROMO_EMBEDDINGS_BASE_URL=http://<IP>:8002/v1
-   CROMO_REASONER_API_KEY=<VLLM_API_KEY>
-   CROMO_VISION_API_KEY=<VLLM_API_KEY>
-   CROMO_EMBEDDINGS_API_KEY=<VLLM_API_KEY>
-   ```
-   Then start CROMO: `.venv\Scripts\python -m uvicorn cromo.api:app --app-dir backend --port 8000`, and open
-   http://localhost:8000. The header says **Live on AMD**. Delete `data\runtime\cromo.db` first so CROMO starts from
-   the AMD snapshot. (The model names default to Gemma 4 in `.env.example`: `CROMO_REASONER_MODEL` and
-   `CROMO_VISION_MODEL` = `google/gemma-4-26B-A4B-it`.)
-5b. **Optional: reasoner A/B (Gemma 4 vs Qwen3-30B-A3B), about 40 more minutes of droplet time.** After the video,
-   on the droplet:
-   ```bash
-   PROFILE=qwen ./deploy/amd/session.sh
-   ```
-   It swaps the servers to the all-Qwen stack and benchmarks it into `eval_amd_qwen.json` / `benchmark_amd_qwen.json` (the
-   Gemma results are not touched). Repeat step 3 to copy the results; the System page then shows both reasoners side by
-   side on the 49-step eval. Finish with step 6 and 7.
-6. **Update the README, slides and cover with the measured numbers, and publish them:**
-   ```
-   .venv\Scripts\python scripts\update_readme.py
-   .venv\Scripts\python scripts\build_submission.py
-   git add data/recorded data/evolus_cache README.md submission && git commit -m "Measured AMD results" && git push
-   ```
-   The GitHub Pages demo rebuilds automatically with the AMD results.
-7. **Destroy the droplet.** In AMD Developer Cloud: your droplet → **Destroy**. Powering it off does *not* stop billing.
-
-## Route A — AMD Token Factory (event API, no billing) for live use without a droplet
-1. In Token Factory (notebooks.amd.com/tokenfactory), copy the **base URL**, your **API key** and a **model name** from
-   the catalogue. Prefer a **Gemma 4** model if the catalogue lists one (it covers reasoner *and* vision); otherwise any
-   instruct model, plus a vision or embedding model if offered.
-2. In `.env` set:
+1. Get the team key: [notebooks.amd.com/tokenfactory](https://notebooks.amd.com/tokenfactory) → sign in with the AMD AI
+   Developer Program account → **Redeem API Key** (every team member must redeem) → **Copy to clipboard**.
+2. In `.env` (never committed):
    ```
    CROMO_PROVIDER=amd
    CROMO_AMD_ROUTE=tokenfactory
-   CROMO_REASONER_BASE_URL=<base URL ending in /v1>
-   CROMO_REASONER_API_KEY=<token factory key>
-   CROMO_REASONER_MODEL=<model>
-   CROMO_HARDWARE_LABEL=AMD Token Factory (AMD Instinct GPUs)
+   AMD_TOKEN_FACTORY=rc-...the key...
+   AMD_TOKEN_FACTORY_BASE_URL=https://developer.amd.com.cn/radeon/api/v1
+   CROMO_REASONER_MODEL=Gemma-4-31B-IT
+   CROMO_VISION_MODEL=Gemma-4-31B-IT
+   CROMO_EMBEDDINGS_MODEL=
    ```
-   `.env.example` presets the vision model to Gemma 4. Set `CROMO_VISION_MODEL` to the catalogue's image-capable model
-   id (the same as the reasoner if it's Gemma 4), or leave it **empty** if there is none. Do the same for
-   `CROMO_EMBEDDINGS_MODEL`. Without them, scans use recorded transcriptions and retrieval uses local embeddings; the
-   System page, slides and submission text say so, and no transcription accuracy is claimed.
-3. `.venv\Scripts\python scripts\check_amd.py` must end with `ALL REQUIRED CHECKS PASSED`; every failure prints what to fix.
-4. `.venv\Scripts\python scripts\benchmark_amd.py --concurrency 4` (if a rate limit stops it, rerun with `--resume`),
-   then step 6 above. On this route no GPU-hour audit cost is claimed: the Token Factory has no per-GPU billing.
-5. Evolus: the Evolus track asks for *your own vLLM endpoint on AMD Developer Cloud*, so this route alone may not
-   qualify for it. Ask the organisers before relying on it.
+   Every role uses the Token Factory endpoint and the team key by default. CROMO paces itself below the per-key limits
+   (18 requests/min, 6 concurrent, 600 s timeout); override with `CROMO_RPM_LIMIT`, `CROMO_MAX_CONCURRENCY`,
+   `CROMO_REQUEST_TIMEOUT_S`. The catalogue changes over time: `check_amd.py` lists what is served.
+3. Check (prints the remaining daily allowance too):
+   ```
+   .venv\Scripts\python scripts\check_amd.py
+   ```
+   It must end with `ALL REQUIRED CHECKS PASSED`. The embeddings WARN is expected on this route.
+4. Compare the vision/OCR models on the archive's 68 scanned pages (about 270 page reads; cached and resumable):
+   ```
+   .venv\Scripts\python scripts\compare_models.py ocr --estimate
+   .venv\Scripts\python scripts\compare_models.py ocr
+   .venv\Scripts\python scripts\compare_models.py ocr --retry-failed
+   ```
+5. Full run: ingest the whole archive on AMD, investigate all 49 steps (recorded for replay), evaluate:
+   ```
+   .venv\Scripts\python scripts\benchmark_amd.py --concurrency 6
+   ```
+   It prints an estimate first (about 700 model calls). Progress is saved after every 10 documents and every step: if the
+   endpoint is overloaded or a rate limit stops it, run the same command with `--resume`. Documents and steps that hit
+   endpoint errors are retried after a pause, and any that still fail are reported, never silently counted.
+6. Retrieval check, README, slides, cover, public demo:
+   ```
+   .venv\Scripts\python eval\retrieval_eval.py
+   .venv\Scripts\python scripts\update_readme.py
+   .venv\Scripts\python scripts\build_submission.py
+   ```
+7. Run the app live: `.venv\Scripts\python -m uvicorn cromo.api:app --app-dir backend --port 8000` → http://localhost:8000.
+   The header says **Live on AMD Token Factory · Gemma-4-31B-IT**. A live investigation takes a few minutes on the
+   shared endpoint; for a demo, the **Replay** toggle replays the recorded AMD runs (labelled as replays).
+
+**Usage.** The Token Factory meter is free during the event. To see it: Token Factory page → **Model Usage**, or
+`check_amd.py`. The benchmark records the meter before and after the run (`tokenfactory_usage` in
+`data/recorded/benchmark_amd.json`).
+
+## Route B — own vLLM on AMD Developer Cloud (when credits arrive)
+
+> **Credits:** a GPU droplet bills **every hour it exists, even when powered off**. Create it → run the session
+> (≈ 45 min) → connect Evolus and record → **destroy it**. One MI300X is $1.99/h list price.
+
+1. **Create the droplet.** AMD Developer Cloud → **GPU Droplets → Create GPU Droplet**: 1× **MI300X**, image **vLLM**
+   (Quick Start), add your SSH key, **Create**. Wait until it is **Active** and copy its public IP.
+2. **Run the one-command session on the droplet** (firewall, Gemma 4 on :8000, bge-m3 on :8002, checks, benchmark,
+   recordings). Use tmux so a dropped SSH connection doesn't stop it:
+   ```bash
+   ssh root@<IP>
+   tmux new -s cromo
+   git clone https://github.com/NovaTorpedo/CROMO.git && cd CROMO
+   export VLLM_API_KEY=$(openssl rand -hex 24); echo "$VLLM_API_KEY"    # write this value down: Evolus needs it
+   ./deploy/amd/session.sh                 # QUICK=1 skips the Qwen A/B download; RESUME=1 continues a stopped run
+   ```
+   With little time left: `QUICK=1 STEPS="ALK-04 SOL-02 SOL-08" ./deploy/amd/session.sh` (marked PARTIAL, no score).
+3. **Connect Evolus to the droplet's model first** (this is what the Evolus track checks), while the benchmark runs:
+   Evolus → **Your models → Add model**: URL `http://<IP>:8000/v1`, model `google/gemma-4-26B-A4B-it`, key = the
+   `VLLM_API_KEY` → **Test connection → Save**, note the `own/...` key. Then on your PC:
+   ```
+   set EVOLUS_MODEL_KEY=own/<alias shown by Evolus>
+   .venv\Scripts\python scripts\evolus_setup.py extractor
+   .venv\Scripts\python scripts\evolus_setup.py agent
+   .venv\Scripts\python scripts\evolus_precompute.py extract --limit 20
+   ```
+   Paste the printed ids into `.env`, and send the agent one question from the **Ask why** page.
+4. **Copy the results** (the session prints the command): `scp -r root@<IP>:/root/CROMO/data/recorded ./data/`.
+   Route B results go to the same files; to keep the Token Factory results as well, copy them aside first
+   (`data\recorded` → `data\recorded-tokenfactory`).
+5. `update_readme.py`, `build_submission.py`, commit, push. **Destroy the droplet** (powering off does not stop billing).
 
 ## Troubleshooting
-- **`check_amd.py` says tool calling WARN.** The reasoner must run with `--enable-auto-tool-choice --tool-call-parser gemma4` (Gemma 4) or `hermes` (Qwen). `serve_vllm.sh` already does this.
-- **A model is still downloading.** `./deploy/amd/serve_vllm.sh logs` on the droplet shows progress.
-- **Out of GPU memory.** Lower `GEMMA_UTIL` (e.g. `GEMMA_UTIL=0.55 ./deploy/amd/serve_vllm.sh start`) or set `MAXLEN=16384`.
-- **Gemma fails to start on ROCm.** Check `serve_vllm.sh logs`; the script already sets `VLLM_ATTENTION_BACKEND=TRITON_ATTN`. As a fallback, `PROFILE=qwen` serves the previous all-Qwen stack (then set the `CROMO_*_MODEL` names to the Qwen models).
+- **`HTTP 500 … CUDA out of memory` from the Token Factory.** The shared server is overloaded (it happened during our
+  run). CROMO retries with backoff for about two minutes per call; if a run still stops, wait and use `--resume`.
+- **`HTTP 429`.** Another teammate or process is using the shared key. CROMO honours `Retry-After`; lower
+  `CROMO_RPM_LIMIT` if it persists.
+- **`400 Requested model … not supported`.** The catalogue changed. `check_amd.py` lists the current model ids.
+- **Empty answers with `finish_reason: length`.** Thinking used the token budget. Gemma does not think unless asked;
+  leave `CROMO_REASONING_EFFORT` empty.
+- **Route B: tool calling WARN.** The reasoner must run with `--enable-auto-tool-choice --tool-call-parser gemma4`.
+  `serve_vllm.sh` already does this.
+- **Route B: out of GPU memory.** `GEMMA_UTIL=0.55 MAXLEN=16384 RESUME=1 ./deploy/amd/session.sh`.

@@ -14,7 +14,10 @@ os.environ["CROMO_PROVIDER"] = "fixture"
 os.environ["CROMO_EVOLUS_ENABLED"] = "false"
 os.environ["CROMO_ACCESS_TOKEN"] = ""
 os.environ["CROMO_METADATA_SOURCE"] = "fixture"
-for k in ("CROMO_REASONER_BASE_URL", "CROMO_VISION_BASE_URL", "CROMO_EMBEDDINGS_BASE_URL"):
+os.environ["CROMO_AMD_ROUTE"] = "vllm"
+os.environ["AMD_TOKEN_FACTORY"] = ""  # a developer's local .env must never make tests call the real Token Factory
+for k in ("CROMO_REASONER_BASE_URL", "CROMO_VISION_BASE_URL", "CROMO_EMBEDDINGS_BASE_URL", "CROMO_RPM_LIMIT",
+          "CROMO_REASONING_EFFORT", "CROMO_MAX_CONCURRENCY", "CROMO_HARDWARE_LABEL"):
     os.environ.pop(k, None)
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))

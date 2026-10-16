@@ -53,6 +53,52 @@ def _ssl_context():
 
 _clients: dict[str, httpx.AsyncClient] = {}
 _sems: dict[str, asyncio.Semaphore] = {}
+_limiters: dict[str, "RateLimiter"] = {}
+
+
+class RateLimiter:
+    """Sliding-window requests-per-minute limit, shared by every role that uses the same endpoint key.
+
+    The AMD Token Factory enforces its limits per API key (not per model), so the reasoner and the vision
+    model must share one budget. A 429 pushes the whole window back by the server's Retry-After."""
+
+    def __init__(self, rpm: int, window_s: float = 60.0):
+        self.rpm, self.window = rpm, window_s
+        self.stamps: list[float] = []
+        self.not_before = 0.0
+        self.lock = asyncio.Lock()
+
+    async def acquire(self) -> float:
+        """Wait for a free slot; returns the seconds spent waiting."""
+        waited = 0.0
+        while True:
+            async with self.lock:
+                now = time.monotonic()
+                self.stamps = [t for t in self.stamps if now - t < self.window]
+                wait = max(self.not_before - now,
+                           (self.stamps[0] + self.window - now) if len(self.stamps) >= self.rpm else 0.0)
+                if wait <= 0:
+                    self.stamps.append(now)
+                    return waited
+            await asyncio.sleep(min(wait, 5.0) + 0.05)
+            waited += min(wait, 5.0) + 0.05
+
+    def backoff(self, seconds: float) -> None:
+        self.not_before = max(self.not_before, time.monotonic() + seconds)
+
+
+def _endpoint_key(role: config.RoleConfig) -> str:
+    return f"{role.base_url}|{hashlib.sha256(role.api_key.encode()).hexdigest()[:12]}"
+
+
+def _limiter(role: config.RoleConfig) -> RateLimiter | None:
+    rpm = config.settings.rpm_limit
+    if rpm <= 0:
+        return None
+    k = _endpoint_key(role)
+    if k not in _limiters:
+        _limiters[k] = RateLimiter(rpm)
+    return _limiters[k]
 
 
 def _client(role: config.RoleConfig) -> httpx.AsyncClient:
@@ -66,14 +112,46 @@ def _client(role: config.RoleConfig) -> httpx.AsyncClient:
     return _clients[key]
 
 
-def _sem(role: str) -> asyncio.Semaphore:
+def _sem(role: str | config.RoleConfig) -> asyncio.Semaphore:
+    # With a per-key rate limit (Token Factory) the concurrency cap is per key too, so roles share one semaphore.
+    if isinstance(role, config.RoleConfig):
+        role = _endpoint_key(role) if config.settings.rpm_limit > 0 else role.role
     if role not in _sems:
         _sems[role] = asyncio.Semaphore(config.settings.max_concurrency)
     return _sems[role]
 
 
+def _retry_after(r: httpx.Response, attempt: int) -> float:
+    """Seconds to wait before retrying: the server's Retry-After when given, else exponential backoff with jitter."""
+    import random
+
+    try:
+        ra = float(r.headers.get("retry-after", ""))
+    except ValueError:
+        ra = 0.0
+    base = ra if ra > 0 else min(60.0, 2.0 * (2 ** attempt))
+    return base + random.uniform(0, 1.5)
+
+
+def _error_text(r: httpx.Response) -> str:
+    """Upstream error message; the Token Factory gateway uses {"error":{...}}, its platform layer {"detail":{"error":{...}}}."""
+    try:
+        j = r.json()
+    except ValueError:
+        return r.text[:300]
+    err = j.get("error") or (j.get("detail") or {}).get("error") if isinstance(j, dict) else None
+    if isinstance(err, dict):
+        return str(err.get("message") or err)[:300]
+    return str(j)[:300]
+
+
 def mode() -> str:
     return "amd" if config.settings.is_live else "fixture"
+
+
+# Retrieval vectors when no embedding model is served (AMD Token Factory has none): hashed word uni/bigrams computed
+# locally on the CPU. Lexical, not semantic; the cross-lingual part comes from the reasoner's bilingual keywords.
+LOCAL_VECTORS = "local hashed n-grams (CPU, no model)"
 
 
 def model_name(role: str) -> str:
@@ -81,6 +159,8 @@ def model_name(role: str) -> str:
     r = getattr(s, role)
     if s.is_live and r.configured:
         return r.model
+    if s.is_live and role == "embeddings":
+        return LOCAL_VECTORS
     return f"fixture-{role}"
 
 
@@ -139,34 +219,56 @@ async def _chat(role: config.RoleConfig, messages: list[dict], *, max_tokens: in
         body["response_format"] = {"type": "json_schema", "json_schema": {"name": stage.replace(".", "_"), "schema": schema}}
     elif schema is not None and so == "json_object":
         body["response_format"] = {"type": "json_object"}
-    t0 = time.perf_counter()
-    async with _sem(role.role):
-        last_err = None
-        for attempt in range(3):
+    if role.role == "reasoner" and config.settings.reasoning_effort:
+        body["reasoning_effort"] = config.settings.reasoning_effort
+    # Latency is the duration of the successful request itself: time queued behind our own concurrency cap, the
+    # rate limiter or retries is not model latency (it is reported separately as wait time).
+    t_start = time.perf_counter()
+    ms = 0.0
+    async with _sem(role):
+        last_err: tuple[str, str] | None = None
+        limiter = _limiter(role)
+        data = None
+        for attempt in range(8):
+            if limiter:
+                await limiter.acquire()
             try:
+                t0 = time.perf_counter()
                 r = await _client(role).post("/chat/completions", json=body)
+                ms = (time.perf_counter() - t0) * 1000
                 if r.status_code in (429, 500, 502, 503, 504):
-                    last_err = ProviderError(f"{role.role} endpoint HTTP {r.status_code}")
-                    await asyncio.sleep(1.5 * (attempt + 1))
+                    last_err = (f"{role.role} endpoint HTTP {r.status_code}", _error_text(r))
+                    wait = _retry_after(r, attempt)
+                    if r.status_code == 429 and limiter:
+                        limiter.backoff(wait)
+                    if attempt >= (7 if r.status_code == 429 else 5):
+                        break
+                    log.info("%s: HTTP %s, retrying in %.0f s", role.role, r.status_code, wait)
+                    await asyncio.sleep(wait)
                     continue
                 if r.status_code == 400 and "response_format" in body:
                     body.pop("response_format")  # endpoint without structured output support
                     continue
                 if r.status_code >= 400:
-                    raise ProviderError(f"{role.role} endpoint HTTP {r.status_code}", detail=r.text)
+                    raise ProviderError(f"{role.role} endpoint HTTP {r.status_code}", detail=_error_text(r))
                 data = r.json()
                 break
             except httpx.HTTPError as e:
-                last_err = ProviderError(f"{role.role} endpoint unreachable: {type(e).__name__}")
-                await asyncio.sleep(1.5 * (attempt + 1))
-        else:
-            db.record_metric(stage, role.role, role.model, "amd", (time.perf_counter() - t0) * 1000, ok=False)
-            raise last_err or ProviderError("model call failed")
-    ms = (time.perf_counter() - t0) * 1000
+                last_err = (f"{role.role} endpoint unreachable: {type(e).__name__}", "")
+                if attempt >= 2:
+                    break
+                await asyncio.sleep(2.0 * (attempt + 1))
+        if data is None:
+            db.record_metric(stage, role.role, role.model, "amd", (time.perf_counter() - t_start) * 1000, ok=False)
+            raise ProviderError(*last_err) if last_err else ProviderError("model call failed")
     usage = data.get("usage") or {}
     db.record_metric(stage, role.role, role.model, "amd", ms, usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
-    msg = data["choices"][0]["message"]
-    return msg.get("content") or "", {"latency_ms": ms, **usage}
+    choice = data["choices"][0]
+    msg = choice["message"]
+    content = msg.get("content") or ""
+    if not content.strip() and choice.get("finish_reason") == "length":
+        raise ProviderError(f"{role.role}: the answer was cut off by max_tokens (thinking can use the whole budget)")
+    return content, {"latency_ms": ms, "wait_ms": (time.perf_counter() - t_start) * 1000 - ms, **usage}
 
 
 async def run_task(task: str, payload: dict, schema_model: type[T]) -> T:
@@ -275,7 +377,8 @@ async def embed(texts: list[str], *, stage: str = "embed") -> np.ndarray:
 
         t0 = time.perf_counter()
         v = fixture.embed(texts)
-        db.record_metric(stage, "embeddings", "fixture-embeddings", "fixture", (time.perf_counter() - t0) * 1000)
+        db.record_metric(stage, "embeddings", LOCAL_VECTORS if s.is_live else "fixture-embeddings",
+                         "local" if s.is_live else "fixture", (time.perf_counter() - t0) * 1000)
         return v
     out: list[list[float]] = []
     role = s.embeddings

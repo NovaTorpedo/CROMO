@@ -55,16 +55,15 @@ export default function ChangePage({ initial }: { initial: string }) {
   const d = res ? DECISION[res.decision] ?? DECISION.caution : null;
   return (
     <div style={{ maxWidth: 1100 }}>
-      <div className="eyebrow">Before you change</div>
-      <h1 className="h1" style={{ marginTop: 6 }}>The tool that tells AI optimizers which fences not to tear down.</h1>
-      <p className="lead">
-        Propose a change in plain language - or call the REST endpoint from your optimization tool. CROMO answers blocked, caution or allowed,
-        with the fences and evidence involved. Decisions are made by auditable rules over the recovered verdicts; the model only maps your words
-        to steps.
+      <p className="lead" style={{ marginTop: 0 }}>
+        The tool that tells AI optimizers which fences not to tear down. Propose a change in plain language, or call the REST endpoint from an
+        optimization tool. CROMO answers <strong>blocked</strong>, <strong>caution</strong> or <strong>allowed</strong> with the fences and
+        evidence involved. Auditable rules decide; the model only maps your words to steps.
       </p>
-      <form className="askbar" onSubmit={(e) => { e.preventDefault(); check(p); }}>
+      <form className="askbar glass" style={{ marginTop: 18 }} onSubmit={(e) => { e.preventDefault(); check(p); }}>
+        <Scale size={18} />
         <input className="input" value={p} onChange={(e) => setP(e.target.value)} placeholder="e.g. Remove step SOL-02 to save time" aria-label="Proposed change" />
-        <button className="btn primary" disabled={busy}>{busy ? <Spinner /> : <Scale size={16} />} Check</button>
+        <button className="btn primary" disabled={busy}>{busy ? <Spinner /> : null} Check</button>
       </form>
       <div className="row wrap" style={{ gap: 6, marginTop: 12 }}>
         {EXAMPLES.map((x) => <button key={x} className="chip" onClick={() => { setP(x); check(x); }}>{x}</button>)}
@@ -106,15 +105,17 @@ export default function ChangePage({ initial }: { initial: string }) {
           </>
         )}
       </div>
-      <div className="card card-pad" style={{ marginTop: 26 }}>
-        <div className="eyebrow" style={{ marginBottom: 8 }}>REST API for optimization tools</div>
+      <details className="card acc-section" style={{ marginTop: 26 }}>
+        <summary>REST API for optimization tools</summary>
+        <div className="acc-body">
         <pre className="code">{`curl -X POST $CROMO_URL/api/v1/change-check \\
   -H "Content-Type: application/json" \\
   -H "X-Access-Token: $CROMO_ACCESS_TOKEN" \\
   -d '{"proposal": "Shorten the AF-12 cooling hold from 30 to 5 minutes"}'
 
 # -> {"decision": "blocked", "findings": [{"step_id": "ALK-07", "verdict": "FENCE", "why": "...", "evidence": [...]}]}`}</pre>
-      </div>
+        </div>
+      </details>
     </div>
   );
 }

@@ -43,6 +43,8 @@ IP_OK = [ipaddress.ip_network(n) for n in ("0.0.0.0/8", "127.0.0.0/8", "10.0.0.0
 IP_SKIP_DIRS = ("fixtures/", "eval/", "data/")  # synthetic transcriptions and recorded numbers contain dotted numbers
 # .env variables whose values are private even though they are not keys
 PRIVATE_NAME = re.compile(r"KEY|SECRET|TOKEN|PASSWORD|PASSCODE|_ID$|_IDS$|BASE_URL|AGENT_MODEL|APPLICATION")
+# values that are public by design (documented endpoints), so finding them in the repo is fine
+PUBLIC_VALUE = re.compile(r"localhost|127\.0\.0\.1|^https://developer\.amd\.com\.cn/radeon/api(/v1)?/?$|^https://api\.evolus\.ai/")
 
 
 def env_values() -> list[str]:
@@ -53,7 +55,7 @@ def env_values() -> list[str]:
             if "=" in line and not line.lstrip().startswith("#"):
                 name, v = line.split("=", 1)
                 v = v.strip().strip('"').strip("'")
-                if len(v) >= 8 and PRIVATE_NAME.search(name.strip().upper()) and not re.search(r"localhost|127\.0\.0\.1", v):
+                if len(v) >= 8 and PRIVATE_NAME.search(name.strip().upper()) and not PUBLIC_VALUE.search(v):
                     vals.append(v)
     return vals
 

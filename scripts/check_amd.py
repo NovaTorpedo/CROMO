@@ -204,6 +204,17 @@ def main():
     a = ap.parse_args()
     s = config.settings
     print(f"CROMO provider={s.provider} route={s.amd_route}")
+    if s.amd_route == "tokenfactory":
+        from cromo import tokenfactory
+
+        if not s.reasoner.api_key:
+            report("AMD_TOKEN_FACTORY", FAIL, "the team key is not set: add a line AMD_TOKEN_FACTORY=rc-... to .env")
+        u = tokenfactory.usage()
+        if u:
+            report("token factory: account", OK,
+                   f"{u['rpm_limit']} requests/min, ${u['daily_cost_used_usd']:.3f} of ${u['daily_cost_limit_usd']} daily "
+                   f"allowance used today ({u['today']['requests']} requests), resets {u['daily_reset_at']}; "
+                   f"CROMO paces itself at {s.rpm_limit}/min")
     if s.provider != "amd":
         report("CROMO_PROVIDER", WARN, "is not 'amd' - the app will stay in offline fixture mode until you set CROMO_PROVIDER=amd")
     checks = {"reasoner": check_reasoner, "vision": check_vision, "embeddings": check_embeddings}
@@ -212,6 +223,10 @@ def main():
             continue
         role = getattr(s, name)
         print(f"\n{name.upper()}  model={role.model or '-'}")
+        if not role.configured and name == "embeddings" and s.amd_route == "tokenfactory":
+            report("embeddings: configured", WARN, "the Token Factory serves no embedding model: retrieval uses BM25 + local "
+                   "hashed n-grams + the reasoner's bilingual keywords (docs/ARCHITECTURE.md). Expected on this route.")
+            continue
         if not role.configured:
             report(f"{name}: configured", FAIL if name == "reasoner" else WARN,
                    f"set CROMO_{name.upper()}_BASE_URL and CROMO_{name.upper()}_MODEL"

@@ -12,6 +12,12 @@ from pathlib import Path
 
 ROOT = Path(os.environ.get("CROMO_ROOT", Path(__file__).resolve().parents[2]))
 
+# AMD Token Factory (event API): OpenAI-compatible shared endpoints on AMD GPUs; one key for every model.
+TOKEN_FACTORY_BASE_URL = "https://developer.amd.com.cn/radeon/api/v1"
+# Its documented limits are per key (20 requests/min per account, 8 concurrent); stay a little below them.
+TOKEN_FACTORY_RPM = 18
+TOKEN_FACTORY_CONCURRENCY = 6
+
 
 def _load_dotenv() -> None:
     env = ROOT / ".env"
@@ -68,6 +74,8 @@ class Settings:
     max_concurrency: int
     evolus_api_key: str = field(repr=False)
     evolus_application_id: str = field(repr=False)
+    rpm_limit: int = 0  # client-side requests/minute per endpoint key (0 = unlimited)
+    reasoning_effort: str = ""  # sent to the REASONER when set (Token Factory: none|low|medium|high ...)
     evolus_extractor_agent_id: str = ""
     evolus_extractor_id: str = ""
     evolus_trial_workflow_id: str = ""
@@ -144,32 +152,44 @@ def _host(url: str) -> str:
     return h
 
 
-def _role(name: str, fallback: RoleConfig | None = None) -> RoleConfig:
+def _role(name: str, fallback: RoleConfig | None = None, default_base: str = "", default_key: str = "") -> RoleConfig:
     p = f"CROMO_{name.upper()}_"
     base, key, model = _get(p + "BASE_URL"), _get(p + "API_KEY"), _get(p + "MODEL")
     if fallback is not None:
         base = base or (fallback.base_url if model else "")
         key = key or (fallback.api_key if base == fallback.base_url else "")
+    base = base or (default_base if model else "")
+    key = key or (default_key if base and base.rstrip("/") == default_base.rstrip("/") else "")
     return RoleConfig(name, base.rstrip("/"), key, model)
 
 
 def load_settings() -> Settings:
-    reasoner = _role("reasoner")
+    route = _get("CROMO_AMD_ROUTE", "vllm").lower()
+    tf = route == "tokenfactory"
+    # On the Token Factory route every role defaults to the event endpoint and the team key (AMD_TOKEN_FACTORY).
+    tf_base = (_get("AMD_TOKEN_FACTORY_BASE_URL") or TOKEN_FACTORY_BASE_URL) if tf else ""
+    tf_key = _get("AMD_TOKEN_FACTORY") if tf else ""
+    reasoner = _role("reasoner", None, tf_base, tf_key)
     origins = tuple(o.strip() for o in _get("CROMO_ALLOWED_ORIGINS").split(",") if o.strip())
     return Settings(
         provider=_get("CROMO_PROVIDER", "fixture").lower(),
-        amd_route=_get("CROMO_AMD_ROUTE", "vllm").lower(),
+        amd_route=route,
         reasoner=reasoner,
-        vision=_role("vision", reasoner),
-        embeddings=_role("embeddings", reasoner),
-        speech=_role("speech", reasoner),
+        vision=_role("vision", reasoner, tf_base, tf_key),
+        embeddings=_role("embeddings", reasoner, tf_base, tf_key),
+        speech=_role("speech", reasoner, tf_base, tf_key),
         structured_output=_get("CROMO_STRUCTURED_OUTPUT", "json_object").lower(),
-        hardware_label=_get("CROMO_HARDWARE_LABEL", "AMD Instinct MI300X (192 GB HBM3), ROCm + vLLM"),
+        hardware_label=_get("CROMO_HARDWARE_LABEL") or ("AMD Token Factory (shared endpoints on AMD GPUs)" if tf
+                                                         else "AMD Instinct MI300X (192 GB HBM3), ROCm + vLLM"),
         gpu_price_per_hour=float(_get("CROMO_GPU_PRICE_PER_HOUR", "1.99") or 1.99),
         gpu_price_source=_get("CROMO_GPU_PRICE_SOURCE",
                               "AMD Developer Cloud list price, 1x MI300X: https://docs.digitalocean.com/products/amd/details/pricing/"),
-        request_timeout_s=float(_get("CROMO_REQUEST_TIMEOUT_S", "120") or 120),
-        max_concurrency=int(_get("CROMO_MAX_CONCURRENCY", "8") or 8),
+        # the Token Factory allows 10 minutes for a non-streaming request; under load a long answer can take minutes
+        request_timeout_s=float(_get("CROMO_REQUEST_TIMEOUT_S") or (600 if tf else 120)),
+        # empty = route default; the Token Factory limits are per key, so CROMO paces itself below them
+        max_concurrency=int(_get("CROMO_MAX_CONCURRENCY") or (TOKEN_FACTORY_CONCURRENCY if tf else 8)),
+        rpm_limit=int(_get("CROMO_RPM_LIMIT") or (TOKEN_FACTORY_RPM if tf else 0)),
+        reasoning_effort=_get("CROMO_REASONING_EFFORT").lower(),
         evolus_api_key=_get("EVOLUS_API_KEY"),
         evolus_application_id=_get("EVOLUS_APPLICATION_ID"),
         evolus_extractor_agent_id=_get("EVOLUS_EXTRACTOR_AGENT_ID"),
