@@ -106,7 +106,7 @@ b { color: #0b1220; }
   box-shadow: inset 0 1px 0 #fff, 0 30px 60px -36px rgba(15,23,42,.35); padding: 34px 40px; }
 .foot { position: absolute; bottom: 44px; left: 120px; right: 120px; font-size: 19px; color: #5b6577; display: flex; justify-content: space-between; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-.shot { width: 100%; border-radius: 26px; box-shadow: 0 40px 80px -40px rgba(15,23,42,.45); border: 1px solid rgba(255,255,255,.9); }
+.shot { width: 100%; max-height: 780px; object-fit: cover; object-position: top left; border-radius: 26px; box-shadow: 0 40px 80px -40px rgba(15,23,42,.45); border: 1px solid rgba(255,255,255,.9); }
 .big { font-size: 92px; font-weight: 750; line-height: 1; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
 .fossil { color: #b53d0a; } .fence { color: #0f766e; } .unknown { color: #6d28d9; } .muted { color: #5b6577; } .accent { color: #2f5bea; }
 .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 30px; }
@@ -144,8 +144,19 @@ def _levi_chain(n: dict) -> str:
     cited = set(v["strength"]["cited"])
     items = sorted((e for e in v["evidence"].values() if e["id"] in cited and e.get("verified") and not e.get("suspicious")),
                    key=lambda e: e.get("date") or "9999")
-    rows = [f"<span><b>{html.escape((e.get('date') or '')[:4])}</b>{html.escape((e.get('doc_type') or 'document').capitalize())}: "
-            f"{html.escape((e.get('claim') or e['quote'])[:96])}</span>" for e in items[:7]]
+    def short(t: str, n: int = 88) -> str:
+        t = " ".join(t.split())
+        return t if len(t) <= n else t[:n].rsplit(" ", 1)[0].rstrip(",.;:") + "…"
+
+    def text(e: dict) -> str:
+        claim = (e.get("claim") or "").strip()
+        dt = (e.get("doc_type") or "").lower()
+        if claim.lower().startswith(dt) and ":" in claim[:60]:  # "Lab test report (1995): ..." -> drop the repeated prefix
+            claim = claim.split(":", 1)[1].strip()
+        return short(claim or e["quote"])
+
+    rows = [f"<span><b>{html.escape((e.get('date') or '')[:4])}</b><i class=\"muted\" style=\"font-style:normal\">"
+            f"{html.escape((e.get('doc_type') or 'document').capitalize())}</i> · {html.escape(text(e))}</span>" for e in items[:7]]
     rows.append(f'<span style="border-color:#c2410c"><b class="fossil">{v["verdict"]}</b>{html.escape(v["strength"]["grade"])} evidence · '
                 f'{eur(v["cost"]["annual_eur"])}/yr · {v["hops"]} hops</span>')
     return "".join(rows)
