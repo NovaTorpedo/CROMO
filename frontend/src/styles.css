@@ -445,7 +445,7 @@ details[open] > summary::before { transform: rotate(45deg); }
   display: flex; flex-direction: column; overflow: hidden; animation: slide 0.28s var(--ease); background: var(--glass-strong); }
 @keyframes slide { from { transform: translateX(30px); opacity: 0; } }
 .drawer-head { padding: 14px 18px 14px 22px; border-bottom: 1px solid var(--hairline); display: flex; gap: 12px; align-items: center; }
-.drawer-body { flex: 1; overflow: auto; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; padding: 20px; }
+.drawer-body { background: var(--surface); flex: 1; overflow: auto; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; padding: 20px; }
 .page-wrap { position: relative; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); background: #fff; }
 .page-wrap img { display: block; width: 100%; height: auto; }
 .hl { position: absolute; background: rgba(47, 91, 234, 0.16); outline: 2px solid rgba(47, 91, 234, 0.85); border-radius: 4px; }

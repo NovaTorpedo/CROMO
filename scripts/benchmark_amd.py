@@ -97,6 +97,9 @@ def gpu_info(path: str | None) -> dict | None:
     return None
 
 
+MAX_STEP_ATTEMPTS = 4  # an investigation whose model calls keep failing on the endpoint is retried, then reported
+
+
 def _partial_path(tag: str) -> Path:
     return config.settings.recorded_dir / f"benchmark_amd{'_' + tag if tag else ''}.partial.json"
 
@@ -170,7 +173,7 @@ def finalize_partial(args) -> None:
     out["tag"] = args.tag or "primary"
     _usage(out)
     out["note"] = f"PARTIAL run: {len(d)} of {n_all} steps investigated on AMD; no evaluation score is reported for a partial run."
-    for k in ("durations", "inv_wall_s"):
+    for k in ("durations", "inv_wall_s", "step_attempts"):
         out.pop(k, None)
     dest = s.recorded_dir / f"benchmark_amd{'_' + args.tag if args.tag else ''}.json"
     dest.write_text(json.dumps(out, indent=1), encoding="utf-8")
@@ -218,9 +221,8 @@ async def run(args):
             prog["documents"] += 1
             prog["pages"] += pages
             prog["scanned_pages"] += 0 if archive.text_layer(acc) else pages
-            if i % 10 == 0 or i == n:
-                prog["seconds_running"] = time.perf_counter() - t0
-                _save_partial(out, args.tag)
+            prog["seconds_running"] = time.perf_counter() - t0
+            _save_partial(out, args.tag)  # after every document: an interruption loses at most the ones in flight
             if i % 25 == 0:
                 print(f"  {i}/{n}", flush=True)
 
@@ -272,25 +274,30 @@ async def run(args):
     sem = asyncio.Semaphore(args.concurrency)
     t0 = time.perf_counter()
 
-    degraded: dict[str, int] = {}
+    attempts: dict = out.setdefault("step_attempts", {})
+    pending: list[str] = []
+    runs_this_time = 0
 
     async def one(sid):
+        nonlocal runs_this_time
         async with sem:
-            for attempt in range(3):
-                events = []
+            events = []
 
-                async def emit(ev):
-                    events.append(ev)
+            async def emit(ev):
+                events.append(ev)
 
-                v = await investigate.investigate(sid, emit)
-                errs = (v.get("stats") or {}).get("provider_errors", 0)
-                if not errs:
-                    degraded.pop(sid, None)
-                    break
-                # a model call failed on the endpoint (not a model judgement): repeat the whole investigation later
-                degraded[sid] = errs
-                print(f"  {sid}: {errs} failed model call(s) on the endpoint; retrying in 60 s", flush=True)
-                await asyncio.sleep(60)
+            v = await investigate.investigate(sid, emit)
+            runs_this_time += 1
+            errs = (v.get("stats") or {}).get("provider_errors", 0)
+            attempts[sid] = attempts.get(sid, 0) + 1
+            if errs and attempts[sid] < MAX_STEP_ATTEMPTS:
+                # a model call failed on the endpoint (not a model judgement): investigate this step again later
+                pending.append(sid)
+                _save_partial(out, args.tag)
+                print(f"  {sid}: {errs} failed model call(s) on the endpoint; will run again (attempt {attempts[sid]})", flush=True)
+                return
+            if errs:  # still failing after MAX_STEP_ATTEMPTS: recorded, and reported as degraded
+                out.setdefault("degraded_steps", {})[sid] = errs
             done[sid] = v["duration_s"]
             (runs_dir / f"{sid}.json").write_text(json.dumps({
                 "step_id": sid, "recorded_at": time.time(), "provider": "amd", "hardware": s.hardware_label,
@@ -301,18 +308,27 @@ async def run(args):
 
     print(f"[bench] investigating {len(todo)} of {len(steps)} steps (concurrency {args.concurrency}) ...", flush=True)
     await asyncio.gather(*(one(x) for x in todo))
-    if degraded:
-        out["degraded_steps"] = degraded
+    for _ in range(2):  # the shared endpoint can be overloaded for a while: pause, then repeat the affected steps
+        if not pending:
+            break
+        again, pending[:] = list(pending), []
+        print(f"[bench] {len(again)} step(s) hit endpoint errors; running them again in 120 s", flush=True)
+        await asyncio.sleep(120)
+        await asyncio.gather(*(one(x) for x in again))
+    if pending:
+        out["inv_wall_s"] = prior_wall + (time.perf_counter() - t0)
         _save_partial(out, args.tag)
-        print(f"[bench] WARNING: {len(degraded)} step(s) still had failed model calls after retries: {degraded}. "
-              "They are reported in benchmark_amd.json (degraded_steps).", flush=True)
+        sys.exit(f"[bench] {len(pending)} step(s) still hit endpoint errors: {pending}. Progress is saved; rerun with --resume.")
+    if out.get("degraded_steps"):
+        print(f"[bench] WARNING: {len(out['degraded_steps'])} step(s) kept failing model calls after {MAX_STEP_ATTEMPTS} attempts: "
+              f"{out['degraded_steps']}. They are reported in benchmark_amd.json (degraded_steps).", flush=True)
     t_inv = prior_wall + (time.perf_counter() - t0)
     calls = db.q1("SELECT COUNT(*) n FROM metrics WHERE role='reasoner'")["n"] - calls_before
     durations = sorted(done[x] for x in steps if x in done)
     out["investigation"] = {
         "steps": len(steps), "wall_seconds": round(t_inv, 1), "p50_s": round(statistics.median(durations), 1),
         "p95_s": round(durations[min(len(durations) - 1, int(0.95 * len(durations)))], 1),
-        "calls_per_step": round(calls / max(1, len(todo)), 1), "concurrency": args.concurrency,
+        "calls_per_step": round(calls / max(1, runs_this_time), 1), "concurrency": args.concurrency,
     }
     print("[bench] investigations:", out["investigation"], flush=True)
 
@@ -338,7 +354,7 @@ async def run(args):
         out["investigation"]["of_steps"] = n_all
         out["note"] = (f"PARTIAL run: {len(steps)} of {n_all} steps investigated on AMD"
                        + ("" if not args.skip_ingest else ", ingest not re-measured") + "; no evaluation score is reported.")
-    for k in ("durations", "inv_wall_s"):
+    for k in ("durations", "inv_wall_s", "step_attempts"):
         out.pop(k, None)
     out["gpu"] = gpu_info(args.rocm_smi)
     out["finished_at"] = time.time()
