@@ -40,6 +40,12 @@ Parameters: `trial_id`, `step_id`, `process`, `stage`, `decision`, `approver`. I
 Its id is in `.env` as `EVOLUS_TRIAL_WORKFLOW_ID`.
 
 ### 4. Connect the AMD model (after `LINK_AMD.md` route B, step 2)
+> **Which endpoint counts?** The Evolus track requires the main agent to use an open model served through *our own
+> vLLM endpoint on AMD Developer Cloud* (event page, checked 16 Oct 2026). The Evolus developer page lists Fireworks AI
+> or vLLM on AMD Developer Cloud for the hackathon. The AMD Token Factory (CROMO's measured route) is **not** listed, so
+> CROMO does not connect it to Evolus or present it as compliant unless the organisers confirm it. The workflow, the
+> compare AI Tool and the knowledge library do not need a model endpoint and work today.
+
 1. Evolus → **Your models** → **Add model**.
 2. Fill in:
    - OpenAI-compatible base URL: `http://<droplet-ip>:8000/v1`

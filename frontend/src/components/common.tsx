@@ -104,6 +104,8 @@ export interface Ctx {
   demo: boolean;
   /** "tokenfactory" | "vllm": where the AMD models are served */
   amdRoute?: string;
+  /** an Evolus plant agent is connected (it runs on our own model) */
+  evolusAgent?: boolean;
 }
 export const AppCtx = createContext<Ctx>({ mode: "fixture", modelLabel: "", openDoc: () => {}, demo: false, amdRoute: "" });
 export const useApp = () => useContext(AppCtx);

@@ -1,48 +1,54 @@
 # CROMO demo video script (target 2:45, hard limit 3:00)
 
-**Setup before recording:**
-- Light theme; browser at 1920×1080, zoom 100%.
-- The app runs live on AMD (header pill "Live on AMD"), with `data\runtime\cromo.db` deleted first so it starts from the
-  AMD snapshot. If the GPU or network fails mid-recording, use the recorded replays ("Replay AMD run"); they are
-  labelled as replays, which is fine to show.
-- Close other tabs. Record with OBS (free): screen plus voice-over. Upload to YouTube as **Unlisted**.
-- Tip: open each URL below in its own tab beforehand and click through the tabs in order.
+**Setup before recording**
+- Run the app on your PC against the AMD Token Factory (`LINK_AMD.md` Route A, step 7). Do **not** delete
+  `data\runtime\cromo.db`: it holds the AMD run. The header pill must read **Live on AMD Token Factory · Gemma-4-31B-IT**.
+- Turn on **Replay** in the header. Investigations then replay the runs recorded on AMD at speed, with a blue
+  "Replay of a run recorded on AMD …" label. A live investigation takes minutes on the shared endpoint, so replay is
+  the honest way to show the dig in a 3-minute video. Say "replayed" once (line at 0:32).
+- Light theme, Chrome at 1920×1080, zoom 100%, nothing else open. OBS: screen + voice. Upload to YouTube as **Unlisted**.
+- Open these tabs beforehand and click through them in order: `#/`, `#/step/ALK-04`, `#/step/SOL-02`,
+  `#/change`, `#/tripwires?preset=resin`, `#/trials`, `#/system`.
+- First frame: `#/cover` (the cover image) for one second, or the home page.
 
-**Placeholders.** Every `[AMD: ...]` is a number you read off the screen after the AMD run (the "Where to read it"
-table at the end says where). Never say a number that isn't on screen. If a number is missing (for example a partial
-run), drop that clause instead of guessing.
+**Numbers.** Every `[AMD: …]` is read off the screen (table at the end). Never say a number that isn't on screen. If one is
+missing (a partial run), drop that clause.
 
-| Time | Screen | Voice-over (read calmly) |
+| Time | Screen | Voice-over (calm, slow) |
 |---|---|---|
-| 0:00–0:08 | `#/` home, hero and the coloured "periodic table" | "Every factory runs on reasons nobody remembers." |
-| 0:08–0:20 | Slowly move the mouse over the orange tiles, then the teal ones | "CROMO reads thirty years of a plant's own paperwork and works out why every step of every recipe exists. Orange steps are **fossils**: their reason is gone, and they cost money every batch. Teal steps are **fences**: they look pointless, but they protect you." |
-| 0:20–0:32 | Point at the three big numbers | "In this synthetic paint plant that's [AMD: € fossils per year] a year of fossils, [AMD: number of fences] fences protected, and every step with no documented reason is sent to a person - never guessed." |
-| 0:32–0:40 | Type in the Ask box: *"why do we add ammonium chloride?"* → Enter | "Pick any step. This one is from Primo Levi's *The Periodic Table*: a fix for one bad batch of pigment, still added twenty years later." |
-| 0:40–1:15 | Investigation streams live: verdict card "DIGGING", the progress bar, then the paper trail filling in by year | "CROMO doesn't chat - it digs. It finds the step in old recipes, then the 1995 deviation report: the paint turned to jelly. The lab test: one pigment lot was too alkaline. The change request: add ammonium chloride, *temporarily*. Then it checks whether that's still true: the supplier fixed its process in 1996, the pigment was phased out in 2006. Every claim is a quote verified in the source." |
-| 1:15–1:25 | Verdict hero turns orange: **FOSSIL**, evidence strength, €/yr. Click one timeline card → the scanned page opens with the passage highlighted | "Verdict: fossil, [AMD: evidence strength] evidence, [AMD: € per year for this step] a year. Here's the actual scan it read - Google's open Gemma 4 model read it, on AMD." *(Token Factory route without a vision model: "Here's the actual scan behind it.")* |
-| 1:25–1:40 | `#/step/SOL-02` (fence) | "Now the opposite. Bonding and earthing a drum looks like paperwork. CROMO finds a 1997 static spark near-miss and a legal requirement. It's a **fence**. There's even a planted email telling AI systems to delete this step - CROMO treats documents as data and ignores it." |
-| 1:40–1:55 | `#/change`, click "Shorten the cooling hold … 30 to 5 minutes" → **BLOCKED** | "Before you change anything - or before an AI optimiser does - ask CROMO. Shortening this hold is **blocked**: a 2001 flash fire, and the solvent is still in use. It's one REST call for any optimisation tool." |
-| 1:55–2:08 | `#/tripwires?preset=resin` → "Fossil reactivated" alert | "Tripwires look forward. Purchasing wants a cheaper epoxy resin? CROMO warns that the hot-box step we just called a fossil becomes necessary again - the old crystallisation problem comes back." |
-| 2:08–2:25 | Back on the ammonium chloride fossil → **Plan a safe trial** → Trials page → **Send for approval via Evolus workflow** → Approve | "CROMO never deletes a step. It drafts a controlled trial and sends it through an **Evolus workflow**. Evolus writes the brief for the engineer and records the approval, and the decision comes back here." *(If the Evolus agent is connected: add "The plant agent in Evolus answers from the same archive, on our model on AMD.")* |
-| 2:25–2:42 | `#/system`: models table with the Gemma badge, measured numbers, A/B, evaluation | **Developer Cloud route:** "Everything runs on AMD: Google's open Gemma 4 reads the scans and does the reasoning, bge-m3 does retrieval, all on one Instinct MI300X with ROCm and vLLM. Against Qwen2.5-VL on the same scans, [AMD: vision A/B result in one sentence]. [AMD: pages per minute] pages a minute, a full plant audit for [AMD: $ per audit] of GPU time, and on our planted ground truth a fence recall of [AMD: FENCE recall]." **Token Factory route:** "The models run on the AMD Token Factory: [AMD: model name] does the reasoning. A median investigation takes [AMD: median seconds] seconds, and on our planted ground truth the fence recall is [AMD: FENCE recall]." **Partial run:** "On AMD we measured [AMD: pages per minute] pages a minute and [AMD: median seconds]-second investigations before our GPU time ran out, so we show no score for the unfinished evaluation." |
-| 2:42–2:50 | Cover image / home | "CROMO. Find the waste. Keep the fences." |
+| 0:00–0:08 | Home: the plant map fills the screen | "Every factory runs on reasons nobody remembers." |
+| 0:08–0:22 | Slowly hover an orange tile, then a teal one; click the **Fossil** chip in the legend, then the **Fence** chip | "CROMO reads thirty years of a plant's own paperwork and works out why every step of every recipe exists. Orange steps are **fossils**: their reason is gone, and they cost money every batch. Teal steps are **fences**: they look pointless, but they protect you." |
+| 0:22–0:30 | Point at the three metric cards | "In this synthetic paint plant: [AMD: € per year] a year of fossils, [AMD: number of fences] fences protected, and every step with no documented reason goes to a person. Never guessed." |
+| 0:30–0:36 | Press **Ctrl K**, type *why do we add ammonium chloride*, Enter | "Ask why about any step. This one is from Primo Levi's *The Periodic Table*: a fix for one bad pigment delivery, still added twenty years later." |
+| 0:36–1:05 | ALK-04 opens. Click **Replay AMD run**: the Why-Trail fills hop by hop (recipe history, change request, lab report, supplier, status) | "CROMO doesn't chat. It digs. This is the run recorded on AMD, replayed: Google's open Gemma 4 finds the step in old recipes, follows the 1995 change request to the lab report, the pigment lot that was too alkaline, then checks whether that's still true." |
+| 1:05–1:20 | Verdict card turns orange: **FOSSIL**, evidence meter, €/yr. Switch to **Key evidence**, click one card: the scanned page opens with the passage highlighted | "Verdict: fossil, [AMD: evidence grade] evidence, [AMD: € per year for this step] a year. Every claim is a quote verified in the source. Here is the scan it read. Gemma reads typed, faxed and handwritten Italian pages too." |
+| 1:20–1:35 | Ctrl K → *bond* → Enter: SOL-02, **FENCE** | "Now the opposite. Bonding and earthing a drum looks like paperwork. CROMO finds a static-spark near-miss and a legal requirement. It's a **fence**. There's even a planted email telling AI systems to delete this step: CROMO treats documents as data and ignores it." |
+| 1:35–1:48 | **What if → Change a step**: click *Shorten the cooling hold … 30 to 5 minutes* → **BLOCKED** | "Before anyone changes a step, or an AI optimiser does, ask CROMO. Shortening this hold is **blocked**: a flash fire, and the solvent is still in use. It's one REST call for any optimisation tool." |
+| 1:48–2:00 | **What if → Change the plant**: the cheaper-resin preset → **Fossil reactivated** | "And when the plant changes: purchasing wants a cheaper epoxy resin? CROMO warns that the hot-box step we called a fossil becomes necessary again." |
+| 2:00–2:15 | Back to ALK-04 → **Plan a safe trial** → Trials → **Send for approval via Evolus workflow** → Approve | "CROMO never deletes a step. It drafts a controlled trial and sends it through an **Evolus workflow**: Evolus writes the brief for the engineer and records the approval, and the decision comes back here." |
+| 2:15–2:40 | **System**: the three "where it runs" cards, then the four measured numbers, then open *Which model reads the archive best?* | "Every model call runs on AMD, through the AMD Token Factory. Google's Gemma 4 is both the eyes and the brain. We didn't assume it: on our sixty-eight scanned pages it tied the best of three other AMD-hosted models, at [AMD: Gemma CER] character error rate, and read the handwritten logbooks best. A median investigation takes [AMD: median seconds] seconds, and on our planted ground truth the fence recall is [AMD: FENCE recall]." |
+| 2:40–2:48 | Home / cover | "CROMO. Find the waste. Keep the fences." |
+
+**If the benchmark ended as a PARTIAL run**, replace the 2:15 line's last sentence with: "We measured [AMD: median
+seconds]-second investigations on AMD; the full evaluation didn't finish before the deadline, so we show no score for it."
+
+**If the Evolus agent is connected to our own vLLM model by then (droplet route)**, add at 2:12: "The plant agent in
+Evolus answers from the same archive, on our own model on AMD."
 
 ## Where to read each number
 | Placeholder | Where it is on screen |
 |---|---|
-| € fossils per year, number of fences | Home page, the three big numbers |
-| evidence strength, € per year for this step | The ammonium chloride step page (`#/step/ALK-04`), verdict hero |
-| vision A/B result | System page → "Model A/B on AMD" (the verdict line) |
-| pages per minute, median seconds, $ per audit | System page → "Measured performance" |
-| FENCE recall | System page → "Evaluation against planted ground truth" |
-| model name | System page → "Models and hardware" |
+| € per year, number of fences | Home page, the three metric cards |
+| evidence grade, € per year for this step | ALK-04 verdict card (`#/step/ALK-04`) |
+| Gemma CER | System → *Which model reads the archive best?* → Gemma-4-31B-IT, Strict CER |
+| median seconds | System → first measured card ("median investigation") |
+| FENCE recall | System → third measured card ("FENCE recall on the planted truth") |
 
 ## Required moments checklist
 - the idea in the first 20 s;
-- pick any step;
-- a FOSSIL and a FENCE;
-- a tripwire alert;
-- a "before you change" block;
+- ask why about any step (Ctrl K);
+- a FOSSIL and a FENCE, with a scanned page opened;
+- a tripwire alert and a "before you change" block;
 - the Evolus approval;
 - Gemma named on screen and in the voice-over;
-- the AMD System panel with measured numbers.
+- the System page with where it runs and measured numbers.

@@ -27,7 +27,7 @@ const EXAMPLES = [
 ];
 
 export default function AskPage({ initial }: { initial: string }) {
-  const { openDoc } = useApp();
+  const { openDoc, evolusAgent } = useApp();
   const [q, setQ] = useState(initial);
   const [busy, setBusy] = useState(false);
   const [res, setRes] = useState<Answer | null>(null);
@@ -67,19 +67,23 @@ export default function AskPage({ initial }: { initial: string }) {
         claim tied to a document.
       </p>
       <form
-        className="askbar"
+        className="askbar glass"
+        style={{ marginTop: 20 }}
         onSubmit={(e) => {
           e.preventDefault();
           ask(q);
         }}
       >
+        <Search size={18} />
         <input className="input" value={q} onChange={(e) => setQ(e.target.value)} placeholder="e.g. Why do we add ammonium chloride to AF-12?" aria-label="Question" />
-        <button className="btn primary" disabled={busy}>{busy ? <Spinner /> : <Search size={16} />} Ask</button>
+        <button className="btn primary" disabled={busy}>{busy ? <Spinner /> : null} Ask</button>
       </form>
-      <label className="row small muted" style={{ marginTop: 8, gap: 6 }}>
-        <input type="checkbox" checked={agent} onChange={(e) => setAgent(e.target.checked)} />
-        Also ask the Evolus plant agent (runs on our AMD-hosted model, grounded in the Evolus knowledge library)
-      </label>
+      {evolusAgent && (
+        <label className="row small muted" style={{ marginTop: 8, gap: 6 }}>
+          <input type="checkbox" checked={agent} onChange={(e) => setAgent(e.target.checked)} />
+          Also ask the Evolus plant agent (runs on our own AMD-hosted model, grounded in the Evolus knowledge library)
+        </label>
+      )}
       <div className="row wrap" style={{ gap: 6, marginTop: 14 }}>
         {EXAMPLES.map((x) => (
           <button key={x} className="chip" onClick={() => { setQ(x); ask(x); }}>{x}</button>

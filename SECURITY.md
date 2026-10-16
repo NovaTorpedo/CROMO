@@ -6,7 +6,11 @@ CROMO is a hackathon prototype. Please report vulnerabilities privately via a Gi
 - Secrets live only in `.env` (git-ignored). `.env.example` lists names and comments, never values.
 - Pre-commit hook (`.githooks/pre-commit`, enable with `git config core.hooksPath .githooks`) runs `scripts/secret_scan.py`, which blocks any staged file containing a value from the local `.env`, common credential formats, private paths or an `.env` file, and then gitleaks on the staged changes (required; the commit fails if gitleaks is missing). CI runs gitleaks on the full history and fails the build on any finding.
 - Security does not rely on the code being secret: everything below holds for an attacker who has read every file, including the prompts.
-- API keys are used server-side only; the browser never receives them.
+- API keys are used server-side only; the browser never receives them. This includes the AMD Token Factory team key
+  (`AMD_TOKEN_FACTORY`), which is shared by the team and covered by the Token Factory terms (no proxying or reselling):
+  CROMO uses it only for its own calls, paces them below the per-key limits, and the public static demo makes no model
+  calls at all.
+- Only the synthetic archive is sent to model endpoints (the Token Factory keeps prompts for about two days).
 - Archive documents are treated as untrusted data: prompts delimit document text, models are told it is data not instructions, outputs are validated against schemas, quotes are verified against the source, and instruction-like text is flagged (see `archive` document with an injected instruction and `backend/tests/test_injection.py`).
 - Request bodies are capped at 256 KB (11 MB only for the optional voice testimony upload, with an audio type allow-list) and every field is length- and pattern-validated. File access is confined to the archive directory (strict accession-number and page validation, path traversal checks). Rendered text is escaped (no HTML from documents); a strict Content-Security-Policy blocks inline and third-party scripts.
 - Every endpoint that writes data, calls a model or uses Evolus (investigations, ask, change checks, tripwire simulations, trials, testimony, uncached compares) requires `CROMO_ACCESS_TOKEN` (constant-time comparison). There is no default token: when none is configured these endpoints fail closed for every caller that is not a direct connection from this machine or a private network (requests relayed by a proxy count as remote). The Evolus webhook requires the token and is disabled without one.

@@ -13,7 +13,7 @@ import SystemPage from "./pages/SystemPage";
 import CoverPage from "./pages/CoverPage";
 
 interface Health { ok: boolean; mode: "amd" | "fixture"; results?: { provider: string; model: string } | null }
-interface SysLite { config: { amd_route: string; roles: { reasoner: { model: string | null } } }; recordings: string[] }
+interface SysLite { config: { amd_route: string; roles: { reasoner: { model: string | null } }; evolus?: { agent?: boolean } }; recordings: string[] }
 
 const NAV: { p: string; label: string; icon: typeof LayoutGrid; also?: string[] }[] = [
   { p: "", label: "Plant", icon: LayoutGrid, also: ["step", "ask"] },
@@ -40,6 +40,7 @@ export default function App() {
   const [recorded, setRecorded] = useState<string | null>(null);
   const [hasRecordings, setHasRecordings] = useState(false);
   const [palette, setPalette] = useState(false);
+  const [evolusAgent, setEvolusAgent] = useState(false);
   const [demo, setDemo] = useState<boolean>(() => {
     try {
       return localStorage.getItem("cromo.demo") === "1";
@@ -78,6 +79,7 @@ export default function App() {
       .then((s) => {
         setModelLabel(s.config.roles.reasoner.model ?? "");
         setRoute_(s.config.amd_route);
+        setEvolusAgent(!!s.config.evolus?.agent);
         setHasRecordings((s.recordings ?? []).length > 0);
       })
       .catch(() => {});
@@ -115,7 +117,7 @@ export default function App() {
     : mode === "amd" ? `Live on ${where} · ${modelLabel || "vLLM"}` : recorded ? `Recorded AMD results · ${recorded}` : "Offline mode · no AMD model";
 
   return (
-    <AppCtx.Provider value={{ mode, modelLabel, openDoc, demo: demo && hasRecordings, amdRoute: route_ }}>
+    <AppCtx.Provider value={{ mode, modelLabel, openDoc, demo: demo && hasRecordings, amdRoute: route_, evolusAgent }}>
       <div className="app">
         <div className="topbar-wrap">
           <header className="topbar glass">

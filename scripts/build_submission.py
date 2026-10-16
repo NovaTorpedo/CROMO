@@ -108,7 +108,7 @@ b { color: #0b1220; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
 .shot { width: 100%; border-radius: 26px; box-shadow: 0 40px 80px -40px rgba(15,23,42,.45); border: 1px solid rgba(255,255,255,.9); }
 .big { font-size: 92px; font-weight: 750; line-height: 1; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
-.fossil { color: #c2410c; } .fence { color: #0f766e; } .unknown { color: #6d28d9; } .muted { color: #5b6577; } .accent { color: #2f5bea; }
+.fossil { color: #b53d0a; } .fence { color: #0f766e; } .unknown { color: #6d28d9; } .muted { color: #5b6577; } .accent { color: #2f5bea; }
 .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 30px; }
 .kpi .l { font-size: 24px; color: #334155; margin-top: 14px; line-height: 1.3; }
 .kpi .s2 { font-size: 19px; color: #5b6577; margin-top: 8px; line-height: 1.35; }
@@ -120,7 +120,7 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
 tr.used td { background: rgba(47,91,234,.07); }
 .chain { display: flex; flex-direction: column; gap: 12px; }
 .chain span { background: rgba(255,255,255,.9); border: 1px solid rgba(15,23,42,.08); border-radius: 18px; padding: 12px 20px; font-size: 23px; color: #334155; }
-.chain b { color: #c2410c; margin-right: 8px; }
+.chain b { color: #b53d0a; margin-right: 8px; }
 .pending { color: #6d28d9; font-style: italic; }
 .note { font-size: 21px; color: #5b6577; }
 .logo { width: 120px; height: 120px; border-radius: 34px; display: grid; place-items: center; position: relative; font-weight: 760; font-size: 54px;
