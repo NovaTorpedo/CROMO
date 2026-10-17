@@ -5,11 +5,11 @@
 > Run `scripts/build_submission.py` after the AMD benchmark, check that no `[AMD: ...]` is left, then copy.
 > (The markers themselves are HTML comments: do not paste them into the form.)
 
-## Project title
-CROMO — every factory runs on reasons nobody remembers
+## Project title (max 50 characters)
+CROMO: why every factory step exists
 
-## Short description (one sentence)
-CROMO reads a plant's own archive with Google's open Gemma 4 on AMD GPUs (AMD Token Factory) and recovers why every process step exists: it flags costly "fossil" steps whose reason is gone, protects "fence" steps that look pointless but prevent accidents, and warns when a change breaks either.
+## Short description (one sentence, max 255 characters)
+CROMO reads a factory's own archive with Google's Gemma 4 on AMD and finds out why every process step exists: it flags costly fossil steps, protects fences that prevent accidents, and warns when a change breaks either.
 
 ## Long description
 Every factory recipe contains steps nobody can explain anymore. In Primo Levi's "Chromium" (The Periodic Table, 1975),

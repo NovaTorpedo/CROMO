@@ -1,53 +1,59 @@
-# CROMO demo video script (target 2:45, hard limit 3:00)
+# CROMO submission video: the final script
 
-**Setup before recording**
-- Run the app on your PC against the AMD Token Factory (`LINK_AMD.md` Route A, step 7). Do **not** delete
-  `data\runtime\cromo.db`: it holds the AMD run. The header pill must read **Live on AMD Token Factory · Gemma-4-31B-IT**.
-- Run `.venv\Scripts\python scripts\warm_demo.py http://localhost:8000` once after starting the app (it can take
-  10–20 minutes on a busy endpoint). Every What-if example then answers at once with the stored AMD answer, marked
-  "stored answer from …".
-- Turn on **Replay** in the header. Investigations then replay the runs recorded on AMD at speed, with a blue
-  "Replay of a run recorded on AMD …" label. A live investigation takes minutes on the shared endpoint, so replay is
-  the honest way to show the dig in a 3-minute video. Say "replayed" once (line at 0:32).
-- Light theme, Chrome at 1920×1080, zoom 100%, nothing else open. OBS: screen + voice. Upload to YouTube as **Unlisted**.
-- Open these tabs beforehand and click through them in order: `#/`, `#/step/ALK-04`, `#/step/SOL-02`,
-  `#/change`, `#/tripwires?preset=resin`, `#/trials`, `#/system`.
-- First frame: `#/cover` (the cover image) for one second, or the home page.
+**Length 2:44** · 1920×1080, 30 fps, H.264 · loudness −14 LUFS · English captions burned in and as a separate
+`.srt` file. Credits and licences: `VIDEO_CREDITS.md`. Upload text: `YOUTUBE.md`.
 
-**Numbers.** The numbers in the voice-over are the measured AMD results (16–17 Oct run); each is visible on the screen
-named in the table at the end. If you re-run the benchmark, check them again; never say a number that isn't on screen.
+## How it was made
+- **Screen recordings** are the real app, recorded frame by frame in headless Chrome at 1920×1080. The app ran in
+  live Token Factory mode on a local PC, with the results recorded on AMD:
+  - the ALK-04 dig is the **replay of the run recorded on AMD** ("Replay AMD run"), slowed with `?pace=2.4` so the
+    hops can be read; the blue "Replay of a run recorded on AMD …" label is on screen, and the narration says so;
+  - SOL-02 shows its stored AMD verdict ("Computed on the AMD Token Factory by Gemma-4-31B-IT …");
+  - "Before you change" and the Tripwire answers are the **stored answers computed on AMD** (marked "stored answer
+    from …" in the app and in the on-screen label);
+  - the trial approval is a real decision sent through the Evolus workflow; the film cuts from the click to the
+    decision Evolus recorded about 50 s later.
+- **Illustrations** (the story, the problem, the results and the close) are original SVG/HTML, animated in code.
+- **Narration:** the AssemblyAI Voice Agent API (voice "charles"), every line checked word for word with AssemblyAI
+  speech-to-text; captions are timed from the AssemblyAI word timestamps.
+- **Music:** an original ambient score synthesised in numpy (CC0), ducked under the voice.
+- Every number comes from `data/recorded/` (AMD run of 16–17 Oct 2026) or the app's own data. Nothing on screen shows a key,
+  a private URL, an IP address, an email address or a file path.
 
-| Time | Screen | Voice-over (calm, slow) |
+## The film
+
+| Time | Screen | Narration |
 |---|---|---|
-| 0:00–0:08 | Home: the plant map fills the screen | "Every factory runs on reasons nobody remembers." |
-| 0:08–0:22 | Slowly hover an orange tile, then a teal one; click the **Fossil** chip in the legend, then the **Fence** chip | "CROMO reads thirty years of a plant's own paperwork and works out why every step of every recipe exists. Orange steps are **fossils**: their reason is gone, and they cost money every batch. Teal steps are **fences**: they look pointless, but they protect you." |
-| 0:22–0:30 | Point at the three metric cards | "In this synthetic paint plant: three hundred and five thousand euros a year of fossils, sixteen fences protected, and every step with no documented reason goes to a person. Never guessed." |
-| 0:30–0:36 | Press **Ctrl K**, type *why do we add ammonium chloride*, Enter | "Ask why about any step. This one is from Primo Levi's *The Periodic Table*: a fix for one bad pigment delivery, still added twenty years later." |
-| 0:36–1:05 | ALK-04 opens. Click **Replay AMD run**: the Why-Trail fills hop by hop (recipe history, change request, lab report, supplier, status) | "CROMO doesn't chat. It digs. This is the run recorded on AMD, replayed: Google's open Gemma 4 finds the step in old recipes, follows the 1995 change request to the lab report, the pigment lot that was too alkaline, then checks whether that's still true." |
-| 1:05–1:20 | Verdict card turns orange: **FOSSIL**, evidence meter, €/yr. Switch to **Key evidence**, click one card: the scanned page opens with the passage highlighted | "Verdict: fossil, strong evidence, fifteen thousand seven hundred euros a year. Every claim is a quote verified in the source. Here is the scan it read. Gemma reads typed, faxed and handwritten Italian pages too." |
-| 1:20–1:35 | Ctrl K → *bond* → Enter: SOL-02, **FENCE** | "Now the opposite. Bonding and earthing a drum looks like paperwork. CROMO finds a static-spark near-miss and a legal requirement. It's a **fence**. There's even a planted email telling AI systems to delete this step: CROMO treats documents as data and ignores it." |
-| 1:35–1:48 | **What if → Change a step**: click *Shorten the cooling hold … 30 to 5 minutes* → **BLOCKED** | "Before anyone changes a step, or an AI optimiser does, ask CROMO. Shortening this hold is **blocked**: a flash fire, and the solvent is still in use. It's one REST call for any optimisation tool." |
-| 1:48–2:00 | **What if → Change the plant**: the cheaper-resin preset → **Fossil reactivated** | "And when the plant changes: purchasing wants a cheaper epoxy resin? CROMO warns that the hot-box step we called a fossil becomes necessary again." |
-| 2:00–2:15 | Back to ALK-04 → **Plan a safe trial** → Trials → **Send for approval via Evolus workflow** → Approve | "CROMO never deletes a step. It drafts a controlled trial and sends it through an **Evolus workflow**: Evolus writes the brief for the engineer and records the approval, and the decision comes back here." |
-| 2:15–2:40 | **System**: the three "where it runs" cards, then the four measured numbers, then open *Which model reads the archive best?* | "Every model call runs on AMD, through the AMD Token Factory. Google's Gemma 4 is both the eyes and the brain. We didn't assume it: on our sixty-eight scanned pages it tied the best of three other AMD-hosted models, at a two percent character error rate, and read the handwritten logbooks best. On our planted ground truth CROMO finds eighty-nine percent of the fences and calls none of them a fossil; a rule-based baseline found fifty-six percent and made that mistake once." |
-| 2:40–2:48 | Home / cover | "CROMO. Find the waste. Keep the fences." |
+| 0:00–0:04 | Title card: "Every factory runs on reasons nobody remembers. CROMO finds them." | (music) |
+| 0:03–0:33 | Illustrated: the paint factory, the jelly batch rescued with ammonium chloride, years later the salt still added, the book card (Primo Levi, The Periodic Table) | “Italy, just after the war. A young chemist starts work at a paint factory.” “A batch of anti-rust paint keeps turning to jelly. He traces it to one bad delivery of pigment, and rescues it by adding a simple salt: ammonium chloride.” “Years later, that pigment is long gone. But the factory still adds the salt to every batch. Nobody remembers why.” “Primo Levi tells this story in The Periodic Table.” |
+| 0:32–0:46 | Illustrated: a row of process steps, one waste and one safeguard, then the archive shelves | “Every factory is full of steps like this. Some are pure waste. Some are the only thing standing between a batch and a fire.” “From the outside, they look the same. And the reasons are buried in decades of paperwork.” |
+| 0:46–1:01 | App, home page: the hero metrics, then the Fossil Map; the Fossil and Fence legend chips highlight the tiles | “CROMO reads a plant's own archive, and works out why every step exists.” “Orange steps are fossils: their reason is gone, and they cost money every batch. Green steps are fences: they look pointless, but they protect you.” |
+| 1:01–1:29 | Ctrl K, "why do we add ammonium chloride", ALK-04; Replay AMD run: the Why-Trail fills hop by hop; FOSSIL verdict, €15,713 a year; Key evidence; the scanned lab report with the cited passage | “Ask why about any step.” “CROMO doesn't chat. It digs. What you see is a replay of a run recorded on AMD. Google's open Gemma model reads old recipes, follows the change request from nineteen ninety-five, and the lab report, then checks whether the reason still holds.” “Verdict: fossil, with strong evidence. Over fifteen thousand euros a year. Every claim is a quote, checked against the original page.” |
+| 1:28–1:39 | SOL-02 Bond and earth: FENCE, the 1997 static-spark near-miss, the legal requirement | “Now the opposite. Bonding and earthing a drum looks like paperwork. But CROMO finds a static spark incident and a legal requirement. It's a fence.” |
+| 1:39–1:49 | What if → Change a step: "Shorten the cooling hold" → BLOCKED (stored AMD answer) | “Before anyone changes a step, ask CROMO first. Shortening this cooling hold is blocked: there was a flash fire, and the solvent is still in use.” |
+| 1:49–2:00 | What if → Change the plant: cheaper epoxy resin → a fossil is needed again (stored AMD answer) | “When the plant changes, CROMO warns you too. A cheaper epoxy resin brings back an old crystallisation problem, so a step we called a fossil is needed again.” |
+| 1:59–2:08 | Trials: the engineer approves the safe trial for ALK-04; cut to the decision recorded by the Evolus workflow and the trial marked Approved | “And CROMO never deletes anything. It drafts a safe trial, and an engineer approves it through an Evolus workflow.” |
+| 2:07–2:19 | System page: Gemma 4 on the AMD Token Factory, the measured numbers, the model comparison | “Every model call runs on AMD, through the AMD Token Factory. Gemma reads scanned, faxed and handwritten pages, and does the reasoning. Rules, not the model, decide what may be removed.” |
+| 2:19–2:31 | Illustrated: fences found 89% vs 56%, fences called fossils 0 vs 1, verdicts right 80% vs 65% | “On a synthetic plant with a hidden answer key, CROMO found eighty-nine percent of the fences, and called none of them a fossil. A rule-based baseline found fifty-six percent.” |
+| 2:30–2:44 | Who it's for, €305,298 a year of fossils, 16 fences; title card with the repository and demo URLs | “For process engineers and safety managers, CROMO turns forgotten paperwork into money saved, and accidents avoided.” “CROMO. Find the waste. Keep the fences.” |
 
-**If the Evolus agent is connected to our own vLLM model by then (droplet route)**, add at 2:12: "The plant agent in
-Evolus answers from the same archive, on our own model on AMD."
 
-## Where to read each number
-| Number | Value | Where it is on screen |
+## Where each number comes from
+| Number in the film | Value | Source, and where it is on screen |
 |---|---|---|
-| fossils per year, fences | €305,298 /yr, 16 fences | Home page, the metric cards |
-| ALK-04 evidence and cost | Strong, €15,713 /yr | ALK-04 verdict card (`#/step/ALK-04`) |
-| Gemma CER | 2.2% (MiniCPM 2.1%) | System → *Which model reads the archive best?* |
-| FENCE recall, fences called fossils | 89%, 0 (baseline 56%, 1) | System → "FENCE recall" card and *Evaluation* |
+| ALK-04 cost and evidence | €15,713 a year ("over fifteen thousand euros"), strong | `data/recorded/runs/ALK-04.json`; the ALK-04 verdict card |
+| Fossils found, fences kept | €305,298 a year, 16 steps kept as fences | the app's home page metrics (AMD verdicts); the close card |
+| Fences found | 89% (baseline 56%) | `data/recorded/eval_amd.json` / `eval_fixture.json`; System page and the results card |
+| Fences called fossils | 0 (baseline 1) | same files; the results card |
+| Verdicts right | 80% (baseline 65%) | same files; the results card |
+| OCR error rate | Gemma 2.2% CER | `data/recorded/ocr_comparison.json`; System → *Which model reads the archive best?* |
 
-## Required moments checklist
-- the idea in the first 20 s;
-- ask why about any step (Ctrl K);
-- a FOSSIL and a FENCE, with a scanned page opened;
-- a tripwire alert and a "before you change" block;
-- the Evolus approval;
-- Gemma named on screen and in the voice-over;
-- the System page with where it runs and measured numbers.
+## Judging criteria, where they show
+- **The idea by 0:20:** the opening card at 0:00–0:04 ("Every factory runs on reasons nobody remembers. CROMO finds
+  them."), then the Levi story makes it concrete.
+- **Application of technology:** the Why-Trail replay (Gemma 4 on the AMD Token Factory), the scanned page with the
+  verified quote, the System page (where every model call runs, measured numbers, the model comparison).
+- **Presentation:** one story (a fossil step in a real paint factory) carried from the cold open to the app.
+- **Business value:** € per year of fossils, fences protected from "optimisation", every change gated by a person
+  through Evolus; who it is for.
+- **Originality:** asking *why* a step exists, rather than optimising it, with fences that may never be removed.

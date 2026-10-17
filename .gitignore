@@ -101,3 +101,6 @@ $RECYCLE.BIN/
 # --- static demo build output ---
 site/
 .tools/
+
+# --- rendered submission video (never committed) ---
+video_out/

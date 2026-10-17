@@ -150,7 +150,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* ---------------------------------------------------------------- shell */
 .app { min-height: 100vh; display: flex; flex-direction: column; }
-.topbar-wrap { position: sticky; top: 0; z-index: 30; padding: 14px 24px 0; }
+.topbar-wrap { position: sticky; top: 0; z-index: 30; padding: 14px 24px 10px;
+  background: linear-gradient(to bottom, var(--bg) 0%, color-mix(in srgb, var(--bg) 70%, transparent) 55%, transparent 100%); }
 .topbar {
   max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 14px;
   padding: 8px 8px 8px 14px; border-radius: 999px;

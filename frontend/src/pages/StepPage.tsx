@@ -50,7 +50,9 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
         return;
       }
       setEvents((e) => [...e, ev]);
-      timer.current = window.setTimeout(tick, ev.type === "hop" ? 380 : ev.type === "hop_started" ? 140 : 40);
+      // ?pace=2 slows the reveal for presentations (default 1)
+      const pace = Math.min(4, Math.max(0.5, Number(new URLSearchParams(window.location.hash.split("?")[1] || "").get("pace")) || 1));
+      timer.current = window.setTimeout(tick, (ev.type === "hop" ? 380 : ev.type === "hop_started" ? 140 : 40) * pace);
     };
     tick();
   }, []);
