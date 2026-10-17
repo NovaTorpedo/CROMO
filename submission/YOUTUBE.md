@@ -42,6 +42,7 @@ paraphrased from Primo Levi, "The Periodic Table" (1975), chapter "Chromium".
 ## Upload settings
 - Visibility: **Unlisted**
 - Audience: not made for kids
-- Subtitles: upload `CROMO_submission.srt` as English
+- Subtitles: English captions are burned into the picture, so don't add the `.srt` on YouTube (with CC on they would
+  show twice); keep `CROMO_submission.srt` for any place that asks for a caption file
 - Thumbnail: `thumbnail.png`
 - Category: Science & Technology
