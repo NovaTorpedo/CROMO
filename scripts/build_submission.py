@@ -353,12 +353,22 @@ def submission_blocks(n: dict) -> dict[str, str]:
     if oc:
         by = {m["model"]: m for m in oc["models"]}
         g = by.get(mo.get("vision") or "")
-        others = ", ".join(f"{m['model']} {pct1(m['mean_cer'])}" for m in oc["models"] if m["model"] != (mo.get("vision") or ""))
         if g:
+            others = [m for m in oc["models"] if m["model"] != g["model"] and m["mean_cer"] is not None]
+            tied = [m for m in others if abs(m["mean_cer"] - g["mean_cer"]) <= 0.005]
+            behind = sorted((m for m in others if m not in tied), key=lambda m: m["mean_cer"])
+
+            def name(m):
+                extra = (f", strict; it reorders page blocks but reads {pct1(m['mean_word_f1'])} of the words"
+                         if m.get("mean_word_f1") and m["mean_cer"] - g["mean_cer"] > 0.05
+                         and m["mean_word_f1"] - g.get("mean_word_f1", 0) > -0.01 else "")
+                return f"{m['model']} ({pct1(m['mean_cer'])}{extra})"
+
             lines.append(f"- the vision model was chosen by measurement: on the archive's {g['pages']} scanned pages, "
                          f"{g['model']} reads with a {pct1(g['mean_cer'])} character error rate "
-                         f"({pct1(g['cer_by_kind'].get('handwritten logbook'))} on handwritten logbooks), against {others} "
-                         "for the other AMD-hosted models we tested.")
+                         f"({pct1(g['cer_by_kind'].get('handwritten logbook'))} on handwritten logbooks)"
+                         + (f", tied with {', '.join(name(m) for m in tied)}" if tied else "")
+                         + (f" and ahead of {' and '.join(name(m) for m in behind)}" if behind else "") + ".")
     vc = n["vc"]
     if vc and vc.get("verdict"):
         lines.append(f"- a measured vision A/B on the same GPU: {vc['verdict']}")

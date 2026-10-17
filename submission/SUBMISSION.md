@@ -45,7 +45,7 @@ Around the verdicts, CROMO offers:
 Every model call runs on the AMD Token Factory (shared endpoints on AMD GPUs):
 - **Gemma 4 31B-IT (Google DeepMind), open weights** as both the eyes and the brain: it reads every scanned, faxed and handwritten Italian page, reasons over the evidence, proposes verdicts and writes the bilingual search keywords for each document;
 - retrieval: BM25 plus local n-gram vectors on the CROMO server, made bilingual by the keywords Gemma writes at ingest (the Token Factory serves no embedding model);
-- the vision model was chosen by measurement: on the archive's 68 scanned pages, Gemma-4-31B-IT reads with a 2.2% character error rate (0.7% on handwritten logbooks), against MinerU2.5-Pro 30.2%, DeepSeek-V4-Flash-Vision-Exp 15.0%, MiniCPM-V-4.7-35B-A3B 2.1% for the other AMD-hosted models we tested.
+- the vision model was chosen by measurement: on the archive's 68 scanned pages, Gemma-4-31B-IT reads with a 2.2% character error rate (0.7% on handwritten logbooks), tied with MiniCPM-V-4.7-35B-A3B (2.1%) and ahead of DeepSeek-V4-Flash-Vision-Exp (15.0%) and MinerU2.5-Pro (30.2%, strict; it reorders page blocks but reads 97.6% of the words).
 <!-- AMD-STACK:END -->
 
 <!-- EVOLUS:START -->
