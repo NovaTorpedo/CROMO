@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,7 +49,9 @@ def col(ev: dict | None, bench: dict | None, baseline: bool) -> list[str]:
         else:
             audit = "audit cost n/a (" + ("partial run" if bench.get("complete") is False else "no per-GPU billing") + ")"
         vis = f" · CER {pct1(va.get('mean_cer'))}" if va.get("mean_cer") is not None else " · recorded transcriptions"
-        rows += [f"{ing.get('pages_per_min', '–')} pages/min{vis}", f"{inv.get('p50_s', '–')} s · {audit}"]
+        p50 = inv.get("p50_s")
+        med = "–" if p50 is None else (f"{p50:.0f} s" if p50 < 120 else f"{p50 / 60:.0f} min")
+        rows += [f"{ing.get('pages_per_min', '–')} pages/min{vis}", f"{med} · {audit}"]
     return rows
 
 
@@ -65,6 +68,8 @@ def _eval_rows(ev: dict) -> list[str]:
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")  # the Windows console code page cannot print every character used here
     fx, amd, bench = load("eval_fixture.json"), load("eval_amd.json"), load("benchmark_amd.json")
     labels = ["FENCE recall", "False-FOSSIL rate", "Fences called fossils", "Accuracy, 4 classes", "Citation precision",
               "Tripwire effects found", "Change-check decisions correct", "Prompt-injection test",
@@ -89,6 +94,8 @@ def main():
                   f"retries ({', '.join(bench['degraded_steps'])}); their verdicts count as measured.*"]
     if bench and (bench.get("ingest") or {}).get("note"):
         lines += ["", f"*{bench['ingest']['note']}*"]
+    if bench and (bench.get("ingest") or {}).get("reused_note"):
+        lines += ["", f"*{bench['ingest']['reused_note']}*"]
     oc = load("ocr_comparison.json")
     if oc:  # which AMD-hosted model reads the scans best (scripts/compare_models.py ocr)
         kinds = list(oc["models"][0]["cer_by_kind"])
@@ -104,9 +111,10 @@ def main():
     rv = load("retrieval_eval.json")
     if rv:
         a_, b_ = rv["without_expansion"], rv["with_expansion"]
-        lines += ["", f"**Retrieval without an embedding model:** key documents in the top 5 search results "
-                  f"{pct(a_['recall_at_5'])} → {pct(b_['recall_at_5'])} with Gemma's bilingual keywords "
-                  f"(top 10: {pct(a_['recall_at_10'])} → {pct(b_['recall_at_10'])}; {b_['steps']} steps)."]
+        lines += ["", f"**Retrieval without an embedding model** ({b_['steps']} steps, searching with the step text): Gemma's "
+                  f"bilingual keywords rank the first key document higher (mean reciprocal rank {a_['mrr']:.2f} → {b_['mrr']:.2f}); "
+                  f"the share of key documents in the top 5 / top 10 stays {pct(a_['recall_at_5'])} → {pct(b_['recall_at_5'])} / "
+                  f"{pct(a_['recall_at_10'])} → {pct(b_['recall_at_10'])}."]
     alt = load("eval_amd_qwen.json")
     if amd and alt:  # optional reasoner A/B (benchmark_amd.py --tag qwen)
         lines += ["", "**Reasoner A/B on AMD** (same 49-step ground truth):", "",

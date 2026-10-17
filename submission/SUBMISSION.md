@@ -42,10 +42,10 @@ Around the verdicts, CROMO offers:
   answers as testimony, weighted below written records.
 
 <!-- AMD-STACK:START -->
-The AI pipeline runs on one AMD Instinct MI300X (AMD Developer Cloud, ROCm + vLLM):
-- **Gemma 4 (Google DeepMind, 26B-A4B, open weights)** as both the eyes and the brain: it reads every scanned, faxed and handwritten Italian page, reasons over the evidence and proposes verdicts, and drives the Evolus agent through native tool calling;
-- bge-m3 for multilingual retrieval;
-- a vision A/B against Qwen2.5-VL on the same GPU, so Gemma's reading quality is measured, not assumed (result: [AMD: vision A/B verdict]).
+Every model call runs on the AMD Token Factory (shared endpoints on AMD GPUs):
+- **Gemma 4 31B-IT (Google DeepMind), open weights** as both the eyes and the brain: it reads every scanned, faxed and handwritten Italian page, reasons over the evidence, proposes verdicts and writes the bilingual search keywords for each document;
+- retrieval: BM25 plus local n-gram vectors on the CROMO server, made bilingual by the keywords Gemma writes at ingest (the Token Factory serves no embedding model);
+- the vision model was chosen by measurement: on the archive's 68 scanned pages, Gemma-4-31B-IT reads with a 2.2% character error rate (0.7% on handwritten logbooks), against MinerU2.5-Pro 30.2%, DeepSeek-V4-Flash-Vision-Exp 15.0%, MiniCPM-V-4.7-35B-A3B 2.1% for the other AMD-hosted models we tested.
 <!-- AMD-STACK:END -->
 
 <!-- EVOLUS:START -->
@@ -65,7 +65,7 @@ We measure FENCE recall (missing a fence is the dangerous error), the false-FOSS
 it, next to a no-LLM heuristic baseline. The product never reads the answer key (enforced by a test).
 
 <!-- AMD-RESULTS:START -->
-**Measured on AMD.** On the planted ground truth CROMO reaches a FENCE recall of [AMD: FENCE recall] (rule-based baseline without an LLM: 56%), a false-FOSSIL rate of [AMD: false-FOSSIL rate] (baseline 11%), [AMD: n] fences called fossils and a citation precision of [AMD: citation precision]. It ingests [AMD: pages/min] archive pages per minute, reads scans and handwriting with a character error rate of [AMD: CER] and takes [AMD: median s] s for a median multi-hop investigation. A full plant audit (178 documents, 49 steps) costs [AMD: $ per audit] of GPU time.
+**Measured on AMD.** On the planted ground truth CROMO reaches a FENCE recall of 89% (rule-based baseline without an LLM: 56%), a false-FOSSIL rate of 0% (baseline 11%), 0 fences called fossils and a citation precision of 71%. It ingests 1.5 archive pages per minute on the shared event endpoint under heavy load, reads scans and handwriting with a character error rate of 2.2% and takes 21 minutes for a median multi-hop investigation (the shared endpoint answered each model call in about a minute during our run). A full plant audit (178 documents, 49 steps) took 1351 requests and 1.3M tokens, $0.04 on the Token Factory meter (free during the event).
 <!-- AMD-RESULTS:END -->
 
 The repository is MIT licensed, keys stay server-side, secrets are scanned in CI, and the app also runs end to end
@@ -87,7 +87,7 @@ Factory counts (see `LINK_AMD.md`); otherwise leave it out*
 
 ## Technology tags
 <!-- TAGS:START -->
-AMD Token Factory · Gemma 4 · Google DeepMind · Evolus · FastAPI · React · Python · TypeScript · Docker
+AMD Token Factory · AMD GPUs · Gemma · Gemma 4 · Google DeepMind · Evolus · FastAPI · React · Python · TypeScript · Docker
 <!-- TAGS:END -->
 
 ## App hosting and repository

@@ -77,8 +77,13 @@ The options we weighed (zero-dollar budget):
 also returns 8–16 search keywords for the document in **both English and Italian** (e.g. *gelling / impolmonimento*).
 They are added to the document's search terms together with its English one-line summary, and they ride on the call
 that was happening anyway, so they cost no extra request. Searches then use BM25 plus cosine over hashed word
-uni/bigrams computed locally (a lexical method, not a model). This closes the main gap embeddings would have filled
-here, which is cross-lingual retrieval between English questions and Italian logbooks and notices.
+uni/bigrams computed locally (a lexical method, not a model). It targets the main gap embeddings would have filled
+here, cross-lingual retrieval between English questions and Italian logbooks and notices.
+
+**Measured** (`eval/retrieval_eval.py`, 49 steps, searching with each step's text for its planted key documents, on the
+AMD ingest): the keywords rank the first key document clearly higher (mean reciprocal rank 0.29 → 0.39), while the share
+of key documents in the top 5 (40%) and top 10 (66%) is unchanged. The investigation also follows cited references and
+the model's own follow-up queries, so the first search is only one of its paths.
 
 - The keywords change only **which** chunks a search finds. They are never shown to the model as passage text and can
   never be cited, so quote verification is unaffected.

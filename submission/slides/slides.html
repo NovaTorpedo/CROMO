@@ -2,38 +2,48 @@
 <link rel="stylesheet" href="fonts.css"><style>
 @page { size: 1920px 1080px; margin: 0; }
 * { box-sizing: border-box; }
-body { margin: 0; font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif; color: #1c1c1f; background: #f5f2eb; }
-.s { width: 1920px; height: 1080px; padding: 96px 120px; position: relative; page-break-after: always; overflow: hidden; background: #f5f2eb; }
+body { margin: 0; font-family: 'Inter', 'Segoe UI', sans-serif; color: #0b1220; background: #eef1f6; font-feature-settings: "cv11", "ss01"; }
+.s { width: 1920px; height: 1080px; padding: 92px 120px; position: relative; page-break-after: always; overflow: hidden;
+  background: #eef1f6 radial-gradient(1400px 900px at 6% -12%, rgba(255,196,150,.36), transparent 60%),
+  radial-gradient(1200px 800px at 104% 0%, rgba(150,196,255,.34), transparent 62%), radial-gradient(1200px 900px at 60% 116%, rgba(176,226,214,.32), transparent 60%); }
 .s:last-child { page-break-after: auto; }
-h1 { font-family: 'Fraunces', Georgia, serif; font-size: 84px; line-height: 1.05; margin: 0; letter-spacing: -1px; font-weight: 600; }
-h2 { font-family: 'Fraunces', Georgia, serif; font-size: 64px; line-height: 1.1; margin: 0 0 36px; font-weight: 600; letter-spacing: -0.5px; }
-p, li { font-size: 32px; line-height: 1.45; color: #3c3c42; }
-.eyebrow { font-size: 24px; color: #86827a; margin-bottom: 18px; letter-spacing: 0.5px; }
-.logo { display: inline-flex; align-items: center; gap: 22px; }
-.tile { width: 110px; height: 110px; border-radius: 16px; background: #f2c230; display: grid; place-items: center; font-family: Georgia, serif; font-weight: 700; font-size: 54px; position: relative; color: #1f1903; }
-.tile small { position: absolute; top: 8px; left: 11px; font-size: 18px; font-family: monospace; }
-.word { font-family: Georgia, serif; font-size: 72px; letter-spacing: 10px; font-weight: 600; }
-.foot { position: absolute; bottom: 48px; left: 120px; right: 120px; font-size: 20px; color: #86827a; display: flex; justify-content: space-between; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
-.shot { width: 100%; border-radius: 14px; box-shadow: 0 24px 60px -24px rgba(40,30,10,.35); border: 1px solid #e6e0d4; }
-.big { font-family: 'Fraunces', Georgia, serif; font-size: 96px; font-weight: 600; line-height: 1; }
-.fossil { color: #cf6a0c; } .fence { color: #0d8a79; } .unknown { color: #7451c3; } .muted { color: #86827a; }
-.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; margin-top: 40px; }
-.kpi { border-left: 6px solid #1c1c1f; padding-left: 24px; }
-.kpi .l { font-size: 26px; color: #4a4a50; margin-top: 12px; }
-table { border-collapse: collapse; width: 100%; font-size: 28px; }
-td, th { padding: 16px 20px; border-bottom: 1px solid #e6e0d4; text-align: left; }
-th { color: #86827a; font-weight: 500; font-size: 24px; }
-.chain { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; font-size: 26px; }
-.chain span { background: #fff; border: 1px solid #e6e0d4; border-radius: 999px; padding: 10px 20px; }
-.chain b { color: #c99a10; }
-.pending { color: #b08ee6; font-style: italic; }
-.note { font-size: 22px; color: #86827a; }
+h1 { font-size: 92px; line-height: 1.02; margin: 0; letter-spacing: -0.035em; font-weight: 740; }
+h2 { font-size: 62px; line-height: 1.08; margin: 0 0 36px; font-weight: 720; letter-spacing: -0.03em; max-width: 1600px; }
+p, li { font-size: 30px; line-height: 1.45; color: #334155; }
+b { color: #0b1220; }
+.eyebrow { font-size: 22px; color: #5b6577; margin-bottom: 18px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 650; }
+.card { background: rgba(255,255,255,.86); border: 1px solid rgba(255,255,255,.8); border-radius: 32px;
+  box-shadow: inset 0 1px 0 #fff, 0 30px 60px -36px rgba(15,23,42,.35); padding: 34px 40px; }
+.foot { position: absolute; bottom: 44px; left: 120px; right: 120px; font-size: 19px; color: #5b6577; display: flex; justify-content: space-between; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.shot { width: 100%; max-height: 780px; object-fit: cover; object-position: top left; border-radius: 26px; box-shadow: 0 40px 80px -40px rgba(15,23,42,.45); border: 1px solid rgba(255,255,255,.9); }
+.big { font-size: 92px; font-weight: 750; line-height: 1; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
+.fossil { color: #b53d0a; } .fence { color: #0f766e; } .unknown { color: #6d28d9; } .muted { color: #5b6577; } .accent { color: #2f5bea; }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 30px; }
+.kpi .l { font-size: 24px; color: #334155; margin-top: 14px; line-height: 1.3; }
+.kpi .s2 { font-size: 19px; color: #5b6577; margin-top: 8px; line-height: 1.35; }
+table { border-collapse: collapse; width: 100%; font-size: 26px; }
+td, th { padding: 15px 18px; border-bottom: 1px solid rgba(15,23,42,.08); text-align: left; }
+tr:last-child td { border-bottom: none; }
+th { color: #5b6577; font-weight: 600; font-size: 21px; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+tr.used td { background: rgba(47,91,234,.07); }
+.chain { display: flex; flex-direction: column; gap: 12px; }
+.chain span { background: rgba(255,255,255,.9); border: 1px solid rgba(15,23,42,.08); border-radius: 18px; padding: 12px 20px; font-size: 23px; color: #334155; }
+.chain b { color: #b53d0a; margin-right: 8px; }
+.pending { color: #6d28d9; font-style: italic; }
+.note { font-size: 21px; color: #5b6577; }
+.logo { width: 120px; height: 120px; border-radius: 34px; display: grid; place-items: center; position: relative; font-weight: 760; font-size: 54px;
+  background: linear-gradient(145deg, #fff 0%, #dfe5ee 45%, #b9c3d2 100%); box-shadow: inset 0 2px 0 #fff, 0 20px 40px -18px rgba(15,23,42,.4); }
+.logo small { position: absolute; top: 12px; left: 16px; font-size: 18px; font-family: monospace; opacity: .7; }
+.pill { display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px; border-radius: 999px; background: rgba(255,255,255,.9);
+  border: 1px solid rgba(15,23,42,.08); font-size: 22px; font-weight: 600; }
+.pill i { width: 12px; height: 12px; border-radius: 50%; background: #15803d; display: inline-block; }
 </style></head><body><section class="s" style="padding:0"><img src="../cover.png" style="width:1920px;height:1080px;display:block"></section><section class="s">
       <div class="eyebrow">1975 · Primo Levi, The Periodic Table, "Chromium"</div>
       <h2>A batch of anti-rust paint keeps turning to jelly.</h2>
       <p style="max-width:1500px">A young chemist traces it to one bad pigment delivery and fixes it by adding ammonium chloride.
-      <b>Twenty years later</b> the bad pigment is long gone - and the factory still adds ammonium chloride to every batch.
+      <b>Twenty years later</b> the bad pigment is long gone, and the factory still adds ammonium chloride to every batch.
       Nobody can say why.</p>
       <p style="max-width:1500px; margin-top:40px">The opposite also happens. Chesterton (1929): <i>don't tear down a fence until you know why it was put up.</i>
       Some steps that look pointless are load-bearing.</p>
@@ -41,31 +51,25 @@ th { color: #86827a; font-weight: 500; font-size: 24px; }
       <div class="eyebrow">The problem</div>
       <h2>Recipes are full of steps whose reasons retired with the people who wrote them.</h2>
       <div class="grid2" style="align-items:start">
-        <div><p><b class="fossil">Fossils</b> cost money every batch: material, labour, energy, tank time. Nobody dares remove them.</p></div>
-        <div><p><b class="fence">Fences</b> look like waste but prevent fires, recalls and claims. Remove one and the old accident comes back.</p></div>
+        <div class="card"><p style="margin:0"><b class="fossil">Fossils</b> cost money every batch: material, labour, energy, tank time. Nobody dares remove them.</p></div>
+        <div class="card"><p style="margin:0"><b class="fence">Fences</b> look like waste but prevent fires, recalls and claims. Remove one and the old accident comes back.</p></div>
       </div>
-      <p style="margin-top:30px">And AI optimisers now propose "remove this, shorten that" - without knowing which is which.</p>
+      <p style="margin-top:40px">And AI optimisers now propose "remove this, shorten that", without knowing which is which.</p>
       <p class="muted">Users: process engineers · quality / EHS managers · plant managers. A human approves every change.</p><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
-      <div class="eyebrow">The product · offline heuristic results - AMD run pending</div>
+      <div class="eyebrow">The product · computed on AMD by Gemma-4-31B-IT</div>
       <h2>The periodic table of a plant.</h2>
-      <div class="grid2" style="grid-template-columns: 1.35fr 1fr">
+      <div class="grid2" style="grid-template-columns: 1.45fr 1fr">
         <img class="shot" src="../../docs/img/home.png">
         <div>
-          <div class="big fossil">€374,183<span style="font-size:44px">/yr</span></div><p>in <b>12 fossil steps</b> of a synthetic mid-sized coatings plant</p>
-          <div class="big fence" style="font-size:72px; margin-top:30px">6 fences</div><p>protected from removal</p>
-          <div class="big unknown" style="font-size:72px; margin-top:30px">17 unknown</div><p>sent to a person - never guessed</p>
+          <div class="big fossil">€305,298<span style="font-size:40px">/yr</span></div><p>in <b>11 fossil steps</b> of a synthetic mid-sized coatings plant</p>
+          <div class="big fence" style="font-size:68px; margin-top:28px">16 fences</div><p>protected from removal</p>
+          <div class="big unknown" style="font-size:68px; margin-top:28px">5 unknown</div><p>sent to a person, never guessed</p>
         </div>
       </div><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
-      <div class="eyebrow">Live investigation · the Levi case, recreated in our archive</div>
+      <div class="eyebrow">The Why-Trail · the Levi case, recreated in our archive · as cited by the AMD run</div>
       <h2>It digs, it does not chat.</h2>
-      <div class="grid2" style="grid-template-columns: 1fr 1.25fr; align-items:start">
-        <div class="chain" style="flex-direction:column; align-items:flex-start">
-          <span><b>Recipe</b> step first appears 1996</span><span><b>1995</b> deviation: enamel turns to gel</span>
-          <span><b>1995</b> lab test: pigment lot too alkaline</span><span><b>1995</b> change request: add NH4Cl "temporarily"</span>
-          <span><b>1996</b> supplier fax: process fixed</span><span><b>2006</b> memo: chromate pigment phased out</span>
-          <span><b>2007</b> new neutral pigment qualified</span><span><b>2020</b> lab: NH4Cl has no effect</span>
-          <span style="border-color:#cf6a0c"><b class="fossil">FOSSIL</b> · strong evidence · €15,713/yr</span>
-        </div>
+      <div class="grid2" style="grid-template-columns: 1fr 1.3fr; align-items:start">
+        <div class="chain"><span><b>1995</b><i class="muted" style="font-style:normal">Deviation report</i> · In 1995, livering was suspected to be caused by basic lead chromate pigment lots…</span><span><b>1995</b><i class="muted" style="font-style:normal">Lab test report</i> · In 1995, ammonium chloride was found to neutralize excess alkali in the pigment…</span><span><b>1995</b><i class="muted" style="font-style:normal">Change request</i> · In 1995, ammonium chloride was added to AF-12 to prevent livering caused by high…</span><span><b>1996</b><i class="muted" style="font-style:normal">Recipe</i> · Earliest archived recipe revision containing the step is dated 1996-01-22.</span><span><b>1996</b><i class="muted" style="font-style:normal">Change request</i> · In 1996, a chloride limit of 400 ppm was introduced for AF-12 because ammonium chloride…</span><span><b>2006</b><i class="muted" style="font-style:normal">Compliance memo</i> · In 2006, the lead chromate pigment CL-77 from Cromopigmenti Lazzeretti was phased out…</span><span><b>2020</b><i class="muted" style="font-style:normal">Lab test report</i> · In 2020, ammonium chloride was linked to under-film corrosion complaints on AF-12…</span><span style="border-color:#c2410c"><b class="fossil">FOSSIL</b>Strong evidence · €15,713/yr · 9 hops</span></div>
         <img class="shot" src="../../docs/img/investigation.png">
       </div><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
       <div class="eyebrow">Fences and guardrails</div>
@@ -73,61 +77,65 @@ th { color: #86827a; font-weight: 500; font-size: 24px; }
       <div class="grid2">
         <img class="shot" src="../../docs/img/change-check.png">
         <div><p>Every claim cites a quote <b>verified verbatim</b> in the source; uncited claims are dropped.</p>
-        <p>A fossil needs proof that its reason ended and no open safety evidence - otherwise it goes to a person.</p>
-        <p><b>Before you change</b> - also a REST API for optimisers: <span class="fossil">blocked</span> · caution · allowed with trial.</p></div>
+        <p>A fossil needs proof that its reason ended and no open safety evidence; otherwise it goes to a person.</p>
+        <p><b>What if…?</b> Change a step: <span class="fossil">blocked</span> · caution · allowed with trial (also a REST API for optimisers).
+        Change the plant: tripwires show which reasons break.</p></div>
       </div><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
-      <div class="eyebrow">Tripwires · forward-looking</div>
-      <h2>When the plant changes, which reasons break?</h2>
-      <div class="grid2">
-        <div><p>Each recovered reason records its dependencies: suppliers, materials, equipment, regulations.</p>
-        <p>Switch to a cheaper, crystallising epoxy resin and CROMO warns: the "useless" hot-box step is <b class="fossil">needed again</b>.</p>
-        <p>Replace a solvent, and the fences that guarded against it may become fossils - re-investigate, trial, approve.</p></div>
-        <img class="shot" src="../../docs/img/tripwires.png">
-      </div><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
-      <div class="eyebrow">How it works · the whole pipeline on one AMD Instinct MI300X (AMD Developer Cloud, ROCm + vLLM) (planned)</div>
+      <div class="eyebrow">How it works · every model call on the AMD Token Factory (shared endpoints on AMD GPUs)</div>
       <h2>Read the archive. Follow the paper trail. Decide with rules.</h2>
+      <div class="card" style="padding:16px 26px">
       <table>
-        <tr><th>Role</th><th>Open model</th><th>On AMD</th></tr>
-        <tr><td>Vision: scans, faxes, handwritten Italian logbooks</td><td>Gemma 4 26B-A4B-it (Google DeepMind)</td><td>vLLM · ROCm · image input</td></tr>
-        <tr><td>Reasoner: reads passages, follows leads, proposes verdicts</td><td>same model</td><td>vLLM · ROCm · tool calling</td></tr>
-        <tr><td>Embeddings: multilingual retrieval</td><td>bge-m3</td><td>vLLM · ROCm</td></tr>
-      </table><p style="margin-top:28px"><b>Gemma 4</b>, Google DeepMind's open model, is both the eyes and the brain: one model reads every scanned, faxed and handwritten page and does all the reasoning, with native image input and tool calling.</p>
-      <p style="margin-top:28px">Ingestion → hybrid index → multi-hop investigation (9 hops max, streamed) → verified citations → evidence-strength rules → tripwires, change-check, trials.</p><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
-      <div class="eyebrow">Measured on AMD · benchmark pending</div>
+        <tr><th>Role</th><th>Model</th><th>Runs on</th></tr>
+        <tr><td>Vision: scans, faxes, handwritten Italian logbooks</td><td><b>Gemma 4 31B-IT (Google DeepMind)</b></td><td>AMD · image input</td></tr>
+        <tr><td>Reasoner: reads passages, follows leads, proposes verdicts</td><td><b>same model</b></td><td>AMD</td></tr>
+        <tr><td>Retrieval</td><td>BM25 + local n-grams + <b>Gemma's bilingual keywords</b> (no embedding model on the Token Factory)</td><td>CROMO server (CPU)</td></tr>
+        <tr><td>Verdict rules, quote verification, costs</td><td>deterministic, auditable</td><td>CROMO server (CPU)</td></tr>
+      </table></div><p style="margin-top:26px"><b>Gemma 4</b>, Google DeepMind's open model, is both the eyes and the brain: one model reads every scanned, faxed and handwritten page and does all the reasoning.</p><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
+          <div class="eyebrow">Measured on AMD · 4 AMD-hosted models · the same 68 scanned pages</div>
+          <h2>Which model reads 30 years of paperwork best?</h2>
+          <div class="card" style="padding:16px 26px"><table>
+            <tr><th>Model</th><th class="n">Strict CER</th><th class="n">Word F1</th><th class="n">handwritten logbook (n=5)</th><th class="n">fax (n=4)</th><th class="n">typed / scanned (n=58)</th><th class="n">p50 / page</th></tr>
+            <tr class="used"><td><b>Gemma-4-31B-IT</b> · used by CROMO</td><td class="n">2.2%</td><td class="n">97.9%</td><td class="n">0.7%</td><td class="n">7.7%</td><td class="n">1.9%</td><td class="n">16 s</td></tr><tr class=""><td><b>MinerU2.5-Pro</b></td><td class="n">30.2%</td><td class="n">97.6%</td><td class="n">7.5%</td><td class="n">20.9%</td><td class="n">32.9%</td><td class="n">18 s</td></tr><tr class=""><td><b>DeepSeek-V4-Flash-Vision-Exp</b></td><td class="n">15.0%</td><td class="n">94.2%</td><td class="n">17.3%</td><td class="n">14.3%</td><td class="n">14.6%</td><td class="n">11 s</td></tr><tr class=""><td><b>MiniCPM-V-4.7-35B-A3B</b></td><td class="n">2.1%</td><td class="n">97.3%</td><td class="n">0.8%</td><td class="n">5.1%</td><td class="n">1.9%</td><td class="n">19 s</td></tr>
+          </table></div>
+          <p class="note" style="margin-top:26px">CER = character error rate vs. the reference transcription (lower is better), reading order counted; word F1 ignores
+          order. Gemma and MiniCPM are within 0.1 points; Gemma reads the handwritten logbooks best and keeps one model for reading and reasoning.</p><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
+      <div class="eyebrow">Measured on AMD · AMD Token Factory (shared endpoints on AMD GPUs)</div>
       <h2>Real numbers, never estimates.</h2>
       <div class="kpis">
-        <div class="kpi"><div class="big" style="font-size:80px"><span class="pending">pending</span></div><div class="l">archive pages / minute ingested</div></div>
-        <div class="kpi"><div class="big" style="font-size:80px"><span class="pending">pending</span></div><div class="l">median multi-hop investigation</div></div>
-        <div class="kpi"><div class="big" style="font-size:80px"><span class="pending">pending</span></div><div class="l">GPU cost of a full plant audit (49 steps, 178 docs)</div></div>
+        <div class="card kpi"><div class="big" style="font-size:76px">21 min</div><div class="l">median multi-hop investigation</div><div class="s2">7.7 model calls per step · 6 at a time</div></div>
+        <div class="card kpi"><div class="big" style="font-size:76px">1.5</div><div class="l">archive pages / minute ingested</div><div class="s2">on the shared event endpoint under heavy load</div></div>
+        <div class="card kpi"><div class="big" style="font-size:76px">2.2%</div><div class="l">character error rate on scans and handwriting</div><div class="s2">68 scanned pages read by Gemma</div></div>
+        <div class="card kpi"><div class="big" style="font-size:76px">$0.04</div><div class="l">metered for a full audit: 1351 requests, 1.3M tokens (Token Factory meter, free during the event)</div></div>
       </div>
-      <p style="margin-top:60px">Handwriting & scans read by the VLM: character error rate <b><span class="pending">pending</span></b> ·
-      <span class="pending">pending</span> model calls per step</p><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
+      <p style="margin-top:40px">178 documents, 49 steps · Gemma's bilingual keywords rank the first key document higher (MRR 0.29 → <b>0.39</b>).</p>
+      <p class="note">Measured on the shared AMD Token Factory during the event, 6 requests at a time: a metadata call took 47 s at the median (p95 185 s), with outages and rejected requests in between (545 of 1351 requests during the run were rejected by the endpoint and retried). The throughput reflects the shared endpoint&#x27;s load, not GPU capacity.</p><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
       <div class="eyebrow">Evaluation · 49 steps with planted ground truth (12 fossils, 9 fences, 22 active, 6 unknown)</div>
       <h2>Missing a fence is the dangerous error.</h2>
-      <table>
-        <tr><th></th><th>Heuristic baseline (no LLM)</th><th>CROMO on AMD</th></tr>
-        <tr><td>FENCE recall</td><td>56%</td><td><span class="pending">pending</span></td></tr>
-        <tr><td>False-FOSSIL rate</td><td>11%</td><td><span class="pending">pending</span></td></tr>
-        <tr><td>Accuracy (4 classes)</td><td>65%</td><td><span class="pending">pending</span></td></tr>
-        <tr><td>Citation precision</td><td>61%</td><td><span class="pending">pending</span></td></tr>
-        <tr><td>Prompt-injection document</td><td>ignored</td><td><span class="pending">pending</span></td></tr>
-      </table>
-      <p class="note" style="margin-top:28px">Synthetic archive: red herrings, contradictions, a reverted change, a reason only in a handwritten logbook. The product never reads the answer key (tested).</p><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
-      <div class="eyebrow">Evolus Business Agents on AMD</div>
-      <h2>A human approves every change - through Evolus.</h2>
+      <div class="card" style="padding:16px 26px"><table>
+        <tr><th></th><th class="n">Heuristic baseline (no LLM)</th><th class="n">CROMO on AMD · Gemma 4 31B-IT (Google DeepMind)</th></tr>
+        <tr><td>FENCE recall</td><td class="n">56%</td><td class="n"><b>89%</b></td></tr>
+        <tr><td>False-FOSSIL rate</td><td class="n">11%</td><td class="n"><b>0%</b></td></tr>
+        <tr><td>Fences called fossils</td><td class="n">1</td><td class="n"><b>0</b></td></tr>
+        <tr><td>Accuracy (4 classes)</td><td class="n">65%</td><td class="n"><b>80%</b></td></tr>
+        <tr><td>Citation precision</td><td class="n">61%</td><td class="n"><b>71%</b></td></tr>
+        <tr><td>Prompt-injection document</td><td class="n">ignored</td><td class="n"><b>ignored</b></td></tr>
+      </table></div>
+      <p class="note" style="margin-top:24px">Synthetic archive: red herrings, contradictions, a reverted change, a reason only in a handwritten logbook. The product never reads the answer key (tested).</p><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
+      <div class="eyebrow">Evolus building blocks</div>
+      <h2>A human approves every change, through Evolus.</h2>
       <div class="grid2">
         <img class="shot" src="../../docs/img/trials.png">
         <div><p><b>Workflow</b>: fossil → trial plan → AI Tool brief for the engineer → approval record → decision → status back in CROMO.</p>
         <p><b>AI Tool compare</b>: what changed when a step was added. <b>Knowledge library</b>: the 178-document archive.
         </p>
-        <p class="note">All driven through the Evolus REST API; created via POST /workflows.</p></div>
+        <p class="note">All driven through the Evolus REST API; the workflow was created via POST /workflows.</p></div>
       </div><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section><section class="s">
       <div class="eyebrow">Business value · roadmap · team</div>
       <h2>Find the waste. Keep the fences.</h2>
       <div class="grid2" style="align-items:start">
-        <div><p><b>Value</b>: in our synthetic plant, €374,183/yr of fossil steps found, with an audit trail - and every fence protected
+        <div class="card"><p style="margin-top:0"><b>Value</b>: in our synthetic plant, €305,298/yr of fossil steps found, with an audit trail, and every fence protected
         from well-meant "optimisations".</p>
-        <p><b>Model</b>: per-site subscription for process industries (coatings, chemicals, food, pharma); the change-check API for MES and optimisation vendors.</p></div>
-        <div><p><b>Next</b>: pilot on a real archive · veteran-interview mode for unknowns (voice on AMD) · MES connectors · cross-recipe fossil detection.</p>
-        <p><b>Team</b>: solo developer, built with Claude Code. MIT licensed, open models, zero budget.</p></div>
+        <p style="margin-bottom:0"><b>Model</b>: per-site subscription for process industries (coatings, chemicals, food, pharma); the change-check API for MES and optimisation vendors.</p></div>
+        <div class="card"><p style="margin-top:0"><b>Next</b>: pilot on a real archive · veteran interviews for unknowns · MES connectors · cross-recipe fossil detection.</p>
+        <p style="margin-bottom:0"><b>Team</b>: solo developer, built with Claude Code. MIT licensed, open models, zero budget.</p></div>
       </div><div class="foot"><span>CROMO · AMD Developer Hackathon ACT III</span><span>synthetic data · fictional plant</span></div></section></body></html>

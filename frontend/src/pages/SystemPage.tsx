@@ -189,6 +189,8 @@ export default function SystemPage() {
   const family = (m: string) => (/gemma/i.test(m) ? "gemma" : /qwen/i.test(m) ? "qwen" : null);
   const evalAmd = s.eval.amd;
   const usage = b?.tokenfactory_usage;
+  const readP50 = ((b?.latency ?? []) as Lat[]).find((l) => l.stage === "investigate.read")?.p50_ms;
+  const dur = (s: number) => (s < 120 ? `${Math.round(s)}s` : `${Math.round(s / 60)} min`);
   const r = s.retrieval_eval;
 
   return (
@@ -217,9 +219,9 @@ export default function SystemPage() {
 
       <div className="kpis" style={{ marginTop: 14 }}>
         <div className="card kpi">
-          <div className="big-n">{b?.investigation?.p50_s != null ? `${b.investigation.p50_s}s` : "–"}</div>
+          <div className="big-n">{b?.investigation?.p50_s != null ? dur(b.investigation.p50_s) : "–"}</div>
           <div className="l">median investigation</div>
-          <div className="s">{b?.investigation ? `p95 ${b.investigation.p95_s}s · ${b.investigation.calls_per_step ?? "–"} model calls per step · ${b.investigation.concurrency} at a time` : "not measured yet"}</div>
+          <div className="s">{b?.investigation ? `p95 ${dur(b.investigation.p95_s)} · ${b.investigation.calls_per_step ?? "–"} model calls per step${readP50 ? `, ${Math.round(readP50 / 1000)} s each at the median` : ""} · ${b.investigation.concurrency} at a time` : "not measured yet"}</div>
         </div>
         <div className="card kpi">
           <div className="big-n">{b?.ingest?.pages_per_min ?? "–"}</div>
@@ -259,7 +261,7 @@ export default function SystemPage() {
           </div>
         </Acc>
         {r && (
-          <Acc title="Retrieval without an embedding model" sub={`key documents in the top 5: ${pct(r.without_expansion.recall_at_5)} → ${pct(r.with_expansion.recall_at_5)} with Gemma's keywords`}>
+          <Acc title="Retrieval without an embedding model" sub={`first key document ranked higher with Gemma's keywords: MRR ${r.without_expansion.mrr.toFixed(2)} → ${r.with_expansion.mrr.toFixed(2)}`}>
             <table className="table">
               <thead><tr><th>Index</th><th className="num">Recall@5</th><th className="num">Recall@10</th><th className="num">MRR</th></tr></thead>
               <tbody>

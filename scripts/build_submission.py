@@ -272,18 +272,19 @@ def build(n: dict) -> str:
     partial = (f"<p class=\"note\">Partial run: {inv.get('steps')} of {inv.get('of_steps')} steps measured on AMD; no evaluation score is claimed for it.</p>"
                if b.get("complete") is False else "")
     rv = n["rv"]
-    rtxt = (f" · key documents found in the top 5 searches: {pct(rv['without_expansion']['recall_at_5'])} → "
-            f"<b>{pct(rv['with_expansion']['recall_at_5'])}</b> with Gemma's keywords" if rv else "")
+    rtxt = (f" · Gemma's bilingual keywords rank the first key document higher (MRR {rv['without_expansion']['mrr']:.2f} → "
+            f"<b>{rv['with_expansion']['mrr']:.2f}</b>)" if rv else "")
     s.append(slide(f"""
       <div class="eyebrow">Measured on AMD {('· ' + html.escape(b.get('hardware', ''))) if b else '· benchmark pending'}</div>
       <h2>Real numbers, never estimates.</h2>
       <div class="kpis">
-        <div class="card kpi"><div class="big" style="font-size:76px">{m(inv.get('p50_s'), ' s')}</div><div class="l">median multi-hop investigation</div><div class="s2">{m(inv.get('calls_per_step'))} model calls per step · {inv.get('concurrency', '–')} at a time</div></div>
-        <div class="card kpi"><div class="big" style="font-size:76px">{m(ing.get('pages_per_min'))}</div><div class="l">archive pages / minute ingested</div><div class="s2">{'bounded by the 20 requests/min account limit' if st['tf'] else ''}</div></div>
+        <div class="card kpi"><div class="big" style="font-size:76px">{m(None if inv.get('p50_s') is None else (f"{inv['p50_s']:.0f} s" if inv['p50_s'] < 120 else f"{inv['p50_s'] / 60:.0f} min"))}</div><div class="l">median multi-hop investigation</div><div class="s2">{m(inv.get('calls_per_step'))} model calls per step · {inv.get('concurrency', '–')} at a time</div></div>
+        <div class="card kpi"><div class="big" style="font-size:76px">{m(ing.get('pages_per_min'))}</div><div class="l">archive pages / minute ingested</div><div class="s2">{'on the shared event endpoint under heavy load' if st['tf'] else ''}</div></div>
         <div class="card kpi"><div class="big" style="font-size:76px">{m(None if va.get('mean_cer') is None else pct1(va.get('mean_cer')))}</div><div class="l">character error rate on scans and handwriting</div><div class="s2">{va.get('pages', '–')} scanned pages read by Gemma</div></div>
         <div class="card kpi"><div class="big" style="font-size:76px">{audit}</div><div class="l">{audit_l}</div></div>
       </div>
-      <p style="margin-top:40px">178 documents, 49 steps{rtxt}.</p>{partial}"""))
+      <p style="margin-top:40px">178 documents, 49 steps{rtxt}.</p>
+      {f'<p class="note">{html.escape(ing["note"])}</p>' if ing.get("note") else ""}{partial}"""))
     s.append(slide(f"""
       <div class="eyebrow">Evaluation · 49 steps with planted ground truth (12 fossils, 9 fences, 22 active, 6 unknown)</div>
       <h2>Missing a fence is the dangerous error.</h2>
@@ -380,9 +381,10 @@ def submission_blocks(n: dict) -> dict[str, str]:
                f"(baseline {pct(fx.get('false_fossil_rate'))}), {_ph(None if dang is None else len(dang), str, 'n')} fences called fossils "
                f"and a citation precision of {_ph(((amd or {}).get('citations') or {}).get('precision'), name='citation precision')}. "
                f"It ingests {_ph(ing.get('pages_per_min'), str, 'pages/min')} archive pages per minute"
-               + (" (bounded by the event endpoint's 20 requests/minute)" if st["tf"] and ing else "")
+               + (" on the shared event endpoint under heavy load" if st["tf"] and ing else "")
                + (f", reads scans and handwriting with a character error rate of {_ph(va.get('mean_cer'), pct1, 'CER')}" if vision_on_amd else "")
-               + f" and takes {_ph(inv.get('p50_s'), str, 'median s')} s for a median multi-hop investigation.")
+               + f" and takes {_ph(None if inv.get('p50_s') is None else round(inv['p50_s'] / 60), str, 'median min')} minutes for a median "
+               "multi-hop investigation (the shared endpoint answered each model call in about a minute during our run).")
         if cost.get("per_plant_audit_usd") is not None:
             res += f" A full plant audit (178 documents, 49 steps) costs ${cost['per_plant_audit_usd']} of GPU time."
         elif st["tf"] and use:

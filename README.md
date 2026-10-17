@@ -62,18 +62,33 @@ The product never reads this file (enforced by tests).
 **Missing a fence is the dangerous error**, so we report FENCE recall and the false-FOSSIL rate first.
 
 <!-- RESULTS:START -->
-| | Rule-based baseline (offline fixture provider, no LLM) | CROMO on AMD |
+| | Rule-based baseline (offline fixture provider, no LLM) | CROMO on the AMD Token Factory · Gemma-4-31B-IT |
 |---|---|---|
-| FENCE recall | 56% | *pending AMD benchmark* |
-| False-FOSSIL rate | 11% | *pending* |
-| Fences called fossils | 1 (SOL-08) | *pending* |
-| Accuracy, 4 classes | 65% | *pending* |
-| Citation precision | 61% | *pending* |
-| Tripwire effects found | 36% of 11 | *pending* |
-| Change-check decisions correct | 70% of 10 | *pending* |
-| Prompt-injection test | passed | *pending* |
-| Ingestion throughput / VLM transcription CER | n/a (recorded transcriptions) | *pending* |
-| Median investigation time / cost per full plant audit | n/a | *pending* |
+| FENCE recall | 56% | 89% |
+| False-FOSSIL rate | 11% | 0% |
+| Fences called fossils | 1 (SOL-08) | 0 |
+| Accuracy, 4 classes | 65% | 80% |
+| Citation precision | 61% | 71% |
+| Tripwire effects found | 36% of 11 | 73% of 11 |
+| Change-check decisions correct | 70% of 10 | 70% of 10 |
+| Prompt-injection test | passed | passed |
+| Ingestion throughput / VLM transcription CER | n/a (recorded transcriptions) | 1.5 pages/min · CER 2.2% |
+| Median investigation time / cost per full plant audit | n/a | 21 min · $0.04 on the Token Factory meter (1351 requests, 1.3M tokens; free during the event) |
+
+*Measured on the shared AMD Token Factory during the event, 6 requests at a time: a metadata call took 47 s at the median (p95 185 s), with outages and rejected requests in between (545 of 1351 requests during the run were rejected by the endpoint and retried). The throughput reflects the shared endpoint's load, not GPU capacity.*
+
+*36 of 68 scanned pages were not re-sent: the endpoint was rejecting image requests (overloaded), so the ingest reused Gemma-4-31B-IT's own readings of those pages, made on the same AMD endpoint with the same prompt during the OCR comparison. The ingest time does not include those readings.*
+
+**Reading the scans: 4 AMD-hosted models on the same 68 scanned pages** (character error rate vs. the reference, lower is better; word F1 ignores reading order):
+
+| Model | Strict CER | Word F1 | fax (n=4) | handwritten logbook (n=5) | typed + handwritten note (n=1) | typed / scanned (n=58) | p50 / page | Failures |
+|---|---|---|---|---|---|---|---|---|
+| `Gemma-4-31B-IT` (CROMO) | 2.2% | 97.9% | 7.7% | 0.7% | 1.6% | 1.9% | 16 s | 0/68 |
+| `MinerU2.5-Pro` | 30.2% | 97.6% | 20.9% | 7.5% | 24.3% | 32.9% | 18 s | 0/68 |
+| `DeepSeek-V4-Flash-Vision-Exp` | 15.0% | 94.2% | 14.3% | 17.3% | 27.8% | 14.6% | 11 s | 0/68 |
+| `MiniCPM-V-4.7-35B-A3B` | 2.1% | 97.3% | 5.1% | 0.8% | 5.3% | 1.9% | 19 s | 0/68 |
+
+**Retrieval without an embedding model** (49 steps, searching with the step text): Gemma's bilingual keywords rank the first key document higher (mean reciprocal rank 0.29 → 0.39); the share of key documents in the top 5 / top 10 stays 40% → 40% / 66% → 66%.
 <!-- RESULTS:END -->
 
 The baseline column comes from CROMO's deterministic fixture provider, a keyword heuristic that never sees the

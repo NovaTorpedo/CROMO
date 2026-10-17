@@ -134,7 +134,7 @@ export default function App() {
             </nav>
             <span className="spacer" />
             <button className="ask-trigger" onClick={() => setPalette(true)} aria-label="Ask why about any step">
-              <Search size={15} /> <span className="grow label">Ask why about any step…</span> <span className="kbd">Ctrl K</span>
+              <Search size={15} /> <span className="grow label">Ask why…</span> <span className="kbd">Ctrl K</span>
             </button>
             <a href="#/system" className={`pill status ${recorded ? "replay" : mode}`} title={status}>
               <span className="dot" /> <span className="txt">{status}</span>

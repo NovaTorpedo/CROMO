@@ -165,13 +165,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .logo-tile small { position: absolute; top: 2px; left: 4px; font-size: 7.5px; font-family: var(--font-mono); font-weight: 600; opacity: 0.7; }
 .logo-word { font-weight: 700; font-size: 16px; letter-spacing: 0.22em; }
 .nav { display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--surface-3); }
-.nav a { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; padding: 6px 14px; border-radius: 999px;
+.nav a { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; padding: 6px 14px; border-radius: 999px; white-space: nowrap;
   color: var(--text-2); font-size: 14px; font-weight: 500; transition: background 0.2s var(--ease), color 0.2s var(--ease); }
 .nav a:hover { color: var(--text); }
 .nav a.on { color: var(--text); background: var(--surface-solid); box-shadow: var(--shadow-sm); }
 .spacer { flex: 1; }
 .ask-trigger {
-  display: inline-flex; align-items: center; gap: 9px; padding: 7px 10px 7px 14px; min-width: 230px; border-radius: 999px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 9px; padding: 7px 10px 7px 14px; min-width: 150px; border-radius: 999px; cursor: pointer; white-space: nowrap;
   border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 14px; text-align: left;
 }
 .ask-trigger:hover { color: var(--text-2); border-color: var(--border-strong); }
@@ -321,7 +321,7 @@ details[open] > summary::before { transform: rotate(45deg); }
 }
 .tile:hover, .tile:focus-visible { transform: translateY(-3px) scale(1.03); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), var(--shadow); outline: none; z-index: 2; }
 .tile .top { display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; font-weight: 650; opacity: 0.8; font-variant-numeric: tabular-nums; }
-.tile .nm { font-size: 12.4px; hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; font-weight: 620; line-height: 1.2; letter-spacing: -0.01em; }
+.tile .nm { font-size: 12px; hyphens: auto; -webkit-hyphens: auto; font-weight: 620; line-height: 1.2; letter-spacing: -0.01em; }
 .tile .bot { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .tile.t-FOSSIL { background: var(--fossil-tile); color: var(--fossil-ink); border-color: color-mix(in srgb, var(--fossil) 28%, transparent); }
 .tile.t-FENCE { background: var(--fence-tile); color: var(--fence-ink); border-color: color-mix(in srgb, var(--fence) 28%, transparent); }

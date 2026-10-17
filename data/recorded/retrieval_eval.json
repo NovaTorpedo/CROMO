@@ -1,0 +1,19 @@
+{
+ "what": "search with the step instruction; key documents of the planted ground truth in the results",
+ "metadata_source": [
+  "reasoner"
+ ],
+ "without_expansion": {
+  "steps": 49,
+  "recall_at_5": 0.4,
+  "recall_at_10": 0.661,
+  "mrr": 0.287
+ },
+ "with_expansion": {
+  "steps": 49,
+  "recall_at_5": 0.402,
+  "recall_at_10": 0.658,
+  "mrr": 0.394
+ },
+ "note": "Lexical hybrid retrieval (BM25 + local hashed n-gram cosine). 'with_expansion' adds the reasoner's bilingual keywords and summary as search-only terms. Measured on the current ingest."
+}

@@ -260,8 +260,12 @@ async def run(args):
                 f"the ingest reused {s.vision.model}'s own readings of those pages, made on the same AMD endpoint with the same "
                 "prompt during the OCR comparison. The ingest time does not include those readings.")
         if s.rpm_limit:
-            out["ingest"]["note"] = (f"Throughput is bounded by the endpoint's request limit ({s.rpm_limit} requests/min on our "
-                                     "side), not by the GPU: each document costs one model call, each scanned page one more.")
+            meta = [m for m in system.latency_stats("amd") if m["stage"] == "extract.metadata"]
+            out["ingest"]["note"] = (
+                f"Measured on the shared AMD Token Factory during the event, {s.max_concurrency} requests at a time"
+                + (f": a metadata call took {meta[0]['p50_ms'] / 1000:.0f} s at the median (p95 {meta[0]['p95_ms'] / 1000:.0f} s)"
+                   if meta else "") + ", with outages and rejected requests in between. The throughput reflects the shared "
+                "endpoint's load, not GPU capacity.")
         out.pop("ingest_progress", None)
         if s.vision.configured:
             out["vision_accuracy"] = vision_accuracy()

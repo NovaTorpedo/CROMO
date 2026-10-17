@@ -196,7 +196,7 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
         ) : mode === "fixture" && v?.provider !== "amd" ? (
           <span>Offline mode: this result comes from CROMO's rule-based fixture provider, not from an AI model.</span>
         ) : v ? (
-          <span>Computed on {v.provider === "amd" ? where : "this machine"} by {v.model} · {v.hops} hops · {v.duration_s}s</span>
+          <span>Computed on {v.provider === "amd" ? where : "this machine"} by {v.model} · {v.hops} hops · {fmtDur(v.duration_s)}</span>
         ) : null}
         {v && source === "stored" && <span>· {timeAgo(v.created_at)}</span>}
         <span className="grow" />
@@ -271,6 +271,11 @@ export default function StepPage({ stepId, query }: { stepId: string; query: URL
       </div>
     </div>
   );
+}
+
+/** "42s", "6 min", "58 min" */
+export function fmtDur(s: number) {
+  return s < 120 ? `${Math.round(s)}s` : `${Math.round(s / 60)} min`;
 }
 
 function sameText(claim: string, quote: string) {
@@ -435,7 +440,7 @@ function Side({ v }: { v: VerdictData }) {
         </div>
       )}
       <div className="blk tiny muted">
-        {v.provider === "amd" ? `Computed on AMD by ${v.model}` : "Computed offline by the rule-based fixture provider"} · {v.hops} hops · {v.duration_s}s
+        {v.provider === "amd" ? `Computed on AMD by ${v.model}` : "Computed offline by the rule-based fixture provider"} · {v.hops} hops · {fmtDur(v.duration_s)}
         {v.stats ? ` · ${v.stats.unverified_quotes} unverifiable quote(s) rejected` : ""}
       </div>
     </>

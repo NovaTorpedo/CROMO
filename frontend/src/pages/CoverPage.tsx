@@ -56,7 +56,7 @@ export default function CoverPage() {
                 {p.steps.map((s) => (
                   <div key={s.id} className={`tile t-${s.verdict}`} style={{ width: 66, height: 112, padding: "7px 7px", cursor: "default", borderRadius: 14 }}>
                     <span className="top" style={{ fontSize: 10.5 }}><span>{s.seq}</span>{s.verdict !== "ACTIVE" && <VerdictIcon v={s.verdict} size={12} />}</span>
-                    <span className="nm" style={{ fontSize: 10.5, lineHeight: 1.15 }}>{s.name}</span>
+                    <span className="nm" style={{ fontSize: 10, lineHeight: 1.15, letterSpacing: "-0.015em" }}>{s.name}</span>
                   </div>
                 ))}
               </div>

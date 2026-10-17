@@ -1,0 +1,170 @@
+{
+ "started_at": 1792150303.1996124,
+ "provider": "amd",
+ "route": "tokenfactory",
+ "hardware": "AMD Token Factory (shared endpoints on AMD GPUs)",
+ "models": {
+  "reasoner": "Gemma-4-31B-IT",
+  "vision": "Gemma-4-31B-IT",
+  "embeddings": "local hashed n-grams (CPU, no model)"
+ },
+ "ingest": {
+  "documents": 178,
+  "pages": 178,
+  "scanned_pages": 68,
+  "seconds": 7284.8,
+  "pages_per_min": 1.5,
+  "scanned_pages_per_min": 0.6,
+  "vision_p50_ms_per_page": 28692.1,
+  "vision_calls": 71,
+  "concurrency": 6,
+  "rpm_limit": 18,
+  "reused_readings": 36,
+  "reused_note": "36 of 68 scanned pages were not re-sent: the endpoint was rejecting image requests (overloaded), so the ingest reused Gemma-4-31B-IT's own readings of those pages, made on the same AMD endpoint with the same prompt during the OCR comparison. The ingest time does not include those readings.",
+  "note": "Measured on the shared AMD Token Factory during the event, 6 requests at a time: a metadata call took 47 s at the median (p95 185 s), with outages and rejected requests in between (545 of 1351 requests during the run were rejected by the endpoint and retried). The throughput reflects the shared endpoint's load, not GPU capacity."
+ },
+ "vision_accuracy": {
+  "pages": 68,
+  "mean_cer": 0.0218,
+  "median_cer": 0.0208,
+  "worst": [
+   {
+    "acc": "ACC-0138",
+    "page": 1,
+    "cer": 0.1053
+   },
+   {
+    "acc": "ACC-0113",
+    "page": 1,
+    "cer": 0.0751
+   },
+   {
+    "acc": "ACC-0044",
+    "page": 1,
+    "cer": 0.0662
+   },
+   {
+    "acc": "ACC-0078",
+    "page": 1,
+    "cer": 0.0622
+   },
+   {
+    "acc": "ACC-0103",
+    "page": 1,
+    "cer": 0.0436
+   }
+  ],
+  "note": "CER vs. the generator's reference transcription of each scanned page (lower is better), after removing Markdown and the [stamp]/[handwritten note] markers."
+ },
+ "investigation": {
+  "steps": 49,
+  "wall_seconds": 17218.5,
+  "p50_s": 1238.5,
+  "p95_s": 2699.1,
+  "calls_per_step": 7.7,
+  "concurrency": 6
+ },
+ "eval": {
+  "accuracy": 0.796,
+  "fence_recall": 0.889,
+  "false_fossil_rate": 0.0,
+  "dangerous_errors": [],
+  "citation_precision": 0.714
+ },
+ "latency": [
+  {
+   "stage": "change.parse",
+   "role": "reasoner",
+   "model": "Gemma-4-31B-IT",
+   "provider": "amd",
+   "calls": 10,
+   "errors": 0,
+   "p50_ms": 16152.2,
+   "p95_ms": 174145.5,
+   "tokens_in": 15293,
+   "tokens_out": 889
+  },
+  {
+   "stage": "extract.metadata",
+   "role": "reasoner",
+   "model": "Gemma-4-31B-IT",
+   "provider": "amd",
+   "calls": 235,
+   "errors": 33,
+   "p50_ms": 47406.8,
+   "p95_ms": 185184.3,
+   "tokens_in": 111368,
+   "tokens_out": 73418
+  },
+  {
+   "stage": "investigate.conclude",
+   "role": "reasoner",
+   "model": "Gemma-4-31B-IT",
+   "provider": "amd",
+   "calls": 58,
+   "errors": 3,
+   "p50_ms": 52133.8,
+   "p95_ms": 258453.4,
+   "tokens_in": 66449,
+   "tokens_out": 13286
+  },
+  {
+   "stage": "investigate.read",
+   "role": "reasoner",
+   "model": "Gemma-4-31B-IT",
+   "provider": "amd",
+   "calls": 391,
+   "errors": 12,
+   "p50_ms": 50266.2,
+   "p95_ms": 187933.8,
+   "tokens_in": 667049,
+   "tokens_out": 102125
+  },
+  {
+   "stage": "tripwire.assess",
+   "role": "reasoner",
+   "model": "Gemma-4-31B-IT",
+   "provider": "amd",
+   "calls": 9,
+   "errors": 0,
+   "p50_ms": 30411.7,
+   "p95_ms": 102853.7,
+   "tokens_in": 5269,
+   "tokens_out": 1343
+  },
+  {
+   "stage": "vision.transcribe",
+   "role": "vision",
+   "model": "Gemma-4-31B-IT",
+   "provider": "amd",
+   "calls": 71,
+   "errors": 31,
+   "p50_ms": 28692.1,
+   "p95_ms": 68769.0,
+   "tokens_in": 15360,
+   "tokens_out": 7862
+  }
+ ],
+ "tokens": {
+  "in": 880788,
+  "out": 198923
+ },
+ "cost": {
+  "gpu_hours": null,
+  "price_per_gpu_hour": null,
+  "per_plant_audit_usd": null,
+  "basis": "AMD Token Factory (shared serving, no per-GPU billing): GPU time per audit is not observable"
+ },
+ "complete": true,
+ "gpu": null,
+ "finished_at": 1792179065.167909,
+ "tag": "primary",
+ "tokenfactory_usage": {
+  "requests": 1351,
+  "errors": 545,
+  "tokens": 1273130,
+  "metered_usd": 0.0378,
+  "daily_limit_usd": 1,
+  "basis": "AMD Token Factory meter (GET /v1/usage), all-time counters before and after the run; free during the event (points with no monetary value). Includes any other use of the team key during the run."
+ }
+}
