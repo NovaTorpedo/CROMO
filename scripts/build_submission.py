@@ -2,7 +2,7 @@
 
   python scripts/build_submission.py            # needs the app running on localhost:8765 for the cover image
 
-Outputs submission/CROMO-slides.pdf, submission/slides/slides.html, submission/cover.png, and fills the generated blocks
+Outputs "submission/CROMO slides.pdf", submission/slides/slides.html, submission/cover.png, and fills the generated blocks
 of submission/SUBMISSION.md (AMD stack, measured results, Evolus, tags). Re-run after scripts/benchmark_amd.py so the AMD
 numbers replace the "pending" / "[AMD: ...]" placeholders. The texts follow what actually ran (AMD Token Factory or own
 vLLM on AMD Developer Cloud, complete or partial run), so no manual text edits are needed for any of them.
@@ -132,8 +132,8 @@ tr.used td { background: rgba(47,91,234,.07); }
 """
 
 
-def slide(inner: str, foot: str = "CROMO · AMD Developer Hackathon ACT III") -> str:
-    return f'<section class="s">{inner}<div class="foot"><span>{foot}</span><span>synthetic data · fictional plant</span></div></section>'
+def slide(inner: str, foot: str = "CROMO · AMD Developer Hackathon ACT III", right: str = "synthetic data · fictional plant") -> str:
+    return f'<section class="s">{inner}<div class="foot"><span>{foot}</span><span>{right}</span></div></section>'
 
 
 def _levi_chain(n: dict) -> str:
@@ -196,6 +196,23 @@ def build(n: dict) -> str:
       </div>
       <p style="margin-top:40px">And AI optimisers now propose "remove this, shorten that", without knowing which is which.</p>
       <p class="muted">Users: process engineers · quality / EHS managers · plant managers. A human approves every change.</p>"""))
+    # A real case, paraphrased from public sources (HSE case study, IChemE, OSHA); every fact is checked against them.
+    s.append(slide("""
+      <div class="eyebrow">Why it matters · a real case</div>
+      <h2>Flixborough, UK, 1974: one plant change, made without a full assessment.</h2>
+      <div class="grid2" style="align-items:start">
+        <div class="card"><p style="margin:0">A cracked reactor was taken out and a temporary bypass pipe joined its neighbours so production could go on:
+        no drawing, limited calculations, no pressure test. On 1 June 1974 the bypass ruptured, the escaping cyclohexane exploded,
+        and <b>28 workers were killed</b>.</p></div>
+        <div class="card"><p style="margin:0">It became a turning point for process safety and for what is now called <b>management of change</b>.
+        Today OSHA's Process Safety Management standard requires the technical basis and the safety impact of a change to be
+        addressed <b>before</b> it is made.</p></div>
+      </div>
+      <p style="margin-top:40px">CROMO makes no claim about any past incident. It helps recover and check the reasons behind a step before anyone changes it.</p>
+      <p class="note" style="position:absolute; bottom:84px; left:120px; right:120px; font-size:17px">Sources: UK Health and Safety Executive,
+      "Flixborough (Nypro UK) Explosion 1st June 1974" case study (citing the 1975 Court of Inquiry report) · IChemE Safety and Loss
+      Prevention SIG, "50 Years on from Flixborough" · US OSHA, 29 CFR 1910.119(l), Management of change.</p>""",
+                   right="real case · public sources"))
     s.append(slide(f"""
       <div class="eyebrow">The product · {where}</div>
       <h2>The periodic table of a plant.</h2>
@@ -461,7 +478,7 @@ def main():
         css.append(f"@font-face {{ font-family: 'Inter'; font-weight: 100 900; src: url('{inter.name}'); }}")
     (d / "fonts.css").write_text("\n".join(css), encoding="utf-8")
     (d / "slides.html").write_text(build(n), encoding="utf-8")
-    pdf = OUT / "CROMO-slides.pdf"
+    pdf = OUT / "CROMO slides.pdf"
     import tempfile
 
     with tempfile.TemporaryDirectory() as prof:
