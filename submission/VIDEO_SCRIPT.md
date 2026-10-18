@@ -22,7 +22,8 @@ implies that CROMO would have prevented any real incident.
     decision Evolus recorded about 50 s later.
 - **Illustrations** (the story, the problem, the real case, the results and the close) are original SVG/HTML, animated
   in code. The real-case scene reuses the film's template (palette, grain, vignette, camera push, card style, CROMO UI
-  tokens); it was rendered at 1920×1080 instead of 2880×1620 to stay within the half-CPU render budget.
+  tokens) and was rendered at the same 2880×1620 as the other illustrations. v2 reuses v1's encoded frames unchanged
+  up to 0:43.6 and from 1:37.2, joined at v1 keyframes; only 0:43.6–1:37.2 was re-encoded, with v1's encoder settings.
 - **Narration:** the AssemblyAI Voice Agent API (voice "charles"), every line checked word for word with AssemblyAI
   speech-to-text; captions are timed from the AssemblyAI word timestamps.
 - **Music:** an original ambient score synthesised in numpy (CC0), ducked under the voice.
