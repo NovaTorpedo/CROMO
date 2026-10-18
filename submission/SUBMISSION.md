@@ -11,8 +11,8 @@ CROMO: why every factory step exists
 ## Short description (one sentence, max 255 characters)
 CROMO reads a factory's own archive with Google's Gemma 4 on AMD and finds out why every process step exists: it flags costly fossil steps, protects fences that prevent accidents, and warns when a change breaks either.
 
-## Long description (paste this into the form: 1,818 characters, limit 600–2000)
-Every factory recipe contains steps nobody can explain anymore. In Primo Levi's "Chromium" (The Periodic Table, 1975), a paint plant still added ammonium chloride to every batch long after the bad pigment it was meant to fix had disappeared: a fossil. Chesterton's fence is the opposite warning: some steps that look pointless are load-bearing. Changes made without a full review can be deadly: at Flixborough (UK, 1974) a temporary bypass pipe fitted without a full assessment ruptured and 28 workers were killed, a turning point for what is now called management of change (UK HSE, IChemE). And AI optimisers now propose "remove this, shorten that".
+## Long description (paste this into the form: 1,795 characters, limit 600–2000)
+Every factory recipe contains steps nobody can explain anymore. In Primo Levi's "Chromium" (The Periodic Table, 1975), a paint plant still added ammonium chloride to every batch long after the bad pigment it was meant to fix had disappeared: a fossil. Chesterton's fence is the opposite warning: some steps that look pointless are load-bearing. Changes made without a full review can be deadly: in 2013 at a Louisiana olefins plant, a poorly reviewed change let a vessel be cut off from its relief valve, and it ruptured, killing two workers (US Chemical Safety Board). And AI optimisers now propose "remove this, shorten that".
 
 CROMO is an investigator for process engineers, quality/EHS managers and plant managers. Pick any step and it digs through decades of the plant's own paperwork (scanned change requests, faxes, incident reports, handwritten Italian logbooks, supplier files, regulations), finds the record that introduced the step, follows its references and checks whether each reason still holds. Every verdict is FOSSIL, FENCE, ACTIVE or UNKNOWN, with the reasoning chain and quotes verified verbatim in the source. The model reads the evidence; deterministic rules decide what may be removed: a fence never, a fossil only through a controlled trial an engineer approves in an Evolus workflow. Tripwires and a "Before you change" check warn when a change would break a reason.
 
@@ -22,9 +22,9 @@ Every model call runs on the AMD Token Factory: Google's open Gemma-4-31B-IT rea
 Every factory recipe contains steps nobody can explain anymore. In Primo Levi's "Chromium" (The Periodic Table, 1975),
 a paint plant still added ammonium chloride to every batch twenty years after the bad pigment it was meant to fix had
 disappeared. That step had become a fossil. Chesterton's fence is the opposite warning: some steps that look pointless
-are load-bearing. Plants carry both, and changes made without a full review can be deadly: at Flixborough (UK, 1974)
-a temporary bypass pipe fitted without a full assessment ruptured and 28 workers were killed, a turning point for what
-is now called management of change (UK HSE case study; IChemE). Now AI optimisers are starting to propose "remove this,
+are load-bearing. Plants carry both, and changes made without a full review can be deadly: in 2013 at the Williams
+olefins plant in Geismar, Louisiana, a poorly reviewed change let a reboiler be cut off from its relief valve, and it
+ruptured, killing two workers (US Chemical Safety Board final report, 2016). Now AI optimisers are starting to propose "remove this,
 shorten that".
 
 CROMO is an investigator for process engineers, quality/EHS managers and plant managers. Pick any step and it digs

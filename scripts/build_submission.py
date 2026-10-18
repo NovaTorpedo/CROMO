@@ -196,22 +196,22 @@ def build(n: dict) -> str:
       </div>
       <p style="margin-top:40px">And AI optimisers now propose "remove this, shorten that", without knowing which is which.</p>
       <p class="muted">Users: process engineers · quality / EHS managers · plant managers. A human approves every change.</p>"""))
-    # A real case, paraphrased from public sources (HSE case study, IChemE, OSHA); every fact is checked against them.
+    # A recent real case, paraphrased from public sources (US CSB final report, OSHA); every fact is checked against them.
     s.append(slide("""
-      <div class="eyebrow">Why it matters · a real case</div>
-      <h2>Flixborough, UK, 1974: one plant change, made without a full assessment.</h2>
+      <div class="eyebrow">Why it matters · a recent real case</div>
+      <h2>Geismar, Louisiana, 2013: a poorly reviewed change let a vessel be cut off from its relief valve.</h2>
       <div class="grid2" style="align-items:start">
-        <div class="card"><p style="margin:0">A cracked reactor was taken out and a temporary bypass pipe joined its neighbours so production could go on:
-        no drawing, limited calculations, no pressure test. On 1 June 1974 the bypass ruptured, the escaping cyclohexane exploded,
-        and <b>28 workers were killed</b>.</p></div>
-        <div class="card"><p style="margin:0">It became a turning point for process safety and for what is now called <b>management of change</b>.
-        Today OSHA's Process Safety Management standard requires the technical basis and the safety impact of a change to be
-        addressed <b>before</b> it is made.</p></div>
+        <div class="card"><p style="margin:0">Block valves were added that could isolate a reboiler from its pressure relief device, and the change
+        was not effectively reviewed. In June 2013 the isolated reboiler was heated, the pressure rose and its shell ruptured:
+        <b>two workers were killed</b> and 167 people reported injuries.</p></div>
+        <div class="card"><p style="margin:0">The US Chemical Safety Board traced it to process safety gaps, including <b>management of change</b>,
+        over the 12 years before. OSHA's Process Safety Management standard requires the technical basis and the safety impact
+        of a change to be addressed <b>before</b> it is made.</p></div>
       </div>
-      <p style="margin-top:40px">CROMO makes no claim about any past incident. It helps recover and check the reasons behind a step before anyone changes it.</p>
-      <p class="note" style="position:absolute; bottom:84px; left:120px; right:120px; font-size:17px">Sources: UK Health and Safety Executive,
-      "Flixborough (Nypro UK) Explosion 1st June 1974" case study (citing the 1975 Court of Inquiry report) · IChemE Safety and Loss
-      Prevention SIG, "50 Years on from Flixborough" · US OSHA, 29 CFR 1910.119(l), Management of change.</p>""",
+      <p style="margin-top:40px">CROMO makes no claim about any real incident. It helps recover and check the reasons behind a step before anyone changes it.</p>
+      <p class="note" style="position:absolute; bottom:84px; left:120px; right:120px; font-size:17px">Sources: US Chemical Safety and Hazard
+      Investigation Board (CSB), final case study of the 13 June 2013 explosion and fire at the Williams Olefins Plant, Geismar, Louisiana
+      (October 2016) · US OSHA, 29 CFR 1910.119(l), Management of change.</p>""",
                    right="real case · public sources"))
     s.append(slide(f"""
       <div class="eyebrow">The product · {where}</div>
